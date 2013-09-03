@@ -253,7 +253,7 @@ for zp = 0, 1 do
 			fixed = outboxes
 		},
 		groups = tgroups,
-		itest = {max_current = max_current,
+		voltbuild = {max_current = max_current,
 			current_loss = resistance},
 		sounds = default.node_sound_wood_defaults(),
 		walkable = true,
@@ -328,48 +328,48 @@ function register_cables(name, desc, max_insulate, max_energy, res_table, wtable
 	end
 end
 
-register_cables("itest:copper_cable","copper cable",1,32,{0.3, 0.2},{4/16, 6/16},
+register_cables("voltbuild:copper_cable","copper cable",1,32,{0.3, 0.2},{4/16, 6/16},
 	{"itest_copper_cable_0.png","itest_copper_cable_1.png"},
 	{"itest_copper_cable_inv_0.png","itest_copper_cable_inv_1.png"})
 
-register_cables("itest:gold_cable","gold cable",2,128,{0.5, 0.45, 0.4},{4/16, 5/16, 6/16},
+register_cables("voltbuild:gold_cable","gold cable",2,128,{0.5, 0.45, 0.4},{4/16, 5/16, 6/16},
 	{"itest_gold_cable_0.png","itest_gold_cable_1.png","itest_gold_cable_2.png"},
 	{"itest_gold_cable_inv_0.png","itest_gold_cable_inv_1.png","itest_gold_cable_inv_2.png"})
 
-register_cables("itest:tin_cable","tin cable",0,5,{0.025},{5/16},
+register_cables("voltbuild:tin_cable","tin cable",0,5,{0.025},{5/16},
 	{"itest_tin_cable_0.png"},
 	{"itest_tin_cable_inv_0.png"})
 
-register_cables("itest:hv_cable","HV cable",3,2048,{1, 0.95, 0.9, 0.8},{6/16, 8/16, 10/16, 12/16},
+register_cables("voltbuild:hv_cable","HV cable",3,2048,{1, 0.95, 0.9, 0.8},{6/16, 8/16, 10/16, 12/16},
 	{"itest_hv_cable_0.png","itest_hv_cable_1.png","itest_hv_cable_2.png","itest_hv_cable_3.png"},
 	{"itest_hv_cable_inv_0.png","itest_hv_cable_inv_1.png","itest_hv_cable_inv_2.png","itest_hv_cable_inv_3.png"})
 
 local gf_texture = {"itest_glass_fiber_cable.png", "itest_glass_fiber_cable.png", "itest_glass_fiber_cable.png", "itest_glass_fiber_cable.png", "itest_glass_fiber_cable.png", "itest_glass_fiber_cable.png"}
 
-register_cable("itest:glass_fiber_cable",512,0.025,"Glass fiber cable",4/16,gf_texture,gf_texture, gf_texture,"itest_glass_fiber_cable_inv.png")
+register_cable("voltbuild:glass_fiber_cable",512,0.025,"Glass fiber cable",4/16,gf_texture,gf_texture, gf_texture,"itest_glass_fiber_cable_inv.png")
 
 local detector_texture = {"itest_detector_cable.png", "itest_detector_cable.png", "itest_detector_cable.png", "itest_detector_cable.png", "itest_detector_cable.png", "itest_detector_cable.png"}
 
 local adjlist = {{x=0,y=0,z=1},{x=0,y=0,z=-1},{x=0,y=1,z=0},{x=0,y=-1,z=0},{x=1,y=0,z=0},{x=-1,y=0,z=0}}
 
-detector_cables_off = register_cable("itest:detector_cable_off",512,0.5,"Detector cable",12/16,detector_texture,detector_texture, detector_texture,"itest_detector_cable_inv.png",{
+detector_cables_off = register_cable("voltbuild:detector_cable_off",512,0.5,"Detector cable",12/16,detector_texture,detector_texture, detector_texture,"itest_detector_cable_inv.png",{
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("get_current",1)
 		meta:set_int("current",0)
 	end,
 	groups = {mesecon = 2},
-	mesecons = {receptor = {state = "off", rules = adjlist, onstate = "itest:detector_cable_on_#id"}}
+	mesecons = {receptor = {state = "off", rules = adjlist, onstate = "voltbuild:detector_cable_on_#id"}}
 })
 
-detector_cables_on = register_cable("itest:detector_cable_on",512,0.5,"Detector cable on (you hacker you)",12/16,detector_texture,detector_texture, detector_texture,"itest_detector_cable_inv.png",{
+detector_cables_on = register_cable("voltbuild:detector_cable_on",512,0.5,"Detector cable on (you hacker you)",12/16,detector_texture,detector_texture, detector_texture,"itest_detector_cable_inv.png",{
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("get_current",1)
 		meta:set_int("current",0)
 	end,
 	groups = {not_in_creative_inventory = 1, mesecon = 2},
-	mesecons = {receptor = {state = "on", rules = adjlist, offstate = "itest:detector_cable_off_#id"}}
+	mesecons = {receptor = {state = "on", rules = adjlist, offstate = "voltbuild:detector_cable_off_#id"}}
 })
 
 minetest.register_abm({
@@ -405,7 +405,7 @@ minetest.register_abm({
 
 local splitter_texture = {"itest_splitter_cable.png", "itest_splitter_cable.png", "itest_splitter_cable.png", "itest_splitter_cable.png", "itest_splitter_cable.png", "itest_splitter_cable.png"}
 
-register_cable("itest:splitter_cable",512,0.5,"Splitter cable",12/16,splitter_texture,splitter_texture, splitter_texture,"itest_splitter_cable_inv.png",{
+register_cable("voltbuild:splitter_cable",512,0.5,"Splitter cable",12/16,splitter_texture,splitter_texture, splitter_texture,"itest_splitter_cable_inv.png",{
 	groups = {mesecons = 2},
 	mesecons = {effector = {
 		rules = adjlist,
@@ -421,7 +421,7 @@ register_cable("itest:splitter_cable",512,0.5,"Splitter cable",12/16,splitter_te
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("c",1)
 	end,
-	itest = {can_go = function(pos,node,dir)
+	voltbuild = {can_go = function(pos,node,dir)
 			local meta = minetest.env:get_meta(pos)
 			if meta:get_int("c") == 0 then return {} end
 			return adjlist

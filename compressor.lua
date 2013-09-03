@@ -11,7 +11,7 @@ function compressor.get_craft_result(c)
 	return {item = ItemStack(output), time = 20},{items = {input}}
 end
 
-minetest.register_node("itest:compressor", {
+minetest.register_node("voltbuild:compressor", {
 	description = "compressor",
 	tiles = {"itest_compressor_side.png", "itest_compressor_side.png", "itest_compressor_side.png",
 		"itest_compressor_side.png", "itest_compressor_side.png", "itest_compressor_front.png"},
@@ -74,12 +74,12 @@ minetest.register_node("itest:compressor", {
 	end,
 })
 
-minetest.register_node("itest:compressor_active", {
+minetest.register_node("voltbuild:compressor_active", {
 	description = "compressor",
 	tiles = {"itest_compressor_side.png", "itest_compressor_side.png", "itest_compressor_side.png",
 		"itest_compressor_side.png", "itest_compressor_side.png", "itest_compressor_front_active.png"},
 	paramtype2 = "facedir",
-	drop = "itest:compressor",
+	drop = "voltbuild:compressor",
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
@@ -136,7 +136,7 @@ minetest.register_node("itest:compressor_active", {
 })
 
 minetest.register_abm({
-	nodenames = {"itest:compressor","itest:compressor_active"},
+	nodenames = {"voltbuild:compressor","voltbuild:compressor_active"},
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
@@ -204,9 +204,9 @@ minetest.register_abm({
 		end
 		if inv:is_empty("src") then state = false end
 		if state then
-			hacky_swap_node(pos,"itest:compressor_active")
+			hacky_swap_node(pos,"voltbuild:compressor_active")
 		else
-			hacky_swap_node(pos,"itest:compressor")
+			hacky_swap_node(pos,"voltbuild:compressor")
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
 				"list[current_name;src;2,1;1,1;]"..

@@ -1,10 +1,11 @@
-modpath=minetest.get_modpath("itest")
+modpath=minetest.get_modpath("voltbuild")
+minetest.register_alias("itest:","voltbuild:")
 
-itest = {}
-itest.registered_ores = {}
+voltbuild = {}
+voltbuild.registered_ores = {}
 
-function itest.register_ore(name,value)
-	itest.registered_ores[name]=value
+function voltbuild.register_ore(name,value)
+	voltbuild.registered_ores[name]=value
 end
 
 function hacky_swap_node(pos,name)
@@ -42,9 +43,9 @@ function get_node_field(name,meta,key,pos)
 	if name == nil then name = minetest.env:get_node(pos).name end
 	if meta:get_string(key) ~= "" then return meta:get_int(key) end
 	if minetest.registered_nodes[name] and
-		minetest.registered_nodes[name].itest and
-		minetest.registered_nodes[name].itest[key] then
-			return minetest.registered_nodes[name].itest[key]
+		minetest.registered_nodes[name].voltbuild and
+		minetest.registered_nodes[name].voltbuild[key] then
+			return minetest.registered_nodes[name].voltbuild[key]
 	end
 	return minetest.get_item_group(name,key)
 end
@@ -54,18 +55,18 @@ function get_node_field_float(name,meta,key,pos)
 	if name == nil then name = minetest.env:get_node(pos).name end
 	if meta:get_string(key) ~= "" then return meta:get_float(key) end
 	if minetest.registered_nodes[name] and
-		minetest.registered_nodes[name].itest and
-		minetest.registered_nodes[name].itest[key] then
-			return minetest.registered_nodes[name].itest[key]
+		minetest.registered_nodes[name].voltbuild and
+		minetest.registered_nodes[name].voltbuild[key] then
+			return minetest.registered_nodes[name].voltbuild[key]
 	end
 	return 0
 end
 
 function get_item_field(name,key)
 	if minetest.registered_items[name] and
-		minetest.registered_items[name].itest and
-		minetest.registered_items[name].itest[key] then
-			return minetest.registered_items[name].itest[key]
+		minetest.registered_items[name].voltbuild and
+		minetest.registered_items[name].voltbuild[key] then
+			return minetest.registered_items[name].voltbuild[key]
 	end
 	return minetest.get_item_group(name,key)
 end

@@ -99,12 +99,12 @@ function storage.get_formspec(pos)
 	return formspec..chrbar
 end
 
-minetest.register_node("itest:batbox",{description="BatBox",
+minetest.register_node("voltbuild:batbox",{description="BatBox",
 	groups={energy=1, cracky=2, energy_consumer=1},
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_batbox_side.png", "itest_batbox_side.png", "itest_batbox_output.png", "itest_batbox_side.png", "itest_batbox_side.png", "itest_batbox_side.png"},
-	itest = {max_energy = 40000,
+	voltbuild = {max_energy = 40000,
 		max_psize = 32},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
@@ -125,7 +125,7 @@ minetest.register_node("itest:batbox",{description="BatBox",
 })
 
 minetest.register_abm({
-	nodenames={"itest:batbox"},
+	nodenames={"voltbuild:batbox"},
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)
@@ -140,12 +140,12 @@ minetest.register_abm({
 	end
 })
 
-minetest.register_node("itest:mfe_unit",{description="MFE Unit",
+minetest.register_node("voltbuild:mfe_unit",{description="MFE Unit",
 	groups={energy=1, cracky=2, energy_consumer=1},
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_mfe_side.png", "itest_mfe_side.png", "itest_mfe_output.png", "itest_mfe_side.png", "itest_mfe_side.png", "itest_mfe_side.png"},
-	itest = {max_energy = 600000,
+	voltbuild = {max_energy = 600000,
 		max_psize = 128},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
@@ -166,7 +166,7 @@ minetest.register_node("itest:mfe_unit",{description="MFE Unit",
 })
 
 minetest.register_abm({
-	nodenames={"itest:mfe_unit"},
+	nodenames={"voltbuild:mfe_unit"},
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)
@@ -181,12 +181,12 @@ minetest.register_abm({
 	end
 })
 
-minetest.register_node("itest:mfs_unit",{description="MFS Unit",
+minetest.register_node("voltbuild:mfs_unit",{description="MFS Unit",
 	groups={energy=1, cracky=2, energy_consumer=1},
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_mfsu_side.png", "itest_mfsu_side.png", "itest_mfsu_output.png", "itest_mfsu_side.png", "itest_mfsu_side.png", "itest_mfsu_side.png"},
-	itest = {max_energy = 10000000,
+	voltbuild = {max_energy = 10000000,
 		max_psize = 512},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
@@ -207,7 +207,7 @@ minetest.register_node("itest:mfs_unit",{description="MFS Unit",
 })
 
 minetest.register_abm({
-	nodenames={"itest:mfs_unit"},
+	nodenames={"voltbuild:mfs_unit"},
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)

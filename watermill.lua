@@ -1,13 +1,13 @@
-minetest.register_node("itest:watermill",{description="Watermill",
+minetest.register_node("voltbuild:watermill",{description="Watermill",
 	groups={energy=1,cracky=2},
 	tiles={"itest_watermill_top.png", "itest_watermill_top.png", "itest_watermill_side.png"},
-	itest = {max_energy=500},
+	voltbuild = {max_energy=500},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
 		meta:set_int("energyf",0)
 		meta:set_string("formspec", generators.get_formspec(pos)..
-				"image[2,2;1,1;itest_water.png]")
+				"image[2,2;1,1;voltbuild_water.png]")
 		generators.on_construct(pos)
 	end,
 	can_dig = generators.can_dig,
@@ -23,7 +23,7 @@ minetest.register_node("itest:watermill",{description="Watermill",
 })
 
 minetest.register_abm({
-	nodenames={"itest:watermill"},
+	nodenames={"voltbuild:watermill"},
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)
@@ -58,6 +58,6 @@ minetest.register_abm({
 			end
 		end
 		meta:set_string("formspec",generators.get_formspec(pos)..
-				"image[2,2;1,1;itest_water.png]")
+				"image[2,2;1,1;voltbuild_water.png]")
 	end
 })

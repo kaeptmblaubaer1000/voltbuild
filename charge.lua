@@ -12,8 +12,8 @@ end
 
 function charge.set_charge(stack,charge)
 	stack.metadata = tostring(charge)
-	if minetest.registered_items[stack.name] and minetest.registered_items[stack.name].itest and minetest.registered_items[stack.name].itest.cnames then
-		local cn = minetest.registered_items[stack.name].itest.cnames
+	if minetest.registered_items[stack.name] and minetest.registered_items[stack.name].voltbuild and minetest.registered_items[stack.name].voltbuild.cnames then
+		local cn = minetest.registered_items[stack.name].voltbuild.cnames
 		local m = -1
 		local n = stack.name
 		for _,i in ipairs(cn) do
@@ -30,10 +30,10 @@ function charge.single_use(stack)
 	return get_item_field(stack:get_name(),"single_use")>0
 end
 
-minetest.register_tool("itest:re_battery",{
+minetest.register_tool("voltbuild:re_battery",{
 	description = "RE Battery",
 	inventory_image = "itest_re_battery.png",
-	itest = {max_charge = 10000,
+	voltbuild = {max_charge = 10000,
 		max_speed = 100,
 		charge_tier = 1},
 	tool_capabilities =
@@ -41,10 +41,10 @@ minetest.register_tool("itest:re_battery",{
 		groupcaps={fleshy={times={}, uses=1, maxlevel=0}}}
 })
 
-minetest.register_tool("itest:energy_crystal",{
+minetest.register_tool("voltbuild:energy_crystal",{
 	description = "Energy crystal",
 	inventory_image = "itest_energy_crystal.png",
-	itest = {max_charge = 100000,
+	voltbuild = {max_charge = 100000,
 		max_speed = 250,
 		charge_tier = 2},
 	tool_capabilities =
@@ -52,10 +52,10 @@ minetest.register_tool("itest:energy_crystal",{
 		groupcaps={fleshy={times={}, uses=1, maxlevel=0}}}
 }) 
 
-minetest.register_tool("itest:lapotron_crystal",{
+minetest.register_tool("voltbuild:lapotron_crystal",{
 	description = "Lapotron crystal",
 	inventory_image = "itest_lapotron_crystal.png",
-	itest = {max_charge = 1000000,
+	voltbuild = {max_charge = 1000000,
 		max_speed = 600,
 		charge_tier = 3},
 	tool_capabilities =
@@ -63,21 +63,21 @@ minetest.register_tool("itest:lapotron_crystal",{
 		groupcaps={fleshy={times={}, uses=1, maxlevel=0}}}
 }) 
 
-minetest.register_craftitem("itest:single_use_battery",{
+minetest.register_craftitem("voltbuild:single_use_battery",{
 	description = "Single use battery",
 	inventory_image = "itest_single_use_battery.png",
-	itest = {single_use = 1,
+	voltbuild = {single_use = 1,
 		singleuse_energy = 1000}
 })
 
-minetest.register_tool("itest:mining_drill",{
+minetest.register_tool("voltbuild:mining_drill",{
 	description = "Mining drill",
-	inventory_image = "itest_mining_drill.png",
-	itest = {max_charge = 10000,
+	inventory_image = "voltbuild_mining_drill.png",
+	voltbuild = {max_charge = 10000,
 		max_speed = 100,
 		charge_tier = 1,
-		cnames = {{0,"itest:mining_drill_discharged"},
-			{50,"itest:mining_drill"}}},
+		cnames = {{0,"voltbuild:mining_drill_discharged"},
+			{50,"voltbuild:mining_drill"}}},
 	tool_capabilities =
 		{max_drop_level=0,
 		-- Uses are specified, but not used since there is a after_use function
@@ -94,27 +94,27 @@ minetest.register_tool("itest:mining_drill",{
 })
 
 -- Used to prevent digging when discharged
-minetest.register_tool("itest:mining_drill_discharged",{
+minetest.register_tool("voltbuild:mining_drill_discharged",{
 	description = "Mining drill",
-	inventory_image = "itest_mining_drill.png",
-	itest = {max_charge = 10000,
+	inventory_image = "voltbuild_mining_drill.png",
+	voltbuild = {max_charge = 10000,
 		max_speed = 100,
 		charge_tier = 1,
-		cnames = {{0,"itest:mining_drill_discharged"},
-			{50,"itest:mining_drill"}}},
+		cnames = {{0,"voltbuild:mining_drill_discharged"},
+			{50,"voltbuild:mining_drill"}}},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={}},
 })
 
-minetest.register_tool("itest:diamond_drill",{
+minetest.register_tool("voltbuild:diamond_drill",{
 	description = "Diamond drill",
-	inventory_image = "itest_diamond_drill.png",
-	itest = {max_charge = 10000,
+	inventory_image = "voltbuild_diamond_drill.png",
+	voltbuild = {max_charge = 10000,
 		max_speed = 100,
 		charge_tier = 1,
-		cnames = {{0,"itest:diamond_drill_discharged"},
-			{84,"itest:diamond_drill"}}},
+		cnames = {{0,"voltbuild:diamond_drill_discharged"},
+			{84,"voltbuild:diamond_drill"}}},
 	tool_capabilities =
 		{max_drop_level=0,
 		-- Uses are specified, but not used since there is a after_use function
@@ -131,23 +131,23 @@ minetest.register_tool("itest:diamond_drill",{
 })
 
 -- Used to prevent digging when discharged
-minetest.register_tool("itest:diamond_drill_discharged",{
+minetest.register_tool("voltbuild:diamond_drill_discharged",{
 	description = "Diamond drill",
-	inventory_image = "itest_diamond_drill.png",
-	itest = {max_charge = 10000,
+	inventory_image = "voltbuild_diamond_drill.png",
+	voltbuild = {max_charge = 10000,
 		max_speed = 100,
 		charge_tier = 1,
-		cnames = {{0,"itest:diamond_drill_discharged"},
-			{84,"itest:diamond_drill"}}},
+		cnames = {{0,"voltbuild:diamond_drill_discharged"},
+			{84,"voltbuild:diamond_drill"}}},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={}},
 })
 
-minetest.register_tool("itest:od_scanner",{
+minetest.register_tool("voltbuild:od_scanner",{
 	description = "OD Scanner",
-	inventory_image = "itest_od_scanner.png",
-	itest = {max_charge = 10000,
+	inventory_image = "voltbuild_od_scanner.png",
+	voltbuild = {max_charge = 10000,
 		max_speed = 100,
 		charge_tier = 1},
 	tool_capabilities =
@@ -174,7 +174,7 @@ minetest.register_tool("itest:od_scanner",{
 					shall_break = true
 				else
 					nnodes = nnodes + 1 -- Number of nodes scanned
-					if itest.registered_ores[nnode.name] then
+					if voltbuild.registered_ores[nnode.name] then
 						total_ores = total_ores + 1
 					end
 				end
@@ -188,10 +188,10 @@ minetest.register_tool("itest:od_scanner",{
 	end
 })
 
-minetest.register_tool("itest:ov_scanner",{
+minetest.register_tool("voltbuild:ov_scanner",{
 	description = "OV Scanner",
-	inventory_image = "itest_ov_scanner.png",
-	itest = {max_charge = 10000,
+	inventory_image = "voltbuild_ov_scanner.png",
+	voltbuild = {max_charge = 10000,
 		max_speed = 100,
 		charge_tier = 2},
 	tool_capabilities =
@@ -218,8 +218,8 @@ minetest.register_tool("itest:ov_scanner",{
 					shall_break = true
 				else
 					nnodes = nnodes + 1 -- Number of nodes scanned
-					if itest.registered_ores[nnode.name] then
-						total_value = total_value + itest.registered_ores[nnode.name]
+					if voltbuild.registered_ores[nnode.name] then
+						total_value = total_value + voltbuild.registered_ores[nnode.name]
 					end
 				end
 			end
@@ -234,5 +234,5 @@ minetest.register_tool("itest:ov_scanner",{
 
 -- Add power to mesecons
 mcon = clone_node("mesecons:wire_00000000_off")
-mcon.itest = {single_use = 1, singleuse_energy = 500}
+mcon.voltbuild = {single_use = 1, singleuse_energy = 500}
 minetest.register_node(":mesecons:wire_00000000_off",mcon)

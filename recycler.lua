@@ -5,7 +5,7 @@ function recycler.register_blacklist(name)
 	recycler_blacklist[string1]=true
 end
 
-minetest.register_node("itest:recycler", {
+minetest.register_node("voltbuild:recycler", {
 	description = "recycler",
 	tiles = {"itest_recycler_side.png", "itest_recycler_side.png", "itest_recycler_side.png",
 		"itest_recycler_side.png", "itest_recycler_side.png", "itest_recycler_front.png"},
@@ -68,12 +68,12 @@ minetest.register_node("itest:recycler", {
 	end,
 })
 
-minetest.register_node("itest:recycler_active", {
+minetest.register_node("voltbuild:recycler_active", {
 	description = "recycler",
 	tiles = {"itest_recycler_side.png", "itest_recycler_side.png", "itest_recycler_side.png",
 		"itest_recycler_side.png", "itest_recycler_side.png", "itest_recycler_front_active.png"},
 	paramtype2 = "facedir",
-	drop = "itest:recycler",
+	drop = "voltbuild:recycler",
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
@@ -130,7 +130,7 @@ minetest.register_node("itest:recycler_active", {
 })
 
 minetest.register_abm({
-	nodenames = {"itest:recycler","itest:recycler_active"},
+	nodenames = {"voltbuild:recycler","voltbuild:recycler_active"},
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
@@ -170,10 +170,10 @@ minetest.register_abm({
 				meta:set_float("stime", meta:get_float("stime") + 1)
 				if meta:get_float("stime")>=45*speed then
 					meta:set_float("stime",0)
-					if inv:room_for_item("dst",ItemStack("itest:scrap")) then
+					if inv:room_for_item("dst",ItemStack("voltbuild:scrap")) then
 						inv:set_stack("src", 1, recycled)
 						if math.random(1,8)==1 then
-							inv:add_item("dst", ItemStack("itest:scrap"))
+							inv:add_item("dst", ItemStack("voltbuild:scrap"))
 						end
 						
 					else
@@ -189,9 +189,9 @@ minetest.register_abm({
 		local maxprogress = 45*speed
 		if inv:is_empty("src") then state = false end
 		if state then
-			hacky_swap_node(pos,"itest:recycler_active")
+			hacky_swap_node(pos,"voltbuild:recycler_active")
 		else
-			hacky_swap_node(pos,"itest:recycler")
+			hacky_swap_node(pos,"voltbuild:recycler")
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
 				"list[current_name;src;2,1;1,1;]"..

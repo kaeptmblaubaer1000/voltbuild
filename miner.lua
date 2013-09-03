@@ -1,6 +1,6 @@
 miner = {}
 
-minetest.register_node("itest:mining_pipe",{description="Mining pipe",
+minetest.register_node("voltbuild:mining_pipe",{description="Mining pipe",
 	groups={cracky=2},
 	drawtype = "nodebox",
 	node_box = {
@@ -11,12 +11,12 @@ minetest.register_node("itest:mining_pipe",{description="Mining pipe",
 	paramtype = "light",
 })
 
-minetest.register_node("itest:miner", {
+minetest.register_node("voltbuild:miner", {
 	description = "Miner",
 	tiles = {"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_front.png"},
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	sounds = default.node_sound_stone_defaults(),
-	itest = {max_psize = 32,
+	voltbuild = {max_psize = 32,
 		max_energy = 10000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
@@ -40,21 +40,21 @@ minetest.register_node("itest:miner", {
 	end,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
 		if listname == "pipe" then
-			if stack:get_name() == "itest:mining_pipe" then
+			if stack:get_name() == "voltbuild:mining_pipe" then
 				return stack:get_count()
 			else
 				return 0
 			end
 		end
 		if listname == "drill" then
-			if stack:get_name() == "itest:mining_drill" or stack:get_name() == "itest:diamond_drill" or stack:get_name() == "itest:mining_drill_discharged" or stack:get_name() == "itest:diamond_drill_discharged" then
+			if stack:get_name() == "voltbuild:mining_drill" or stack:get_name() == "voltbuild:diamond_drill" or stack:get_name() == "voltbuild:mining_drill_discharged" or stack:get_name() == "voltbuild:diamond_drill_discharged" then
 				return stack:get_count()
 			else
 				return 0
 			end
 		end
 		if listname == "scanner" then
-			if stack:get_name() == "itest:od_scanner" or stack:get_name() == "itest:ov_scanner" then
+			if stack:get_name() == "voltbuild:od_scanner" or stack:get_name() == "voltbuild:ov_scanner" then
 				return stack:get_count()
 			else
 				return 0
@@ -70,14 +70,14 @@ minetest.register_node("itest:miner", {
 			return stack:get_count()
 		end
 		if to_list == "drill" then
-			if stack:get_name() == "itest:mining_drill" or stack:get_name() == "itest:diamond_drill" or stack:get_name() == "itest:mining_drill_discharged" or stack:get_name() == "itest:diamond_drill_discharged" then
+			if stack:get_name() == "voltbuild:mining_drill" or stack:get_name() == "voltbuild:diamond_drill" or stack:get_name() == "voltbuild:mining_drill_discharged" or stack:get_name() == "voltbuild:diamond_drill_discharged" then
 				return stack:get_count()
 			else
 				return 0
 			end
 		end
 		if to_list == "scanner" then
-			if stack:get_name() == "itest:od_scanner" or stack:get_name() == "itest:ov_scanner" then
+			if stack:get_name() == "voltbuild:od_scanner" or stack:get_name() == "voltbuild:ov_scanner" then
 				return stack:get_count()
 			else
 				return 0
@@ -114,7 +114,7 @@ function miner.dig_towards_ore(tpos,radius)
 		if z~=0 or x~=0 then
 			lpos = {x=tpos.x+x,y=tpos.y,z=tpos.z+z}
 			lname = minetest.env:get_node(lpos).name
-			if itest.registered_ores[lname] then return lpos end
+			if voltbuild.registered_ores[lname] then return lpos end
 		end
 	end
 	end
@@ -122,7 +122,7 @@ function miner.dig_towards_ore(tpos,radius)
 end
 
 minetest.register_abm({
-	nodenames = {"itest:miner"},
+	nodenames = {"voltbuild:miner"},
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
@@ -139,35 +139,35 @@ minetest.register_abm({
 		if drill:is_empty() then
 			local tpos = {x=pos.x,y=pos.y-1,z=pos.z}
 			local name = minetest.env:get_node(tpos).name
-			while name == "itest:mining_pipe" do
+			while name == "voltbuild:mining_pipe" do
 				tpos = {x=tpos.x,y=tpos.y-1,z=tpos.z}
 				name = minetest.env:get_node(tpos).name
 			end
 			if name == "ignore" then return end
 			tpos = {x=tpos.x,y=tpos.y+1,z=tpos.z}
 			local name = minetest.env:get_node(tpos).name
-			if name~="itest:mining_pipe" then return end
+			if name~="voltbuild:mining_pipe" then return end
 			minetest.env:set_node(tpos,{name="air"})
-			miner.eject_item(pos,ItemStack("itest:mining_pipe"))
+			miner.eject_item(pos,ItemStack("voltbuild:mining_pipe"))
 			return
 		end
 		local pipe = inv:get_stack("pipe",1)
 		if pipe:is_empty() then return end
 		local ntime
 		local e = 0
-		if drill:get_name() == "itest:mining_drill" or drill:get_name() == "itest:mining_drill_discharged" then
+		if drill:get_name() == "voltbuild:mining_drill" or drill:get_name() == "voltbuild:mining_drill_discharged" then
 			ntime = 4
 			e = e + 450
-		elseif drill:get_name() == "itest:diamond_drill" or drill:get_name() == "itest:diamond_drill_discharged" then
+		elseif drill:get_name() == "voltbuild:diamond_drill" or drill:get_name() == "voltbuild:diamond_drill_discharged" then
 			ntime = 1
 			e = e + 900
 		end
 		local scanner = inv:get_stack("scanner",1)
 		local radius
-		if scanner:get_name() == "itest:od_scanner" then
+		if scanner:get_name() == "voltbuild:od_scanner" then
 			radius = 2
 			e = e + 70
-		elseif scanner:get_name() == "itest:ov_scanner" then
+		elseif scanner:get_name() == "voltbuild:ov_scanner" then
 			radius = 4
 			e = e + 180
 		else
@@ -185,7 +185,7 @@ minetest.register_abm({
 
 			local tpos = {x=pos.x,y=pos.y-1,z=pos.z}
 			local name = minetest.env:get_node(tpos).name
-			while name == "itest:mining_pipe" do
+			while name == "voltbuild:mining_pipe" do
 				tpos = {x=tpos.x,y=tpos.y-1,z=tpos.z}
 				name = minetest.env:get_node(tpos).name
 			end
@@ -203,7 +203,7 @@ minetest.register_abm({
 			end
 			minetest.env:set_node(todig,{name = "air"})
 			if todig.x==tpos.x and todig.y==tpos.y and todig.z==tpos.z then
-				minetest.env:set_node(tpos,{name="itest:mining_pipe"})
+				minetest.env:set_node(tpos,{name="voltbuild:mining_pipe"})
 				pipe:take_item()
 				inv:set_stack("pipe",1,pipe)
 			end
@@ -215,21 +215,21 @@ minetest.register_abm({
 	end,
 })
 
-itest.register_ore("default:stone_with_coal", 1)
-itest.register_ore("default:stone_with_iron", 4)
-itest.register_ore("default:stone_with_mese", 24)
-itest.register_ore("default:stone_with_gold", 3)
-itest.register_ore("default:stone_with_diamond", 5)
-itest.register_ore("default:mese", 216)
-itest.register_ore("default:stone_with_copper", 2)
-itest.register_ore("itest:stone_with_tin", 2)
-itest.register_ore("itest:stone_with_uranium", 4)
+voltbuild.register_ore("default:stone_with_coal", 1)
+voltbuild.register_ore("default:stone_with_iron", 4)
+voltbuild.register_ore("default:stone_with_mese", 24)
+voltbuild.register_ore("default:stone_with_gold", 3)
+voltbuild.register_ore("default:stone_with_diamond", 5)
+voltbuild.register_ore("default:mese", 216)
+voltbuild.register_ore("default:stone_with_copper", 2)
+voltbuild.register_ore("voltbuild:stone_with_tin", 2)
+voltbuild.register_ore("voltbuild:stone_with_uranium", 4)
 
-itest.register_ore("moreores:mineral_tin", 2)
-itest.register_ore("moreores:mineral_copper", 2)
-itest.register_ore("moreores:mineral_gold", 3)
-itest.register_ore("moreores:mineral_mithril", 5)
+voltbuild.register_ore("moreores:mineral_tin", 2)
+voltbuild.register_ore("moreores:mineral_copper", 2)
+voltbuild.register_ore("moreores:mineral_gold", 3)
+voltbuild.register_ore("moreores:mineral_mithril", 5)
 
-itest.register_ore("technic:mineral_uranium", 4)
-itest.register_ore("technic:mineral_chromium", 4)
-itest.register_ore("technic:mineral_zinc", 2)
+voltbuild.register_ore("technic:mineral_uranium", 4)
+voltbuild.register_ore("technic:mineral_chromium", 4)
+voltbuild.register_ore("technic:mineral_zinc", 2)

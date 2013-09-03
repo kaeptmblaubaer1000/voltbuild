@@ -1,16 +1,16 @@
 wind_speed = 15
 
-minetest.register_node("itest:windmill",{description="Windmill",
+minetest.register_node("voltbuild:windmill",{description="Windmill",
 	groups={energy=1,cracky=2},
 	tiles={"itest_windmill_top.png", "itest_windmill_top.png", "itest_windmill_side.png"},
-	itest = {max_energy=500},
+	voltbuild = {max_energy=500},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
 		meta:set_int("energyf",0)
 		meta:set_int("obstacles",200)
 		meta:set_string("formspec", generators.get_formspec(pos)..
-				"image[2,2;1,1;itest_wind.png]")
+				"image[2,2;1,1;voltbuild_wind.png]")
 		generators.on_construct(pos)
 	end,
 	can_dig = generators.can_dig,
@@ -26,7 +26,7 @@ minetest.register_node("itest:windmill",{description="Windmill",
 })
 
 minetest.register_abm({
-	nodenames={"itest:windmill"},
+	nodenames={"voltbuild:windmill"},
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)
@@ -58,12 +58,12 @@ minetest.register_abm({
 			end
 		end
 		meta:set_string("formspec",generators.get_formspec(pos)..
-				"image[2,2;1,1;itest_wind.png]")
+				"image[2,2;1,1;voltbuild_wind.png]")
 	end
 })
 
 minetest.register_abm({
-	nodenames={"itest:windmill"},
+	nodenames={"voltbuild:windmill"},
 	interval=20,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)

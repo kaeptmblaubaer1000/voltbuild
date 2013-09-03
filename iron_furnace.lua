@@ -18,7 +18,7 @@ function iron_furnace.get_formspec(pos)
 	return formspec..chrbar
 end
 
-minetest.register_node("itest:iron_furnace", {
+minetest.register_node("voltbuild:iron_furnace", {
 	description = "Iron furnace",
 	tiles = {"itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_side.png","itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_front.png"},
 	paramtype2 = "facedir",
@@ -70,16 +70,16 @@ minetest.register_node("itest:iron_furnace", {
 	end,
 })
 
-minetest.register_node("itest:iron_furnace_active", {
+minetest.register_node("voltbuild:iron_furnace_active", {
 	description = "Iron furnace",
 	tiles = {"itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_side.png","itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_front_active.png"},
 	paramtype2 = "facedir",
-	drop = "itest:iron_furnace",
+	drop = "voltbuild:iron_furnace",
 	light_source = 8,
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	itest = {max_energy=4000},
+	voltbuild = {max_energy=4000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		local inv = meta:get_inventory()
@@ -126,7 +126,7 @@ minetest.register_node("itest:iron_furnace_active", {
 })
 
 minetest.register_abm({
-	nodenames = {"itest:iron_furnace","itest:iron_furnace_active"},
+	nodenames = {"voltbuild:iron_furnace","voltbuild:iron_furnace_active"},
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
@@ -211,9 +211,9 @@ minetest.register_abm({
 		end
 		if inv:is_empty("src") then state = false end
 		if state then
-			hacky_swap_node(pos,"itest:iron_furnace_active")
+			hacky_swap_node(pos,"voltbuild:iron_furnace_active")
 		else
-			hacky_swap_node(pos,"itest:iron_furnace")
+			hacky_swap_node(pos,"voltbuild:iron_furnace")
 		end
 		meta:set_string("formspec", iron_furnace.get_formspec(pos))
 	end,

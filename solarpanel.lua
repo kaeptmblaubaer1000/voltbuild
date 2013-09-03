@@ -1,7 +1,7 @@
-minetest.register_node("itest:solar_panel",{description="Solar panel",
+minetest.register_node("voltbuild:solar_panel",{description="Solar panel",
 	groups={energy=1,cracky=2},
 	tiles={"itest_solar_panel_top.png", "itest_solar_panel_side.png", "itest_solar_panel_side.png"},
-	itest = {max_energy=500},
+	voltbuild = {max_energy=500},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -22,7 +22,7 @@ minetest.register_node("itest:solar_panel",{description="Solar panel",
 })
 
 minetest.register_abm({
-	nodenames={"itest:solar_panel"},
+	nodenames={"voltbuild:solar_panel"},
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)

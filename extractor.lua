@@ -11,7 +11,7 @@ function extractor.get_craft_result(c)
 	return {item = ItemStack(output), time = 20},{items = {input}}
 end
 
-minetest.register_node("itest:extractor", {
+minetest.register_node("voltbuild:extractor", {
 	description = "Extractor",
 	tiles = {"itest_extractor_side.png", "itest_extractor_side.png", "itest_extractor_side.png", "itest_extractor_side.png", "itest_extractor_side.png", "itest_extractor_front.png"},
 	paramtype2 = "facedir",
@@ -73,11 +73,11 @@ minetest.register_node("itest:extractor", {
 	end,
 })
 
-minetest.register_node("itest:extractor_active", {
+minetest.register_node("voltbuild:extractor_active", {
 	description = "Extractor",
 	tiles = {"itest_extractor_side.png", "itest_extractor_side.png", "itest_extractor_side.png", "itest_extractor_side.png", "itest_extractor_side.png", "itest_extractor_front_active.png"},
 	paramtype2 = "facedir",
-	drop = "itest:extractor",
+	drop = "voltbuild:extractor",
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
@@ -134,7 +134,7 @@ minetest.register_node("itest:extractor_active", {
 })
 
 minetest.register_abm({
-	nodenames = {"itest:extractor","itest:extractor_active"},
+	nodenames = {"voltbuild:extractor","voltbuild:extractor_active"},
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
@@ -202,9 +202,9 @@ minetest.register_abm({
 		end
 		if inv:is_empty("src") then state = false end
 		if state then
-			hacky_swap_node(pos,"itest:extractor_active")
+			hacky_swap_node(pos,"voltbuild:extractor_active")
 		else
-			hacky_swap_node(pos,"itest:extractor")
+			hacky_swap_node(pos,"voltbuild:extractor")
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
 				"list[current_name;src;2,1;1,1;]"..

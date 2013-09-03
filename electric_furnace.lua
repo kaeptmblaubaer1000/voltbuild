@@ -1,4 +1,4 @@
-minetest.register_node("itest:electric_furnace", {
+minetest.register_node("voltbuild:electric_furnace", {
 	description = "Electric furnace",
 	tiles = {"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_front.png"},
 	paramtype2 = "facedir",
@@ -57,11 +57,11 @@ minetest.register_node("itest:electric_furnace", {
 	end,
 })
 
-minetest.register_node("itest:electric_furnace_active", {
+minetest.register_node("voltbuild:electric_furnace_active", {
 	description = "Electric furnace",
 	tiles = {"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_front_active.png"},
 	paramtype2 = "facedir",
-	drop = "itest:generator",
+	drop = "voltbuild:generator",
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
@@ -118,7 +118,7 @@ minetest.register_node("itest:electric_furnace_active", {
 })
 
 minetest.register_abm({
-	nodenames = {"itest:electric_furnace","itest:electric_furnace_active"},
+	nodenames = {"voltbuild:electric_furnace","voltbuild:electric_furnace_active"},
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
@@ -173,9 +173,9 @@ minetest.register_abm({
 		end
 		if inv:is_empty("src") then state = false end
 		if state then
-			hacky_swap_node(pos,"itest:electric_furnace_active")
+			hacky_swap_node(pos,"voltbuild:electric_furnace_active")
 		else
-			hacky_swap_node(pos,"itest:electric_furnace")
+			hacky_swap_node(pos,"voltbuild:electric_furnace")
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
 				"list[current_name;src;2,1;1,1;]"..

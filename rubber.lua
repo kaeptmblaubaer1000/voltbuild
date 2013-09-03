@@ -22,40 +22,40 @@ function spawn_rubber_tree(pos)
 		local node = {}
 		if math.random(1,5) == 1 then
 			local param2 = math.random(0,3)
-			node.name = "itest:rubber_tree_full"
+			node.name = "voltbuild:rubber_tree_full"
 			node.param2 = param2
 		else
-			node.name = "itest:rubber_tree"
+			node.name = "voltbuild:rubber_tree"
 		end
 		minetest.env:set_node(npos,node)
 	end
 	for _,lpos in ipairs(rubber_tree_leaves_pos) do
 		local npos = addVect(pos,lpos)
-		minetest.env:set_node(npos,{name="itest:rubber_leaves"})
+		minetest.env:set_node(npos,{name="voltbuild:rubber_leaves"})
 	end
 end
 
-minetest.register_node("itest:rubber_sapling", {
+minetest.register_node("voltbuild:rubber_sapling", {
 	description = "Rubber Tree Sapling",
 	drawtype = "plantlike",
-	tiles = {"technic_rubber_sapling.png"},
-	inventory_image = "technic_rubber_sapling.png",
-	wield_image = "technic_rubber_sapling.png",
+	tiles = {"voltbuild_rubber_sapling.png"},
+	inventory_image = "voltbuild_rubber_sapling.png",
+	wield_image = "voltbuild_rubber_sapling.png",
 	paramtype = "light",
 	walkable = false,
 	groups = {dig_immediate=3,flammable=2},
 	sounds = default.node_sound_defaults(),
 })
 
-minetest.register_node("itest:rubber_tree", {
+minetest.register_node("voltbuild:rubber_tree", {
 	description = "Rubber Tree",
 	tiles = {"default_tree_top.png", "default_tree_top.png", "default_tree.png"},
 	groups = {tree=1,snappy=1,choppy=2,oddly_breakable_by_hand=1,flammable=2},
-	drop = "itest:rubber_tree",
+	drop = "voltbuild:rubber_tree",
 	sounds = default.node_sound_wood_defaults(),
 })
 
-minetest.register_node("itest:rubber_tree_full", {
+minetest.register_node("voltbuild:rubber_tree_full", {
 	description = "Rubber Tree",
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
@@ -65,11 +65,11 @@ minetest.register_node("itest:rubber_tree_full", {
 		max_items = 2,
 		items = {
 			{
-				items = {'itest:sticky_resin'},
+				items = {'voltbuild:sticky_resin'},
 				rarity = 10,
 			},
 			{
-				items = {'itest:rubber_tree'},
+				items = {'voltbuild:rubber_tree'},
 			}
 		}
 	},
@@ -77,40 +77,40 @@ minetest.register_node("itest:rubber_tree_full", {
 })
 
 
-minetest.register_node("itest:rubber_tree_empty", {
+minetest.register_node("voltbuild:rubber_tree_empty", {
 	tiles = {"default_tree_top.png", "default_tree_top.png", "default_tree.png", "default_tree.png", "default_tree.png", "default_tree.png^itest_rubber_hole_empty.png"},
 	groups = {tree=1,snappy=1,choppy=2,oddly_breakable_by_hand=1,flammable=2, not_in_creative_inventory=1},
-	drop = "itest:rubber_tree",
+	drop = "voltbuild:rubber_tree",
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_wood_defaults(),
 })
 
 minetest.register_abm({
-	nodenames = {"itest:rubber_tree_empty"},
+	nodenames = {"voltbuild:rubber_tree_empty"},
 	interval = 60,
 	chance = 15,
 	action = function(pos, node)
-		node.name = "itest:rubber_tree_full"
+		node.name = "voltbuild:rubber_tree_full"
 		minetest.env:set_node(pos, node)
 	end
 })
 
-minetest.register_node("itest:rubber_leaves", {
+minetest.register_node("voltbuild:rubber_leaves", {
 	drawtype = "allfaces_optional",
 	visual_scale = 1.3,
-	tiles = {"technic_rubber_leaves.png"},
+	tiles = {"voltbuild_rubber_leaves.png"},
 	paramtype = "light",
 	groups = {snappy=3, leafdecay=3, flammable=2, not_in_creative_inventory=1},
 	drop = {
 		max_items = 1,
 		items = {
 			{
-				items = {"itest:rubber_sapling"},
+				items = {"voltbuild:rubber_sapling"},
 				rarity = 40,
 			},
 			{
-				items = {"itest:rubber_leaves"}
+				items = {"voltbuild:rubber_leaves"}
 			}
 		}
 	},
@@ -118,7 +118,7 @@ minetest.register_node("itest:rubber_leaves", {
 })
 
 minetest.register_abm({
-	nodenames = {"itest:rubber_sapling"},
+	nodenames = {"voltbuild:rubber_sapling"},
 	interval = 60,
 	chance = 20,
 	action = function(pos, node)
@@ -137,7 +137,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	end
 end)
 
-minetest.register_craftitem( "itest:sticky_resin", {
+minetest.register_craftitem( "voltbuild:sticky_resin", {
 	description = "Sticky resin",
 	inventory_image = "itest_sticky_resin.png",
 })
@@ -152,7 +152,7 @@ function damage_treetap(itemstack)
 	return itemstack
 end
 
-minetest.register_tool("itest:treetap",{
+minetest.register_tool("voltbuild:treetap",{
 	description = "Treetap",
 	inventory_image = "itest_treetap.png",
 	tool_capabilities =
@@ -161,18 +161,18 @@ minetest.register_tool("itest:treetap",{
 	on_place = function (itemstack, user, pointed_thing)
 		local npos = pointed_thing.under
 		local node = minetest.env:get_node(npos)
-		if node.name == "itest:rubber_tree_full" then
-			node.name = "itest:rubber_tree_empty"
+		if node.name == "voltbuild:rubber_tree_full" then
+			node.name = "voltbuild:rubber_tree_empty"
 			local drop = math.random(1,3)
 			minetest.env:set_node(npos,node)
 			local dropstack = ItemStack(
-				{name = "itest:sticky_resin", count = drop})
+				{name = "voltbuild:sticky_resin", count = drop})
 			if node.param2 == nil then node.param2 = 1 end
 			local droppos = addVect(addVect(npos,param22dir((node.param2+1)%4)),
 				{x=math.random()/2-0.25,y=0,z=math.random()/2-0.25})
 			minetest.env:add_item(droppos,dropstack)
 			itemstack = damage_treetap(itemstack)
-		elseif node.name == "itest:rubber_tree_empty" then
+		elseif node.name == "voltbuild:rubber_tree_empty" then
 		end
 		return minetest.item_place(itemstack,user,pointed_thing)
 	end,

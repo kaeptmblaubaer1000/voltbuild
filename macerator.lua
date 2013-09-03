@@ -11,7 +11,7 @@ function macerator.get_craft_result(c)
 	return {item = ItemStack(output), time = 20},{items = {input}}
 end
 
-minetest.register_node("itest:macerator", {
+minetest.register_node("voltbuild:macerator", {
 	description = "Macerator",
 	tiles = {"itest_macerator_side.png", "itest_macerator_side.png", "itest_macerator_side.png",
 		"itest_macerator_side.png", "itest_macerator_side.png", "itest_macerator_front.png"},
@@ -74,12 +74,12 @@ minetest.register_node("itest:macerator", {
 	end,
 })
 
-minetest.register_node("itest:macerator_active", {
+minetest.register_node("voltbuild:macerator_active", {
 	description = "Macerator",
 	tiles = {"itest_macerator_side.png", "itest_macerator_side.png", "itest_macerator_side.png",
 		"itest_macerator_side.png", "itest_macerator_side.png", "itest_macerator_front_active.png"},
 	paramtype2 = "facedir",
-	drop = "itest:macerator",
+	drop = "voltbuild:macerator",
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
@@ -136,7 +136,7 @@ minetest.register_node("itest:macerator_active", {
 })
 
 minetest.register_abm({
-	nodenames = {"itest:macerator","itest:macerator_active"},
+	nodenames = {"voltbuild:macerator","voltbuild:macerator_active"},
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
@@ -204,9 +204,9 @@ minetest.register_abm({
 		end
 		if inv:is_empty("src") then state = false end
 		if state then
-			hacky_swap_node(pos,"itest:macerator_active")
+			hacky_swap_node(pos,"voltbuild:macerator_active")
 		else
-			hacky_swap_node(pos,"itest:macerator")
+			hacky_swap_node(pos,"voltbuild:macerator")
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
 				"list[current_name;src;2,1;1,1;]"..

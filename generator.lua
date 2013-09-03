@@ -1,4 +1,4 @@
-minetest.register_node("itest:generator", {
+minetest.register_node("voltbuild:generator", {
 	description = "Generator",
 	tiles = {"itest_generator_side.png", "itest_generator_side.png", "itest_generator_side.png",
 		"itest_generator_side.png", "itest_generator_side.png", "itest_generator_front.png"},
@@ -6,7 +6,7 @@ minetest.register_node("itest:generator", {
 	groups = {energy=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	itest = {max_energy=4000},
+	voltbuild = {max_energy=4000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -50,17 +50,17 @@ minetest.register_node("itest:generator", {
 	end,
 })
 
-minetest.register_node("itest:generator_active", {
+minetest.register_node("voltbuild:generator_active", {
 	description = "Generator",
 	tiles = {"itest_generator_side.png", "itest_generator_side.png", "itest_generator_side.png",
 		"itest_generator_side.png", "itest_generator_side.png", "itest_generator_front_active.png"},
 	paramtype2 = "facedir",
 	light_source = 8,
-	drop = "itest:generator",
+	drop = "voltbuild:generator",
 	groups = {energy=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	itest = {max_energy=4000},
+	voltbuild = {max_energy=4000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -105,7 +105,7 @@ minetest.register_node("itest:generator_active", {
 })
 
 minetest.register_abm({
-	nodenames = {"itest:generator","itest:generator_active"},
+	nodenames = {"voltbuild:generator","voltbuild:generator_active"},
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
@@ -172,9 +172,9 @@ minetest.register_abm({
 		end
 
 		if state then
-			hacky_swap_node(pos,"itest:generator_active")
+			hacky_swap_node(pos,"voltbuild:generator_active")
 		else
-			hacky_swap_node(pos,"itest:generator")
+			hacky_swap_node(pos,"voltbuild:generator")
 		end
 	end,
 })

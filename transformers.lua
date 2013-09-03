@@ -12,12 +12,12 @@ function send_alldirs_except(pos,dir,power)
 	end
 end
 
-minetest.register_node("itest:lv_transformer",{description="LV Transformer",
+minetest.register_node("voltbuild:lv_transformer",{description="LV Transformer",
 	groups={energy=1,cracky=2,energy_consumer=1},
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_lv_transformer_lv.png", "itest_lv_transformer_lv.png", "itest_lv_transformer_mv.png", "itest_lv_transformer_lv.png", "itest_lv_transformer_lv.png", "itest_lv_transformer_lv.png"},
-	itest = {max_energy=2560,max_psize=128},
+	voltbuild = {max_energy=2560,max_psize=128},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -35,7 +35,7 @@ minetest.register_node("itest:lv_transformer",{description="LV Transformer",
 })
 
 minetest.register_abm({
-	nodenames={"itest:lv_transformer"},
+	nodenames={"voltbuild:lv_transformer"},
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)
@@ -53,12 +53,12 @@ minetest.register_abm({
 	end
 })
 
-minetest.register_node("itest:mv_transformer",{description="MV Transformer",
+minetest.register_node("voltbuild:mv_transformer",{description="MV Transformer",
 	groups={energy=1,cracky=2,energy_consumer=1},
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_mv_transformer_mv.png", "itest_mv_transformer_mv.png", "itest_mv_transformer_hv.png", "itest_mv_transformer_mv.png", "itest_mv_transformer_mv.png", "itest_mv_transformer_mv.png"},
-	itest = {max_energy=10240,max_psize=512},
+	voltbuild = {max_energy=10240,max_psize=512},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -76,7 +76,7 @@ minetest.register_node("itest:mv_transformer",{description="MV Transformer",
 })
 
 minetest.register_abm({
-	nodenames={"itest:mv_transformer"},
+	nodenames={"voltbuild:mv_transformer"},
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)
@@ -94,12 +94,12 @@ minetest.register_abm({
 	end
 })
 
-minetest.register_node("itest:hv_transformer",{description="HV Transformer",
+minetest.register_node("voltbuild:hv_transformer",{description="HV Transformer",
 	groups={energy=1,cracky=2,energy_consumer=1},
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_hv_transformer_hv.png", "itest_hv_transformer_hv.png", "itest_hv_transformer_ev.png", "itest_hv_transformer_hv.png", "itest_hv_transformer_hv.png", "itest_hv_transformer_hv.png"},
-	itest = {max_energy=40960,max_psize=1000000000},
+	voltbuild = {max_energy=40960,max_psize=1000000000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -117,7 +117,7 @@ minetest.register_node("itest:hv_transformer",{description="HV Transformer",
 })
 
 minetest.register_abm({
-	nodenames={"itest:hv_transformer"},
+	nodenames={"voltbuild:hv_transformer"},
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)

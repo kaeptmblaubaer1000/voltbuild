@@ -81,9 +81,9 @@ function send_packet(fpos,dir,psize)
 		local npos = addVect(fpos,dir)
 		local node = minetest.env:get_node(npos)
 		local meta = minetest.env:get_meta(npos)
-		if not (minetest.registered_nodes[node.name].itest and
-			minetest.registered_nodes[node.name].itest.can_receive and
-				(not minetest.registered_nodes[node.name].itest.can_receive(npos,vect))) then
+		if not (minetest.registered_nodes[node.name].voltbuild and
+			minetest.registered_nodes[node.name].voltbuild.can_receive and
+				(not minetest.registered_nodes[node.name].voltbuild.can_receive(npos,vect))) then
 			local max_energy=get_node_field(node.name,meta,"max_energy")
 			local current_energy=meta:get_int("energy")
 			local max_psize=get_node_field(node.name,meta,"max_psize")
@@ -121,9 +121,9 @@ function enegy_go_next(pos,dir,power)
 	local n
 	local can_go
 	if minetest.registered_nodes[cnode.name] and
-		minetest.registered_nodes[cnode.name].itest and
-		minetest.registered_nodes[cnode.name].itest.can_go then
-			can_go=minetest.registered_nodes[cnode.name].itest.can_go(pos,node,dir)
+		minetest.registered_nodes[cnode.name].voltbuild and
+		minetest.registered_nodes[cnode.name].voltbuild.can_go then
+			can_go=minetest.registered_nodes[cnode.name].voltbuild.can_go(pos,node,dir)
 	else
 		can_go=notdir(adjlist,dir) -- We don't want to go back
 	end
@@ -134,9 +134,9 @@ function enegy_go_next(pos,dir,power)
 		conductor=minetest.get_item_group(node.name,"energy_conductor")
 		meta=minetest.env:get_meta(npos)
 		if consumer==1 then
-			if not (minetest.registered_nodes[node.name].itest and
-				minetest.registered_nodes[node.name].itest.can_receive and
-					(not minetest.registered_nodes[node.name].itest.can_receive(npos,vect))) then
+			if not (minetest.registered_nodes[node.name].voltbuild and
+				minetest.registered_nodes[node.name].voltbuild.can_receive and
+					(not minetest.registered_nodes[node.name].voltbuild.can_receive(npos,vect))) then
 				local max_energy=get_node_field(node.name,meta,"max_energy")
 				local current_energy=meta:get_int("energy")
 				local max_psize=get_node_field(node.name,meta,"max_psize")
