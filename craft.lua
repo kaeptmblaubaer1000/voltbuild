@@ -111,7 +111,7 @@ minetest.register_craftitem( "voltbuild:carbon_plate", {
 minetest.register_craft({
 	type = "shapeless",
 	output = "voltbuild:silicon_mesecon",
-	recipe = {"mesecons:mesecon","mesecons_resources:silicon","voltbuild:copper_dust"}
+	recipe = {"mesecons:wire_00000000_off","mesecons_materials:silicon","voltbuild:copper_dust"}
 })
 
 minetest.register_craft({
@@ -270,7 +270,7 @@ register_craft2({
 minetest.register_craft({
 	output = "voltbuild:detector_cable_off_000000",
 	recipe = {{"","voltbuild:circuit",""},
-		{"mesecon:mesecon","voltbuild:hv_cable3_000000","mesecons:wire_00000000_off"},
+		{"mesecons:wire_00000000_off","voltbuild:hv_cable3_000000","mesecons:wire_00000000_off"},
 		{"","mesecons:wire_00000000_off",""}}
 })
 
@@ -598,7 +598,7 @@ extractor.register_extractor_recipe("voltbuild:sticky_resin","voltbuild:rubber 3
 extractor.register_extractor_recipe("voltbuild:rubber_tree","voltbuild:rubber")
 extractor.register_extractor_recipe("voltbuild:rubber_sapling","voltbuild:rubber")
 extractor.register_extractor_recipe("default:mese_crystal","mesecons:wire_00000000_off 32")
-extractor.register_extractor_recipe("default:sand","mesecons_resources:silicon")
+extractor.register_extractor_recipe("default:sand","mesecons_materials:silicon")
 
 compressor.register_compressor_recipe("voltbuild:mixed_metal_ingot","voltbuild:advanced_alloy")
 compressor.register_compressor_recipe("voltbuild:combined_carbon_fibers","voltbuild:carbon_plate")
