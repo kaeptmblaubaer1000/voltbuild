@@ -501,6 +501,12 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "voltbuild:diamond_drill_discharged",
+	recipe = {{"","default:diamond",""},
+		{"default:diamond","voltbuild:mining_drill_discharged","default:diamond"}}
+})
+
+minetest.register_craft({
 	output = "voltbuild:od_scanner",
 	recipe = {{"","voltbuild:gold_dust",""},
 		{"voltbuild:circuit","voltbuild:re_battery","voltbuild:circuit"},
