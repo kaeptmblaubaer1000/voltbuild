@@ -359,17 +359,18 @@ detector_cables_off = register_cable("voltbuild:detector_cable_off",512,0.5,"Det
 		meta:set_int("current",0)
 	end,
 	groups = {mesecon = 2},
-	mesecons = {receptor = {state = "off", rules = adjlist, onstate = "voltbuild:detector_cable_on_#id"}}
+	mesecons = {receptor = {state = mesecon.state.off}}
 })
 
-detector_cables_on = register_cable("voltbuild:detector_cable_on",512,0.5,"Detector cable on (you hacker you)",12/16,detector_texture,detector_texture, detector_texture,"itest_detector_cable_inv.png",{
+detector_cables_on = register_cable("voltbuild:detector_cable_on",512,0.5,"Detector cable on, you hacker you",12/16,detector_texture,detector_texture, detector_texture,"itest_detector_cable_inv.png",{
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("get_current",1)
 		meta:set_int("current",0)
 	end,
+	drop = "voltbuild:detector_cable_off_000000",
 	groups = {not_in_creative_inventory = 1, mesecon = 2},
-	mesecons = {receptor = {state = "on", rules = adjlist, offstate = "voltbuild:detector_cable_off_#id"}}
+	mesecons = {receptor = {state = mesecon.state.on}}
 })
 
 minetest.register_abm({
@@ -379,10 +380,9 @@ minetest.register_abm({
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		local meta = minetest.env:get_meta(pos)
 		if meta:get_int("current")>0 then
-			meta:set_int("current",0)
-			node.name = minetest.registered_node[node.name].mesecons.receptor.onstate
-			minetest.env:set_node(pos,node)
-			mesecons:receptor_on(pos,adjlist)
+			minetest.env:add_node(pos, {name="voltbuild:detector_cable_on_000000"})
+			mesecon:receptor_on(pos)
+			cable_scanforobjects(pos)
 		end
 	end
 })
@@ -393,12 +393,10 @@ minetest.register_abm({
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		local meta = minetest.env:get_meta(pos)
-		if meta:get_int("current")>0 then
-			meta:set_int("current",0)
-		else
-			node.name = minetest.registered_node[node.name].mesecons.receptor.offstate
-			minetest.env:set_node(pos,node)
-			mesecons:receptor_off(pos,adjlist)
+		if meta:get_int("current")<=0 then
+			minetest.env:add_node(pos, {name="voltbuild:detector_cable_off_000000"})
+			mesecon:receptor_off(pos)
+			cable_scanforobjects(pos)
 		end
 	end
 })
