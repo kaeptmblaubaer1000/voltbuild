@@ -1,5 +1,7 @@
+itest_world_upgrade = false
+
 modpath=minetest.get_modpath("voltbuild")
-minetest.register_alias("itest:","voltbuild:")
+
 
 voltbuild = {}
 voltbuild.registered_ores = {}
@@ -95,3 +97,6 @@ dofile(modpath.."/generators.lua")
 dofile(modpath.."/storage.lua")
 dofile(modpath.."/consumers.lua")
 dofile(modpath.."/craft.lua")
+if itest_world_upgrade then
+	dofile(modpath.."/itest_upgrade_compat.lua")
+end
