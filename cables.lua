@@ -290,6 +290,10 @@ for zp = 0, 1 do
 			for group,val in pairs(value) do
 				nodedef.groups[group]=val
 			end
+		elseif key=="voltbuild" then
+			for property,val in pairs(value) do
+				nodedef.voltbuild[property]=val
+			end
 		elseif type(value)=="table" then
 			nodedef[key]=replace_name(value,"#id",tname)
 		elseif type(value)=="string" then
