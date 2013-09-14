@@ -26,8 +26,7 @@ minetest.register_node("voltbuild:electric_furnace", {
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)
 		meta:set_string("formspec", consumers.get_formspec(pos)..
-				"list[current_name;src;2,1;1,1;]"..
-				"list[current_name;dst;5,1;2,2;]")
+				voltbuild.production_spec)
 		consumers.on_construct(pos)
 	end,
 	can_dig = function(pos,player)
@@ -86,8 +85,7 @@ minetest.register_node("voltbuild:electric_furnace_active", {
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)
 		meta:set_string("formspec", consumers.get_formspec(pos)..
-				"list[current_name;src;2,1;1,1;]"..
-				"list[current_name;dst;5,1;2,2;]")
+				voltbuild.production_spec)
 		consumers.on_construct(pos)
 	end,
 	can_dig = function(pos,player)
@@ -178,7 +176,6 @@ minetest.register_abm({
 			hacky_swap_node(pos,"voltbuild:electric_furnace")
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
-				"list[current_name;src;2,1;1,1;]"..
-				"list[current_name;dst;5,1;2,2;]")
+				voltbuild.production_spec)
 	end,
 })

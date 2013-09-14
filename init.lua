@@ -89,6 +89,7 @@ end
 
 dofile(modpath.."/builtin.lua")
 dofile(modpath.."/mapgen.lua")
+dofile(modpath.."/voltbuild_objects.lua")
 dofile(modpath.."/iron_furnace.lua")
 dofile(modpath.."/energy_transport.lua")
 dofile(modpath.."/cables.lua")

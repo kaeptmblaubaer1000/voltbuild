@@ -39,8 +39,7 @@ minetest.register_node("voltbuild:extractor", {
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)
 		meta:set_string("formspec", consumers.get_formspec(pos)..
-				"list[current_name;src;2,1;1,1;]"..
-				"list[current_name;dst;5,1;2,2;]"..
+				voltbuild.production_spec..
 				consumers.get_progressbar(0,1,
 					"itest_extractor_progress_bg.png",
 					"itest_extractor_progress_fg.png"))
@@ -102,8 +101,7 @@ minetest.register_node("voltbuild:extractor_active", {
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)
 		meta:set_string("formspec", consumers.get_formspec(pos)..
-				"list[current_name;src;2,1;1,1;]"..
-				"list[current_name;dst;5,1;2,2;]")
+				voltbuild.production_spec)
 		consumers.on_construct(pos)
 	end,
 	can_dig = function(pos,player)
@@ -207,8 +205,7 @@ minetest.register_abm({
 			hacky_swap_node(pos,"voltbuild:extractor")
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
-				"list[current_name;src;2,1;1,1;]"..
-				"list[current_name;dst;5,1;2,2;]"..
+				voltbuild.production_spec..
 				consumers.get_progressbar(progress,maxprogress,
 					"itest_extractor_progress_bg.png",
 					"itest_extractor_progress_fg.png"))

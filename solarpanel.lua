@@ -11,13 +11,13 @@ minetest.register_node("voltbuild:solar_panel",{description="Solar panel",
 	end,
 	can_dig = generators.can_dig,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		return generators.inventory(pos, listname, stack)
+		return generators.inventory(pos, listname, stack,1)
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.env:get_meta(pos)
 		local inv = meta:get_inventory()
 		local stack = inv:get_stack(from_list, from_index)
-		return generators.inventory(pos, to_list, stack)
+		return generators.inventory(pos, to_list, stack,1)
 	end,
 })
 

@@ -33,7 +33,7 @@ minetest.register_node("voltbuild:generator", {
 				return 0
 			end
 		end
-		return generators.inventory(pos, listname, stack)
+		return generators.inventory(pos, listname, stack,1)
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.env:get_meta(pos)
@@ -46,7 +46,7 @@ minetest.register_node("voltbuild:generator", {
 				return 0
 			end
 		end
-		return generators.inventory(pos, to_list, stack)
+		return generators.inventory(pos, to_list, stack,1)
 	end,
 })
 
@@ -87,7 +87,7 @@ minetest.register_node("voltbuild:generator_active", {
 				return 0
 			end
 		end
-		return generators.inventory(pos, listname, stack)
+		return generators.inventory(pos, listname, stack,1)
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.env:get_meta(pos)
@@ -100,7 +100,7 @@ minetest.register_node("voltbuild:generator_active", {
 				return 0
 			end
 		end
-		return generators.inventory(pos, to_list, stack)
+		return generators.inventory(pos, to_list, stack,1)
 	end,
 })
 

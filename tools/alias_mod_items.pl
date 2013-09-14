@@ -1,3 +1,6 @@
+use strict;
+use warnings;
+
 $mod_two = pop(@ARGV);
 $mod_one = pop(@ARGV);
 

@@ -34,8 +34,7 @@ minetest.register_node("voltbuild:recycler", {
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)
 		meta:set_string("formspec", consumers.get_formspec(pos)..
-				"list[current_name;src;2,1;1,1;]"..
-				"list[current_name;dst;5,1;2,2;]"..
+				voltbuild.production_spec..
 				consumers.get_progressbar(0,1,
 					"itest_recycler_progress_bg.png",
 					"itest_recycler_progress_fg.png"))
@@ -86,8 +85,7 @@ minetest.register_node("voltbuild:recycler_active", {
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)
 		meta:set_string("formspec", consumers.get_formspec(pos)..
-				"list[current_name;src;2,1;1,1;]"..
-				"list[current_name;dst;5,1;2,2;]")
+				voltbuild.production_spec)
 		consumers.on_construct(pos)
 	end,
 	tube={insert_object=function(pos,node,stack,direction)
@@ -194,8 +192,7 @@ minetest.register_abm({
 			hacky_swap_node(pos,"voltbuild:recycler")
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
-				"list[current_name;src;2,1;1,1;]"..
-				"list[current_name;dst;5,1;2,2;]"..
+				voltbuild.production_spec..
 				consumers.get_progressbar(progress,maxprogress,
 					"itest_recycler_progress_bg.png",
 					"itest_recycler_progress_fg.png"))
