@@ -1,10 +1,11 @@
 iron_furnace = {}
 
 function iron_furnace.get_formspec(pos)
-	formspec = voltbuild.size_spec..
+	formspec = "size[8,9]"..
 	"list[current_name;fuel;2,3;1,1;]"..
-	voltbuild.production_spec..
-	voltbuild.player_inventory_spec
+	"list[current_name;src;2,1;1,1;]"..
+	"list[current_name;dst;5,1;2,2;]"..
+	"list[current_player;main;0,5;8,4;]"
 	local meta = minetest.env:get_meta(pos)
 	local percent
 	if meta:get_float("fburntime") == 0 then
@@ -12,7 +13,7 @@ function iron_furnace.get_formspec(pos)
 	else
 		percent = 100 - meta:get_float("ftime")/meta:get_float("fburntime")*100
 	end
-	local chrbar="image[2,2;1,1;default_furnace_fire_bg.png^[lowpart:"..
+	local chrbar="image["..voltbuild.image_location.."default_furnace_fire_bg.png^[lowpart:"..
 			percent..":default_furnace_fire_fg.png]"
 	return formspec..chrbar
 end

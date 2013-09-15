@@ -7,7 +7,7 @@ minetest.register_node("voltbuild:watermill",{description="Watermill",
 		meta:set_int("energy",0)
 		meta:set_int("energyf",0)
 		meta:set_string("formspec", generators.get_formspec(pos)..
-				"image[2,2;1,1;voltbuild_water.png]")
+				"image["..voltbuild.image_location.."voltbuild_water.png]")
 		generators.on_construct(pos)
 	end,
 	can_dig = generators.can_dig,
@@ -58,6 +58,6 @@ minetest.register_abm({
 			end
 		end
 		meta:set_string("formspec",generators.get_formspec(pos)..
-				"image[2,2;1,1;voltbuild_water.png]")
+				"image["..voltbuild.image_location.."voltbuild_water.png]")
 	end
 })

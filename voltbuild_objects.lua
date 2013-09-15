@@ -3,6 +3,12 @@ voltbuild.charge_spec = "list[current_name;charge;2,1;1,1;]"
 voltbuild.discharge_spec = "list[current_name;discharge;2,3;1,1;]"
 voltbuild.player_inventory_spec = "list[current_player;main;0,5;8,4;]"
 voltbuild.production_spec = "list[current_name;src;2,1;1,1;]list[current_name;dst;5,1;2,2;]"
+voltbuild.components_spec = "list[current_name;components;0,0;1,4;]"
+voltbuild.common_spec = voltbuild.size_spec..
+		voltbuild.player_inventory_spec..
+		voltbuild.components_spec
+voltbuild.image_location = "2,2;1,1;"
+voltbuild.fuel_location = "2,3;1,1"
 
 function voltbuild.get_percent(pos)
 	local meta = minetest.env:get_meta(pos)
@@ -11,11 +17,32 @@ function voltbuild.get_percent(pos)
 end
 
 function voltbuild.chargebar_spec (pos)
-	return("image[3,2;2,1;itest_charge_bg.png^[lowpart:".. voltbuild.get_percent(pos)..":itest_charge_fg.png^[transformR270]]]")
+	return("image[3,2;2,1;itest_charge_bg.png^[lowpart:".. 
+	voltbuild.get_percent(pos)..
+	":itest_charge_fg.png^[transformR270]")
 end
 
 function voltbuild.vertical_chargebar_spec (pos)
-	return("image[2,2;1,1;itest_charge_bg.png^[lowpart:".. voltbuild.get_percent(pos)..":itest_charge_fg.png]]")
+	return("image["..voltbuild.image_location..
+		"itest_charge_bg.png^[lowpart:".. 
+		voltbuild.get_percent(pos)..
+		":itest_charge_fg.png]")
+end
+
+function voltbuild.pressurebar_spec (pos)
+	local meta = minetest.env:get_meta(pos)
+	local pressure = meta:get_int("pressure")
+	local maxp = meta:get_int("max_pressure")
+	local percent = math.min(((pressure/maxp)*100),100)
+	if percent > 90 then
+		return ("image[1,2;1,1;itest_charge_bg.png^itest_charge_fg.png^[crack:1:9]")
+	end
+	if percent > 75 then
+		return ("image[1,2;1,1;itest_charge_bg.png^[crack:1:2")
+	end
+	return ("image[1,2;1,1;itest_charge_bg.png^[lowpart:"..
+		percent..
+		":itest_charge_fg.png]")
 end
 
 function voltbuild.charge_item(pos,energy)
@@ -87,7 +114,20 @@ function voltbuild.inventory(pos,listname,stack,maxtier)
 		if chr>0 and chr<=maxtier then
 			return stack:get_count()
 		end
-		return 0
+	elseif listname=="components" then
+		local meta = minetest.env:get_meta(pos)
+		local inv = meta:get_inventory()
+		if get_item_field(stack:get_name(),"component") == 1 then
+			return 1
+		end
 	end
 	return 0
 end
+
+function voltbuild.on_construct(pos)
+	local meta = minetest.env:get_meta(pos)
+	local inv = meta:get_inventory()
+	inv:set_size("components",4)
+end
+
+dofile(modpath.."/components.lua")

@@ -26,6 +26,7 @@ function storage.on_construct(pos)
 	local inv = meta:get_inventory()
 	inv:set_size("charge", 1)
 	inv:set_size("discharge", 1)
+	voltbuild.on_construct(pos)
 end
 
 storage.can_dig = voltbuild.can_dig
@@ -35,11 +36,11 @@ storage.can_dig = voltbuild.can_dig
 storage.inventory = voltbuild.inventory
 
 function storage.get_formspec(pos)
-	formspec = voltbuild.size_spec..
+	formspec = voltbuild.common_spec..
 	voltbuild.charge_spec..
 	voltbuild.discharge_spec..
-	voltbuild.player_inventory_spec..
-	voltbuild.chargebar_spec(pos)
+	voltbuild.chargebar_spec(pos)..
+	voltbuild.pressurebar_spec(pos)
 	return formspec
 end
 

@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-my @exemptfiles = ("voltbuild_objects.lua","textures","tools");
+my @exemptfiles = ("voltbuild_objects.lua","textures","tools","iron_furnace.lua");
 my($arg);
 foreach $arg (@ARGV) {
 	my($exempt,$break,$nextFile);
@@ -28,6 +28,7 @@ foreach $arg (@ARGV) {
 		$str =~ s/\"list\[current_player;main;0,5;8,4;\]\"/voltbuild.player_inventory_spec/g;
 		$str =~ s/\s*\"list\[current_name;src;2,1;1,1;\]\"\.\.\n\s*//g;
 		$str =~ s/\"list\[current_name;dst;5,1;2,2;\]\"/voltbuild.production_spec/g;
+		$str =~ s/\"image\[2,2;1,1;/"image["..voltbuild.image_location.."/g;
 		print FILE $str;
 	}
 	close(FILE) or die("Couldn't close $arg after writing\n");

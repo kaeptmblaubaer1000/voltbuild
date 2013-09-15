@@ -1,3 +1,5 @@
+local fuel_spec = "list[current_name;fuel;"..voltbuild.fuel_location.."]"
+
 minetest.register_node("voltbuild:generator", {
 	description = "Generator",
 	tiles = {"itest_generator_side.png", "itest_generator_side.png", "itest_generator_side.png",
@@ -13,8 +15,8 @@ minetest.register_node("voltbuild:generator", {
 		local inv = meta:get_inventory()
 		inv:set_size("fuel", 1)
 		meta:set_string("formspec", generators.get_formspec(pos)..
-				"list[current_name;fuel;2,3;1,1;]"..
-				"image[2,2;1,1;default_furnace_fire_bg.png]")
+				fuel_spec..
+				"image["..voltbuild.image_location.."default_furnace_fire_bg.png]")
 		generators.on_construct(pos)
 	end,
 	can_dig = function(pos,player)
@@ -67,8 +69,8 @@ minetest.register_node("voltbuild:generator_active", {
 		local inv = meta:get_inventory()
 		inv:set_size("fuel", 1)
 		meta:set_string("formspec", generators.get_formspec(pos)..
-				"list[current_name;fuel;2,3;1,1;]"..
-				"image[2,2;1,1;default_furnace_fire_bg.png]")
+				fuel_spec..
+				"image["..voltbuild.image_location.."default_furnace_fire_bg.png]")
 		generators.on_construct(pos)
 	end,
 	can_dig = function(pos,player)
@@ -134,22 +136,17 @@ minetest.register_abm({
 			if meta:get_float("ftime") < meta:get_float("fburntime") then
 				meta:set_float("ftime", meta:get_float("ftime") + 1)
 				generators.produce(pos,10)
+				local percent = meta:get_float("ftime")/meta:get_float("fburntime")*100
+				state = true
+				meta:set_string("formspec", generators.get_formspec(pos)..
+					"image["..voltbuild.image_location.."default_furnace_fire_bg.png^[lowpart:"..
+							(100-percent)..":default_furnace_fire_fg.png]"..
+					fuel_spec)
 			else
 				local energy = meta:get_int("energy")
 				local use = math.min(energy,10)
 				meta:set_int("energy",energy-use)
 				generators.produce(pos,use)
-			end
-			
-			if meta:get_float("ftime") < meta:get_float("fburntime") then
-				local percent = meta:get_float("ftime")/meta:get_float("fburntime")*100
-				state = true
-				meta:set_string("formspec", generators.get_formspec(pos)..
-					"image[2,2;1,1;default_furnace_fire_bg.png^[lowpart:"..
-							(100-percent)..":default_furnace_fire_fg.png]"..
-					"list[current_name;fuel;2,3;1,1;]")
-			else
-			
 				if fuellist then
 					fuel, afterfuel = minetest.get_craft_result({method = "fuel", width = 1, items = fuellist})
 				end
@@ -157,16 +154,16 @@ minetest.register_abm({
 				if (not fuel) or fuel.time <= 0 then
 					state = false
 					meta:set_string("formspec", generators.get_formspec(pos)..
-						"image[2,2;1,1;default_furnace_fire_bg.png]"..
-						"list[current_name;fuel;2,3;1,1;]")
+						"image["..voltbuild.image_location.."default_furnace_fire_bg.png]"..
+						fuel_spec)
 					break
 				end
 		
 				meta:set_float("ftime", meta:get_float("ftime")-meta:get_float("fburntime"))
 				meta:set_float("fburntime", fuel.time*5) -- Fuel will last 4 times less, but we have 20 ticks in a second
 				meta:set_string("formspec", generators.get_formspec(pos)..
-						"image[2,2;1,1;default_furnace_fire_fg.png]"..
-						"list[current_name;fuel;2,3;1,1;]")
+						"image["..voltbuild.image_location.."default_furnace_fire_fg.png]"..
+						fuel_spec)
 				inv:set_stack("fuel", 1, afterfuel.items[1])
 			end
 		end

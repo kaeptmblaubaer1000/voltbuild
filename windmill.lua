@@ -10,7 +10,7 @@ minetest.register_node("voltbuild:windmill",{description="Windmill",
 		meta:set_int("energyf",0)
 		meta:set_int("obstacles",200)
 		meta:set_string("formspec", generators.get_formspec(pos)..
-				"image[2,2;1,1;voltbuild_wind_symbol.png]")
+				"image["..voltbuild.image_location.."voltbuild_wind_symbol.png]")
 		generators.on_construct(pos)
 	end,
 	can_dig = generators.can_dig,
@@ -58,7 +58,7 @@ minetest.register_abm({
 			end
 		end
 		meta:set_string("formspec",generators.get_formspec(pos)..
-				"image[2,2;1,1;voltbuild_wind_symbol.png]")
+				"image["..voltbuild.image_location.."voltbuild_wind_symbol.png]")
 	end
 })
 

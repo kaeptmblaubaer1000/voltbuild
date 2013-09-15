@@ -6,7 +6,7 @@ minetest.register_node("voltbuild:solar_panel",{description="Solar panel",
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
 		meta:set_string("formspec", generators.get_formspec(pos)..
-				"image[2,2;1,1;itest_sun.png]")
+				"image["..voltbuild.image_location.."itest_sun.png]")
 		generators.on_construct(pos)
 	end,
 	can_dig = generators.can_dig,
@@ -41,6 +41,6 @@ minetest.register_abm({
 			end
 		end
 		meta:set_string("formspec",generators.get_formspec(pos)..
-				"image[2,2;1,1;itest_sun.png]")
+				"image["..voltbuild.image_location.."itest_sun.png]")
 	end
 })
