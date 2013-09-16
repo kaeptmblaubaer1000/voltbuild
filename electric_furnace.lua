@@ -119,7 +119,9 @@ minetest.register_abm({
 	nodenames = {"voltbuild:electric_furnace","voltbuild:electric_furnace_active"},
 	interval = 1.0,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos,node,active_object_count,active_object_count_wider)
+		components.abm_wrapper(pos,node,active_object_count,active_object_count_wider,
+		function(pos, node, active_object_count, active_object_count_wider)
 		local meta = minetest.env:get_meta(pos)
 		local inv = meta:get_inventory()
 		
@@ -177,5 +179,6 @@ minetest.register_abm({
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
 				voltbuild.production_spec)
-	end,
+	end)
+end
 })

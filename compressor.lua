@@ -1,15 +1,12 @@
-compressor_recipes = {}
+voltbuild.recipes.compressing = {}
+compressor_recipes = voltbuild.recipes.compressing
 compressor = {}
 
 function compressor.register_compressor_recipe(string1,string2)
-	compressor_recipes[string1]=string2
+	voltbuild.register_machine_recipe(string1,string2,"compressing")
 end
-function compressor.get_craft_result(c)
-	local input = c.items[1]
-	local output = compressor_recipes[input:get_name()]
-	input:take_item()
-	return {item = ItemStack(output), time = 20},{items = {input}}
-end
+compressor.get_craft_result = voltbuild.get_craft_result
+
 
 minetest.register_node("voltbuild:compressor", {
 	description = "compressor",
@@ -19,6 +16,7 @@ minetest.register_node("voltbuild:compressor", {
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
+	cooking_method="compressing",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -82,6 +80,7 @@ minetest.register_node("voltbuild:compressor_active", {
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
+	cooking_method="compressing",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -137,79 +136,7 @@ minetest.register_abm({
 	nodenames = {"voltbuild:compressor","voltbuild:compressor_active"},
 	interval = 1.0,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		
-		local speed = 1
-		
-		if meta:get_string("stime") == "" then
-			meta:set_float("stime", 0.0)
-		end
-		
-		local state = false
-		
-		for i = 1,20 do
-			local srclist = inv:get_list("src")
-			local compressed = nil
-			local aftercompressed
-		
-			if srclist then
-				compressed, aftercompressed = compressor.get_craft_result({method = "compressing",
-					width = 1, items = srclist})
-			end
-			
-			if compressed.item:is_empty() then
-				state = false
-				break
-			end
-		
-			local energy = meta:get_int("energy")
-			if energy >= 2 then
-				if compressed and compressed.item then
-					state = true
-					meta:set_int("energy",energy-2)
-					meta:set_float("stime", meta:get_float("stime") + 1)
-					if meta:get_float("stime")>=20*speed*compressed.time then
-						meta:set_float("stime",0)
-						if inv:room_for_item("dst",compressed.item) then
-							inv:add_item("dst", compressed.item)
-							inv:set_stack("src", 1, aftercompressed.items[1])
-						else
-							meta:set_int("energy",energy) -- Don't waste energy
-							meta:set_float("stime",20*speed*compressed.time)
-							state = false
-						end
-					end
-				else
-					state = false
-				end
-			end
-			consumers.discharge(pos)
-		end
-		local srclist = inv:get_list("src")
-		local compressed = nil
-		local aftercompressed
-	
-		if srclist then
-			compressed, aftercompressed = compressor.get_craft_result({method = "compressing",
-				width = 1, items = srclist})
-		end
-		local progress = meta:get_float("stime")
-		local maxprogress = 1
-		if compressed and compressed.time then
-			maxprogress = 20*speed*compressed.time
-		end
-		if inv:is_empty("src") then state = false end
-		if state then
-			hacky_swap_node(pos,"voltbuild:compressor_active")
-		else
-			hacky_swap_node(pos,"voltbuild:compressor")
-		end
-		meta:set_string("formspec", consumers.get_formspec(pos)..
-				voltbuild.production_spec..
-				consumers.get_progressbar(progress,maxprogress,
-					"itest_compressor_progress_bg.png",
-					"itest_compressor_progress_fg.png"))
+	action=function (pos,node,active_object_count,active_object_count_wider)
+		components.abm_wrapper(pos,node,active_object_count,active_object_count_wider,voltbuild.production_abm)
 	end,
 })

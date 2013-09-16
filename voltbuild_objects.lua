@@ -9,6 +9,7 @@ voltbuild.common_spec = voltbuild.size_spec..
 		voltbuild.components_spec
 voltbuild.image_location = "2,2;1,1;"
 voltbuild.fuel_location = "2,3;1,1"
+voltbuild.recipes = {}
 
 function voltbuild.get_percent(pos)
 	local meta = minetest.env:get_meta(pos)
@@ -114,12 +115,14 @@ function voltbuild.inventory(pos,listname,stack,maxtier)
 		if chr>0 and chr<=maxtier then
 			return stack:get_count()
 		end
+		return 0
 	elseif listname=="components" then
 		local meta = minetest.env:get_meta(pos)
 		local inv = meta:get_inventory()
 		if get_item_field(stack:get_name(),"component") == 1 then
 			return 1
 		end
+		return 0
 	end
 	return 0
 end
@@ -128,6 +131,114 @@ function voltbuild.on_construct(pos)
 	local meta = minetest.env:get_meta(pos)
 	local inv = meta:get_inventory()
 	inv:set_size("components",4)
+end
+
+function voltbuild.allow_metadata_inventory_put(pos, listname, index, stack, player)
+	local meta = minetest:get_meta(pos)
+	local max_tier = meta:get_int("max_tier")
+	storage.inventory(pos,listname,stack,max_tier)
+end
+function voltbuild.allow_metadata_inventory_move (pos, from_list, from_index, to_list, to_index, count, player)
+	local meta = minetest.env:get_meta(pos)
+	local inv = meta:get_inventory()
+	local stack = inv:get_stack(from_list, from_index)
+	local max_tier = meta:get_int("max_tier")
+	return storage.inventory(pos, to_list, stack, max_tier)
+end
+
+function voltbuild.register_machine_recipe(string1,string2,cooking_type)
+	voltbuild.recipes[cooking_type][string1]=string2
+end
+
+function voltbuild.get_craft_result(c)
+	local input = c.items[1]
+	local output = voltbuild.recipes[c.method][input:get_name()]
+	input:take_item()
+	return {item = ItemStack(output), time = 20},{items = {input}}
+end
+
+function voltbuild.production_abm (pos,node, active_object_count, active_object_count_wider)
+		local meta = minetest.env:get_meta(pos)
+		local inv = meta:get_inventory()
+		local cooking_method = minetest.registered_nodes[node.name]["cooking_method"]
+		
+		local speed = 1
+		
+		if meta:get_string("stime") == "" then
+			meta:set_float("stime", 0.0)
+		end
+		
+		local state = false
+		
+		for i = 1,20 do
+			local srclist = inv:get_list("src")
+			local produced = nil
+			local afterproduction
+		
+			if srclist then
+				produced, afterproduction = voltbuild.get_craft_result({method = cooking_method,
+					width = 1, items = srclist})
+			end
+			
+			if produced.item:is_empty() then
+				state = false
+				break
+			end
+		
+			local energy = meta:get_int("energy")
+			if energy >= 2 then
+				if produced and produced.item then
+					state = true
+					meta:set_int("energy",energy-2)
+					meta:set_float("stime", meta:get_float("stime") + 1)
+					if meta:get_float("stime")>=20*speed*produced.time then
+						meta:set_float("stime",0)
+						if inv:room_for_item("dst",produced.item) then
+							inv:add_item("dst", produced.item)
+							inv:set_stack("src", 1, afterproduction.items[1])
+						else
+							meta:set_int("energy",energy) -- Don't waste energy
+							meta:set_float("stime",20*speed*produced.time)
+							state = false
+						end
+					end
+				else
+					state = false
+				end
+			end
+			consumers.discharge(pos)
+		end
+		local srclist = inv:get_list("src")
+		local produced = nil
+		local afterproduction
+	
+		if srclist then
+			produced, afterproduction = voltbuild.get_craft_result({method = cooking_method,
+				width = 1, items = srclist})
+		end
+		local progress = meta:get_float("stime")
+		local maxprogress = 1
+		if produced and produced.time then
+			maxprogress = 20*speed*produced.time
+		end
+		if inv:is_empty("src") then state = false end
+		local active = string.find(node.name,"_active")
+		local base_node_name = nil
+		if active then
+			base_node_name = string.sub(node.name,1,active-1)
+		else
+			base_node_name = node.name
+		end
+		if state then
+			hacky_swap_node(pos,base_node_name.."_active")
+		else
+			hacky_swap_node(pos,base_node_name)
+		end
+		meta:set_string("formspec", consumers.get_formspec(pos)..
+				voltbuild.production_spec..
+				consumers.get_progressbar(progress,maxprogress,
+					"itest_extractor_progress_bg.png",
+					"itest_extractor_progress_fg.png"))
 end
 
 dofile(modpath.."/components.lua")

@@ -1,15 +1,12 @@
-extractor_recipes = {}
+voltbuild.recipes.extracting = {}
+extractor_recipes = voltbuild.recipes.extracting
 extractor = {}
 
 function extractor.register_extractor_recipe(string1,string2)
-	extractor_recipes[string1]=string2
+	voltbuild.register_machine_recipe(string1,string2,"extracting")
 end
-function extractor.get_craft_result(c)
-	local input = c.items[1]
-	local output = extractor_recipes[input:get_name()]
-	input:take_item()
-	return {item = ItemStack(output), time = 20},{items = {input}}
-end
+extractor.get_craft_result = voltbuild.get_craft_result
+
 
 minetest.register_node("voltbuild:extractor", {
 	description = "Extractor",
@@ -18,6 +15,7 @@ minetest.register_node("voltbuild:extractor", {
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
+	cooking_method = "extracting",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -80,6 +78,7 @@ minetest.register_node("voltbuild:extractor_active", {
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
+	cooking_method = "extracting",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -135,79 +134,7 @@ minetest.register_abm({
 	nodenames = {"voltbuild:extractor","voltbuild:extractor_active"},
 	interval = 1.0,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		
-		local speed = 1
-		
-		if meta:get_string("stime") == "" then
-			meta:set_float("stime", 0.0)
-		end
-		
-		local state = false
-		
-		for i = 1,20 do
-			local srclist = inv:get_list("src")
-			local extracted = nil
-			local afterextracted
-		
-			if srclist then
-				extracted, afterextracted = extractor.get_craft_result({method = "extracting",
-					width = 1, items = srclist})
-			end
-			
-			if extracted.item:is_empty() then
-				state = false
-				break
-			end
-		
-			local energy = meta:get_int("energy")
-			if energy >= 2 then
-				if extracted and extracted.item then
-					state = true
-					meta:set_int("energy",energy-2)
-					meta:set_float("stime", meta:get_float("stime") + 1)
-					if meta:get_float("stime")>=20*speed*extracted.time then
-						meta:set_float("stime",0)
-						if inv:room_for_item("dst",extracted.item) then
-							inv:add_item("dst", extracted.item)
-							inv:set_stack("src", 1, afterextracted.items[1])
-						else
-							meta:set_int("energy",energy) -- Don't waste energy
-							meta:set_float("stime",20*speed*extracted.time)
-							state = false
-						end
-					end
-				else
-					state = false
-				end
-			end
-			consumers.discharge(pos)
-		end
-		local srclist = inv:get_list("src")
-		local extracted = nil
-		local afterextracted
-	
-		if srclist then
-			extracted, afterextracted = extractor.get_craft_result({method = "extracting",
-				width = 1, items = srclist})
-		end
-		local progress = meta:get_float("stime")
-		local maxprogress = 1
-		if extracted and extracted.time then
-			maxprogress = 20*speed*extracted.time
-		end
-		if inv:is_empty("src") then state = false end
-		if state then
-			hacky_swap_node(pos,"voltbuild:extractor_active")
-		else
-			hacky_swap_node(pos,"voltbuild:extractor")
-		end
-		meta:set_string("formspec", consumers.get_formspec(pos)..
-				voltbuild.production_spec..
-				consumers.get_progressbar(progress,maxprogress,
-					"itest_extractor_progress_bg.png",
-					"itest_extractor_progress_fg.png"))
+	action=function (pos,node,active_object_count,active_object_count_wider)
+		components.abm_wrapper(pos,node,active_object_count,active_object_count_wider,voltbuild.production_abm)
 	end,
 })

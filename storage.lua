@@ -44,5 +44,17 @@ function storage.get_formspec(pos)
 	return formspec
 end
 
+function storage.abm (pos, node, active_object_count, active_objects_wider)
+	local senddir = param22dir(node.param2)
+	local meta = minetest.env:get_meta(pos)
+	local psize = meta:get_int("max_psize")
+	for i=1,20 do
+		storage.charge(pos)
+		storage.send(pos,psize,senddir)
+		storage.discharge(pos)
+	end
+	meta:set_string("formspec",storage.get_formspec(pos))
+end
+
 dofile(modpath.."/batboxes.lua")
 dofile(modpath.."/transformers.lua")
