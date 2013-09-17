@@ -106,7 +106,7 @@ minetest.register_node("voltbuild:generator_active", {
 	end,
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames = {"voltbuild:generator","voltbuild:generator_active"},
 	interval = 1.0,
 	chance = 1,

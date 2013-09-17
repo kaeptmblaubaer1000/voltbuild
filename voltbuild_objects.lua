@@ -131,6 +131,7 @@ function voltbuild.on_construct(pos)
 	local meta = minetest.env:get_meta(pos)
 	local inv = meta:get_inventory()
 	inv:set_size("components",4)
+	meta:set_int("pressure",0)
 end
 
 function voltbuild.allow_metadata_inventory_put(pos, listname, index, stack, player)

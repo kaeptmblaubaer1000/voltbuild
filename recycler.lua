@@ -127,7 +127,7 @@ minetest.register_node("voltbuild:recycler_active", {
 	end,
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames = {"voltbuild:recycler","voltbuild:recycler_active"},
 	interval = 1.0,
 	chance = 1,

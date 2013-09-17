@@ -16,7 +16,7 @@ minetest.register_node("voltbuild:batbox",{description="BatBox",
 	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames={"voltbuild:batbox"},
 	interval=1.0,
 	chance=1,
@@ -41,7 +41,7 @@ minetest.register_node("voltbuild:mfe_unit",{description="MFE Unit",
 	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames={"voltbuild:mfe_unit"},
 	interval=1.0,
 	chance=1,
@@ -66,7 +66,7 @@ minetest.register_node("voltbuild:mfs_unit",{description="MFS Unit",
 	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames={"voltbuild:mfs_unit"},
 	interval=1.0,
 	chance=1,

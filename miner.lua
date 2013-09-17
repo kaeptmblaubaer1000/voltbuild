@@ -121,7 +121,7 @@ function miner.dig_towards_ore(tpos,radius)
 	return tpos
 end
 
-minetest.register_abm({
+components.register_abm({
 	nodenames = {"voltbuild:miner"},
 	interval = 1.0,
 	chance = 1,

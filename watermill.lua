@@ -22,7 +22,7 @@ minetest.register_node("voltbuild:watermill",{description="Watermill",
 	end,
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames={"voltbuild:watermill"},
 	interval=1.0,
 	chance=1,

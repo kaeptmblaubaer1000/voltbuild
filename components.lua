@@ -14,6 +14,7 @@ function components.each_with_method(component_inv,method_name)
 	return ret_comps
 end
 
+
 function components.abm_wrapper(pos,node,active_object_count,active_object_count_wider,abm)
 	local meta = minetest.env:get_meta(pos)
 	local inv = meta:get_inventory()
@@ -24,12 +25,29 @@ function components.abm_wrapper(pos,node,active_object_count,active_object_count
 			break
 		end
 	end
+	for i,comp in ipairs(components.each_with_method(inv,"before_effects")) do
+		comp.before_effects(pos)
+	end
 	if run_abm then
+		for i,comp in ipairs(components.each_with_method(inv,"run_before_effects")) do
+			comp.run_before_effects(pos)
+		end
 		abm(pos,node,active_object_count,active_object_count_wider)
+		for i,comp in ipairs(components.each_with_method(inv,"run_after_effects")) do
+			comp.run_after_effects(pos)
+		end
 	end
 	for i,comp in ipairs(components.each_with_method(inv,"after_effects")) do
-		comp.cooling(pos)
+		comp.after_effects(pos)
 	end
+end
+
+function components.register_abm(table)
+	local register_action = table.action
+	table.action = function (pos,node,active_object_count,active_object_count_wider)
+		components.abm_wrapper(pos,node,active_object_count,active_object_count_wider,register_action)
+	end
+	minetest.register_abm(table)
 end
 
 minetest.register_craftitem("voltbuild:overclock", {

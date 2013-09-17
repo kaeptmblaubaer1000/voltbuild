@@ -131,11 +131,9 @@ minetest.register_node("voltbuild:macerator_active", {
 	end,
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames = {"voltbuild:macerator","voltbuild:macerator_active"},
 	interval = 1.0,
 	chance = 1,
-	action=function (pos,node,active_object_count,active_object_count_wider)
-		components.abm_wrapper(pos,node,active_object_count,active_object_count_wider,voltbuild.production_abm)
-	end,
+	action=voltbuild.production_abm
 })

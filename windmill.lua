@@ -18,7 +18,7 @@ minetest.register_node("voltbuild:windmill",{description="Windmill",
 	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames={"voltbuild:windmill"},
 	interval=1.0,
 	chance=1,
@@ -55,7 +55,7 @@ minetest.register_abm({
 	end
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames={"voltbuild:windmill"},
 	interval=20,
 	chance=1,

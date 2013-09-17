@@ -21,7 +21,7 @@ minetest.register_node("voltbuild:solar_panel",{description="Solar panel",
 	end,
 })
 
-minetest.register_abm({
+components.register_abm({
 	nodenames={"voltbuild:solar_panel"},
 	interval=1.0,
 	chance=1,
