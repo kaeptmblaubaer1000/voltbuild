@@ -5,6 +5,7 @@ minetest.register_node("voltbuild:electric_furnace", {
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
+	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -35,25 +36,8 @@ minetest.register_node("voltbuild:electric_furnace", {
 		return inv:is_empty("src") and inv:is_empty("dst") and
 			consumers.can_dig(pos,player)
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		if listname == "dst" then
-			return 0
-		elseif listname == "src" then
-			return stack:get_count()
-		end
-		return consumers.inventory(pos, listname, stack, 1)
-	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		local stack = inv:get_stack(from_list, from_index)
-		if to_list == "dst" then
-			return 0
-		elseif to_list == "src" then
-			return stack:get_count()
-		end
-		return consumers.inventory(pos, to_list, stack, 1)
-	end,
+	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
+	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
 minetest.register_node("voltbuild:electric_furnace_active", {
@@ -64,6 +48,7 @@ minetest.register_node("voltbuild:electric_furnace_active", {
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
+	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -94,25 +79,8 @@ minetest.register_node("voltbuild:electric_furnace_active", {
 		return inv:is_empty("src") and inv:is_empty("dst") and
 			consumers.can_dig(pos,player)
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		if listname == "dst" then
-			return 0
-		elseif listname == "src" then
-			return stack:get_count()
-		end
-		return consumers.inventory(pos, listname, stack, 1)
-	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		local stack = inv:get_stack(from_list, from_index)
-		if to_list == "dst" then
-			return 0
-		elseif to_list == "src" then
-			return stack:get_count()
-		end
-		return consumers.inventory(pos, to_list, stack, 1)
-	end,
+	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
+	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
 components.register_abm({

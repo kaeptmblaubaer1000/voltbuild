@@ -8,7 +8,7 @@ minetest.register_node("voltbuild:generator", {
 	groups = {energy=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_energy=4000},
+	voltbuild = {max_energy=4000,max_tier=1,energy_produce=10,max_stress=2000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -19,37 +19,9 @@ minetest.register_node("voltbuild:generator", {
 				"image["..voltbuild.image_location.."default_furnace_fire_bg.png]")
 		generators.on_construct(pos)
 	end,
-	can_dig = function(pos,player)
-		local meta = minetest.env:get_meta(pos);
-		local inv = meta:get_inventory()
-		if not inv:is_empty("fuel") then
-			return false
-		end
-		return generators.can_dig(pos,player)
-	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		if listname == "fuel" then
-			if is_fuel_no_lava(stack) then
-				return stack:get_count()
-			else
-				return 0
-			end
-		end
-		return generators.inventory(pos, listname, stack,1)
-	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		local stack = inv:get_stack(from_list, from_index)
-		if to_list == "fuel" then
-			if is_fuel_no_lava(stack) then
-				return count
-			else
-				return 0
-			end
-		end
-		return generators.inventory(pos, to_list, stack,1)
-	end,
+	can_dig = voltbuild.can_dig,
+	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
+	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
 minetest.register_node("voltbuild:generator_active", {
@@ -62,7 +34,7 @@ minetest.register_node("voltbuild:generator_active", {
 	groups = {energy=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_energy=4000},
+	voltbuild = {max_energy=4000,max_tier=1,energy_produce=10,max_stress=2000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -73,37 +45,9 @@ minetest.register_node("voltbuild:generator_active", {
 				"image["..voltbuild.image_location.."default_furnace_fire_bg.png]")
 		generators.on_construct(pos)
 	end,
-	can_dig = function(pos,player)
-		local meta = minetest.env:get_meta(pos);
-		local inv = meta:get_inventory()
-		if not inv:is_empty("fuel") then
-			return false
-		end
-		return generators.can_dig(pos,player)
-	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		if listname == "fuel" then
-			if is_fuel_no_lava(stack) then
-				return stack:get_count()
-			else
-				return 0
-			end
-		end
-		return generators.inventory(pos, listname, stack,1)
-	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		local stack = inv:get_stack(from_list, from_index)
-		if to_list == "fuel" then
-			if is_fuel_no_lava(stack) then
-				return count
-			else
-				return 0
-			end
-		end
-		return generators.inventory(pos, to_list, stack,1)
-	end,
+	can_dig = voltbuild.can_dig,
+	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
+	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
 components.register_abm({
@@ -113,9 +57,10 @@ components.register_abm({
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		local meta = minetest.env:get_meta(pos)
 		local inv = meta:get_inventory()
-		
-		if meta:get_string("ftime") == "" then
-			meta:set_float("ftime", 0.0)
+		local energy_produce = minetest.registered_nodes[node.name]["voltbuild"]["energy_produce"]
+
+		if meta:get_string("stime") == "" then
+			meta:set_float("stime", 0.0)
 		end
 		
 		if meta:get_string("fburntime") == "" then
@@ -133,10 +78,10 @@ components.register_abm({
 					{method = "fuel", width = 1, items = fuellist})
 			end
 			
-			if meta:get_float("ftime") < meta:get_float("fburntime") then
-				meta:set_float("ftime", meta:get_float("ftime") + 1)
-				generators.produce(pos,10)
-				local percent = meta:get_float("ftime")/meta:get_float("fburntime")*100
+			if meta:get_float("stime") < meta:get_float("fburntime") then
+				meta:set_float("stime", meta:get_float("stime") + 1)
+				generators.produce(pos,energy_produce)
+				local percent = meta:get_float("stime")/meta:get_float("fburntime")*100
 				state = true
 				meta:set_string("formspec", generators.get_formspec(pos)..
 					"image["..voltbuild.image_location.."default_furnace_fire_bg.png^[lowpart:"..
@@ -144,7 +89,7 @@ components.register_abm({
 					fuel_spec)
 			else
 				local energy = meta:get_int("energy")
-				local use = math.min(energy,10)
+				local use = math.min(energy,energy_produce)
 				meta:set_int("energy",energy-use)
 				generators.produce(pos,use)
 				if fuellist then
@@ -159,7 +104,7 @@ components.register_abm({
 					break
 				end
 		
-				meta:set_float("ftime", meta:get_float("ftime")-meta:get_float("fburntime"))
+				meta:set_float("stime", meta:get_float("stime")-meta:get_float("fburntime"))
 				meta:set_float("fburntime", fuel.time*5) -- Fuel will last 4 times less, but we have 20 ticks in a second
 				meta:set_string("formspec", generators.get_formspec(pos)..
 						"image["..voltbuild.image_location.."default_furnace_fire_fg.png]"..

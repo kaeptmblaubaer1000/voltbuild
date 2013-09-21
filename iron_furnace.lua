@@ -192,10 +192,6 @@ minetest.register_abm({
 			if cooked and cooked.item then
 				state = true
 				meta:set_float("stime", meta:get_float("stime") + 1)
-				if not cooked.item:is_empty() then
-					--print("Ctime "..cooked.time)
-					--print("Stime "..meta:get_float("stime"))
-				end
 				if meta:get_float("stime")>=20*speed*cooked.time then
 					meta:set_float("stime",0)
 					if inv:room_for_item("dst",cooked.item) then

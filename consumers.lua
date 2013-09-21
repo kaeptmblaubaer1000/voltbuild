@@ -25,7 +25,7 @@ function consumers.get_formspec(pos)
 	formspec = voltbuild.common_spec.. 
 	voltbuild.discharge_spec..
 	voltbuild.vertical_chargebar_spec(pos)..
-	voltbuild.pressurebar_spec(pos)
+	voltbuild.stressbar_spec(pos)
 	return formspec
 end
 

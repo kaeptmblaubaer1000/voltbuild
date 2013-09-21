@@ -1,7 +1,7 @@
 minetest.register_node("voltbuild:watermill",{description="Watermill",
 	groups={energy=1,cracky=2},
 	tiles={"itest_watermill_top.png", "itest_watermill_top.png", "itest_watermill_side.png"},
-	voltbuild = {max_energy=500},
+	voltbuild = {max_energy=500,max_tier=1,max_stress=2000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -11,15 +11,8 @@ minetest.register_node("voltbuild:watermill",{description="Watermill",
 		generators.on_construct(pos)
 	end,
 	can_dig = generators.can_dig,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		return generators.inventory(pos, listname, stack,1)
-	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		local stack = inv:get_stack(from_list, from_index)
-		return generators.inventory(pos, to_list, stack,1)
-	end,
+	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
+	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
 components.register_abm({

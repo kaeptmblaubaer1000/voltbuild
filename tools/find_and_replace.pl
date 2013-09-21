@@ -2,7 +2,8 @@
 use strict;
 use warnings;
 
-my @exemptfiles = ("voltbuild_objects.lua","textures","tools","iron_furnace.lua");
+$/ = undef;
+my @exemptfiles = ("voltbuild_objects.lua","textures","tools","iron_furnace.lua","itest_upgrade_compat.lua");
 my($arg);
 foreach $arg (@ARGV) {
 	my($exempt,$break,$nextFile);

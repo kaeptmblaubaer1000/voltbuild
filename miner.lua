@@ -1,4 +1,25 @@
 miner = {}
+voltbuild.metadata_check.pipe = function (pos,listname,stack,maxtier)
+	if stack:get_name() == "voltbuild:mining_pipe" then
+		return stack:get_count()
+	else
+		return 0
+	end
+end
+voltbuild.metadata_check.drill = function (pos,listname,stack,maxtier)
+	if stack:get_name() == "voltbuild:mining_drill" or stack:get_name() == "voltbuild:diamond_drill" or stack:get_name() == "voltbuild:mining_drill_discharged" or stack:get_name() == "voltbuild:diamond_drill_discharged" then
+		return stack:get_count()
+	else
+		return 0
+	end
+end
+voltbuild.metadata_check.scanner = function (pos,listname,stack,maxtier)
+	if stack:get_name() == "voltbuild:od_scanner" or stack:get_name() == "voltbuild:ov_scanner" then
+		return stack:get_count()
+	else
+		return 0
+	end
+end
 
 minetest.register_node("voltbuild:mining_pipe",{description="Mining pipe",
 	groups={cracky=2},
@@ -17,7 +38,7 @@ minetest.register_node("voltbuild:miner", {
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	sounds = default.node_sound_stone_defaults(),
 	voltbuild = {max_psize = 32,
-		max_energy = 10000},
+		max_energy = 10000,max_tier=1,max_stress=2000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -32,59 +53,9 @@ minetest.register_node("voltbuild:miner", {
 				"list[current_name;scanner;4,3;1,1;]")
 		consumers.on_construct(pos)
 	end,
-	can_dig = function(pos,player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		return inv:is_empty("pipe") and inv:is_empty("drill") and inv:is_empty("scanner") and
-			consumers.can_dig(pos,player)
-	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		if listname == "pipe" then
-			if stack:get_name() == "voltbuild:mining_pipe" then
-				return stack:get_count()
-			else
-				return 0
-			end
-		end
-		if listname == "drill" then
-			if stack:get_name() == "voltbuild:mining_drill" or stack:get_name() == "voltbuild:diamond_drill" or stack:get_name() == "voltbuild:mining_drill_discharged" or stack:get_name() == "voltbuild:diamond_drill_discharged" then
-				return stack:get_count()
-			else
-				return 0
-			end
-		end
-		if listname == "scanner" then
-			if stack:get_name() == "voltbuild:od_scanner" or stack:get_name() == "voltbuild:ov_scanner" then
-				return stack:get_count()
-			else
-				return 0
-			end
-		end
-		return consumers.inventory(pos, listname, stack, 1)
-	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		local stack = inv:get_stack(from_list, from_index)
-		if to_list == "pipe" then
-			return stack:get_count()
-		end
-		if to_list == "drill" then
-			if stack:get_name() == "voltbuild:mining_drill" or stack:get_name() == "voltbuild:diamond_drill" or stack:get_name() == "voltbuild:mining_drill_discharged" or stack:get_name() == "voltbuild:diamond_drill_discharged" then
-				return stack:get_count()
-			else
-				return 0
-			end
-		end
-		if to_list == "scanner" then
-			if stack:get_name() == "voltbuild:od_scanner" or stack:get_name() == "voltbuild:ov_scanner" then
-				return stack:get_count()
-			else
-				return 0
-			end
-		end
-		return consumers.inventory(pos, to_list, stack, 1)
-	end,
+	can_dig = voltbuild.can_dig,
+	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
+	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 })
 
 function miner.eject_item(pos,item)

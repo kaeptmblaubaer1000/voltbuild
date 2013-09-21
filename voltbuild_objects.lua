@@ -10,6 +10,15 @@ voltbuild.common_spec = voltbuild.size_spec..
 voltbuild.image_location = "2,2;1,1;"
 voltbuild.fuel_location = "2,3;1,1"
 voltbuild.recipes = {}
+--hash table of check functions for list names in inventory put
+voltbuild.metadata_check = {}
+--hash table of check functions for list names for inventory move,
+--defaults to voltbuild.metadata_check if not defined in this table
+voltbuild.metadata_check_move = {}
+voltbuild.metadata_check_move.__index = function (table,key)
+	return voltbuild.metadata_check[key]
+end
+setmetatable(voltbuild.metadata_check_move,voltbuild.metadata_check_move)
 
 function voltbuild.get_percent(pos)
 	local meta = minetest.env:get_meta(pos)
@@ -30,16 +39,17 @@ function voltbuild.vertical_chargebar_spec (pos)
 		":itest_charge_fg.png]")
 end
 
-function voltbuild.pressurebar_spec (pos)
+function voltbuild.stressbar_spec (pos)
 	local meta = minetest.env:get_meta(pos)
-	local pressure = meta:get_int("pressure")
-	local maxp = meta:get_int("max_pressure")
-	local percent = math.min(((pressure/maxp)*100),100)
+	local node = minetest.env:get_node(pos)
+	local stress = meta:get_int("stress")
+	local max_stress = minetest.registered_nodes[node.name]["voltbuild"]["max_stress"]
+	local percent = math.min(((stress/max_stress)*100),100)
 	if percent > 90 then
 		return ("image[1,2;1,1;itest_charge_bg.png^itest_charge_fg.png^[crack:1:9]")
 	end
 	if percent > 75 then
-		return ("image[1,2;1,1;itest_charge_bg.png^[crack:1:2")
+		return ("image[1,2;1,1;itest_charge_bg.png^[crack:1:2]")
 	end
 	return ("image[1,2;1,1;itest_charge_bg.png^[lowpart:"..
 		percent..
@@ -109,42 +119,50 @@ function voltbuild.can_dig(pos,player)
 	return true
 end
 
-function voltbuild.inventory(pos,listname,stack,maxtier)
-	if listname=="charge" or listname=="discharge" then
+voltbuild.metadata_check.charge = function (pos,listname,stack,maxtier)
 		local chr = get_item_field(stack:get_name(),"charge_tier")
 		if chr>0 and chr<=maxtier then
 			return stack:get_count()
 		end
 		return 0
-	elseif listname=="components" then
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		if get_item_field(stack:get_name(),"component") == 1 then
-			return 1
-		end
-		return 0
-	end
+end
+
+voltbuild.metadata_check.discharge = voltbuild.metadata_check.charge
+
+voltbuild.metadata_check.fuel = function (pos,listname,stack,maxtier)
+			if is_fuel_no_lava(stack) then
+				return stack:get_count()
+			else
+				return 0
+			end
+end
+
+voltbuild.metadata_check.dst = function (pos,listname,stack,maxtier)
 	return 0
+end
+voltbuild.metadata_check.src = function (pos,listname,stack,maxtier)
+	return stack:get_count()
 end
 
 function voltbuild.on_construct(pos)
 	local meta = minetest.env:get_meta(pos)
 	local inv = meta:get_inventory()
 	inv:set_size("components",4)
-	meta:set_int("pressure",0)
+	meta:set_int("stress",0)
 end
 
 function voltbuild.allow_metadata_inventory_put(pos, listname, index, stack, player)
-	local meta = minetest:get_meta(pos)
-	local max_tier = meta:get_int("max_tier")
-	storage.inventory(pos,listname,stack,max_tier)
+	local node = minetest.get_node(pos)
+	local max_tier = minetest.registered_nodes[node.name]["voltbuild"]["max_tier"]
+	return(voltbuild.metadata_check[listname](pos,listname,stack,max_tier,player))
 end
 function voltbuild.allow_metadata_inventory_move (pos, from_list, from_index, to_list, to_index, count, player)
 	local meta = minetest.env:get_meta(pos)
 	local inv = meta:get_inventory()
 	local stack = inv:get_stack(from_list, from_index)
-	local max_tier = meta:get_int("max_tier")
-	return storage.inventory(pos, to_list, stack, max_tier)
+	local node = minetest.get_node(pos)
+	local max_tier = minetest.registered_nodes[node.name]["voltbuild"]["max_tier"]
+	return math.min(voltbuild.metadata_check_move[from_list](pos,to_list,stack,max_tier,from_list,from_index,to_index,count,player),voltbuild.metadata_check[to_list](pos,to_list,stack,max_tier))
 end
 
 function voltbuild.register_machine_recipe(string1,string2,cooking_type)
@@ -162,6 +180,7 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 		local meta = minetest.env:get_meta(pos)
 		local inv = meta:get_inventory()
 		local cooking_method = minetest.registered_nodes[node.name]["cooking_method"]
+		local energy_cost = minetest.registered_nodes[node.name]["voltbuild"]["energy_cost"]
 		
 		local speed = 1
 		
@@ -180,17 +199,19 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 				produced, afterproduction = voltbuild.get_craft_result({method = cooking_method,
 					width = 1, items = srclist})
 			end
-			
+
 			if produced.item:is_empty() then
 				state = false
 				break
+			elseif produced.item:get_name() == "air" then
+				produced.item = ItemStack(nil)
 			end
 		
 			local energy = meta:get_int("energy")
-			if energy >= 2 then
+			if energy >= energy_cost then
 				if produced and produced.item then
 					state = true
-					meta:set_int("energy",energy-2)
+					meta:set_int("energy",energy-energy_cost)
 					meta:set_float("stime", meta:get_float("stime") + 1)
 					if meta:get_float("stime")>=20*speed*produced.time then
 						meta:set_float("stime",0)
@@ -242,4 +263,3 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 					"itest_extractor_progress_fg.png"))
 end
 
-dofile(modpath.."/components.lua")

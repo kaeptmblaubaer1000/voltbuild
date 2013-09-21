@@ -3,7 +3,7 @@ wind_speed = 15
 minetest.register_node("voltbuild:windmill",{description="Windmill",
 	groups={energy=1,cracky=2},
 	tiles={"itest_windmill_top.png", "itest_windmill_top.png", "itest_windmill_side.png"},
-	voltbuild = {max_energy=500,max_tier=1},
+	voltbuild = {max_energy=500,max_tier=1,max_stress=2000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
