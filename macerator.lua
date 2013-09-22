@@ -63,7 +63,7 @@ minetest.register_node("voltbuild:macerator_active", {
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_tier=1,energy_cost=2},
+	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
 	cooking_method="grinding",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)

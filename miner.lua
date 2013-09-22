@@ -97,9 +97,7 @@ components.register_abm({
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
-		for i=1,20 do
-			consumers.discharge(pos)
-		end
+		consumers.discharge(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_string("formspec",consumers.get_formspec(pos)..
 				"list[current_name;pipe;2,1;1,1;]"..

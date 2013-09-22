@@ -33,21 +33,17 @@ components.register_abm({
 		end
 		end
 		if prod==0 then
-			for i=1,20 do
-				local energy = meta:get_int("energy")
-				local use = math.min(energy,2)
-				meta:set_int("energy",energy-use)
-				generators.produce(pos,use)
-			end
+			local energy = meta:get_int("energy")
+			local use = math.min(energy,3)
+			meta:set_int("energy",energy-use)
+			generators.produce(pos,use)
 		else
-			for i=1,20 do
-				meta:set_int("energyf",meta:get_int("energyf")+prod%100)
-				if meta:get_int("energyf") >= 100 then
-					meta:set_int("energyf",meta:get_int("energyf")-100)
-					generators.produce(pos,math.floor(prod/100)+1)
-				else
-					generators.produce(pos,math.floor(prod/100))
-				end
+			meta:set_int("energyf",meta:get_int("energyf")+prod%100)
+			if meta:get_int("energyf") >= 100 then
+				meta:set_int("energyf",meta:get_int("energyf")-100)
+				generators.produce(pos,(math.floor(prod/100)*2)+1)
+			else
+				generators.produce(pos,(math.floor(prod/100))*2)
 			end
 		end
 		meta:set_string("formspec",generators.get_formspec(pos)..

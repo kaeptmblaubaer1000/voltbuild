@@ -42,13 +42,9 @@ minetest.register_abm({
 		local senddir = param22dir(node.param2)
 		local meta = minetest.env:get_meta(pos)
 		if meta:get_int("send_lv") == 0 then
-			for i=1,20 do
-				storage.send(pos,128,senddir)
-			end
+			storage.send(pos,128,senddir)
 		else
-			for i=1,80 do
-				send_alldirs_except(pos,senddir,32)
-			end
+			send_alldirs_except(pos,senddir,32)
 		end
 	end
 })
@@ -83,13 +79,9 @@ minetest.register_abm({
 		local senddir = param22dir(node.param2)
 		local meta = minetest.env:get_meta(pos)
 		if meta:get_int("send_mv") == 0 then
-			for i=1,20 do
-				storage.send(pos,512,senddir)
-			end
+			storage.send(pos,512,senddir)
 		else
-			for i=1,80 do
-				send_alldirs_except(pos,senddir,128)
-			end
+			send_alldirs_except(pos,senddir,128)
 		end
 	end
 })
@@ -124,13 +116,9 @@ minetest.register_abm({
 		local senddir = param22dir(node.param2)
 		local meta = minetest.env:get_meta(pos)
 		if meta:get_int("send_hv") == 0 then
-			for i=1,20 do
-				storage.send(pos,2048,senddir)
-			end
+			storage.send(pos,2048,senddir)
 		else
-			for i=1,80 do
-				send_alldirs_except(pos,senddir,512)
-			end
+			send_alldirs_except(pos,senddir,512)
 		end
 	end
 })

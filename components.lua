@@ -96,12 +96,25 @@ minetest.register_craftitem("voltbuild:overclock", {
 			local energy_produce = minetest.registered_nodes[node.name]["voltbuild"]["energy_produce"]
 			local energy = meta:get_int("energy")
 			local stress = meta:get_int("stress")
+			local pay_cost = false
 			if energy_cost and energy > 2*energy_cost then
 				meta:set_int("energy",energy-energy_cost)
+				pay_cost = true
+			elseif energy_produce then
+				if type(energy_produce) == "function" then
+					local energy_p = nil
+					energy_p = energy_produce()
+					generators.produce(pos,energy_p)
+				elseif type(energy_produce) == "number" then
+					generators.produce(pos,energy_produce)
+				end
+				pay_cost = true
+			end
+			if pay_cost then
 				meta:set_int("stress",stress+20)
 				if meta:get_string("stime") ~= "" then
 					local stime = meta:get_float("stime")
-					meta:set_float("stime",stime+1.0)
+					meta:set_float("stime",stime+10.0)
 				end
 			end
 		end},

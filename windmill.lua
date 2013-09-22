@@ -28,21 +28,17 @@ components.register_abm({
 		local meta=minetest.env:get_meta(pos)
 		local prod=wind_speed*(alt-meta:get_int("obstacles"))
 		if prod<=0 then
-			for i=1,20 do
-				local energy = meta:get_int("energy")
-				local use = math.min(energy,5)
-				meta:set_int("energy",energy-use)
-				generators.produce(pos,use)
-			end
+			local energy = meta:get_int("energy")
+			local use = math.min(energy,5)
+			meta:set_int("energy",energy-use)
+			generators.produce(pos,use)
 		else
-			for i=1,20 do
-				meta:set_int("energyf",meta:get_int("energyf")+prod%750)
-				if meta:get_int("energyf") >= 750 then
-					meta:set_int("energyf",meta:get_int("energyf")-750)
-					generators.produce(pos,math.floor(prod/750)+1)
-				else
-					generators.produce(pos,math.floor(prod/750))
-				end
+			meta:set_int("energyf",meta:get_int("energyf")+prod%750)
+			if meta:get_int("energyf") >= 750 then
+				meta:set_int("energyf",meta:get_int("energyf")-750)
+				generators.produce(pos,(math.floor(prod/750)*3)+1)
+			else
+				generators.produce(pos,math.floor(prod/750)*3)
 			end
 		end
 		if prod >= 3750 then
@@ -55,7 +51,8 @@ components.register_abm({
 	end
 })
 
-components.register_abm({
+--counts obstacles around the windmill, so not meant to be run as a components abm
+minetest.register_abm({
 	nodenames={"voltbuild:windmill"},
 	interval=20,
 	chance=1,

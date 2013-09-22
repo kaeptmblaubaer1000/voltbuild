@@ -22,16 +22,12 @@ components.register_abm({
 		local l=minetest.env:get_node_light({x=pos.x, y=pos.y+1, z=pos.z})
 		local meta=minetest.env:get_meta(pos)
 		if l<15 then
-			for i=1,20 do
-				local energy = meta:get_int("energy")
-				local use = math.min(energy,1)
-				meta:set_int("energy",energy-use)
-				generators.produce(pos,use)
-			end
+			local energy = meta:get_int("energy")
+			local use = math.min(energy,2)
+			meta:set_int("energy",energy-use)
+			generators.produce(pos,use)
 		else
-			for i=1,20 do
-				generators.produce(pos,1)
-			end
+			generators.produce(pos,2)
 		end
 		meta:set_string("formspec",generators.get_formspec(pos)..
 				"image["..voltbuild.image_location.."itest_sun.png]")

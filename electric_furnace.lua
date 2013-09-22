@@ -1,3 +1,10 @@
+voltbuild.recipes.cooking = {}
+voltbuild.recipes.cooking.__index = function (table,key)
+	local produced = minetest.get_craft_result({method = "cooking", width = 1, items={ItemStack(key)}})
+	return produced.item:get_name()
+end
+setmetatable(voltbuild.recipes.cooking,voltbuild.recipes.cooking)
+
 minetest.register_node("voltbuild:electric_furnace", {
 	description = "Electric furnace",
 	tiles = {"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_front.png"},
@@ -6,6 +13,7 @@ minetest.register_node("voltbuild:electric_furnace", {
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
 	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
+	cooking_method="cooking",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -49,6 +57,7 @@ minetest.register_node("voltbuild:electric_furnace_active", {
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
 	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
+	cooking_method="cooking",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -87,63 +96,5 @@ components.register_abm({
 	nodenames = {"voltbuild:electric_furnace","voltbuild:electric_furnace_active"},
 	interval = 1.0,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		
-		local speed = 0.65
-		
-		if meta:get_string("stime") == "" then
-			meta:set_float("stime", 0.0)
-		end
-		
-		local state = false
-		
-		for i = 1,20 do
-			local srclist = inv:get_list("src")
-			local cooked = nil
-			local aftercooked
-		
-			if srclist then
-				cooked, aftercooked = minetest.get_craft_result({method = "cooking",
-					width = 1, items = srclist})
-			end
-			
-			if cooked.item:is_empty() then
-				state = false
-				break
-			end
-		
-			local energy = meta:get_int("energy")
-			if energy >= 3 then
-				if cooked and cooked.item then
-					state = true
-					meta:set_int("energy",energy-3)
-					meta:set_float("stime", meta:get_float("stime") + 1)
-					if meta:get_float("stime")>=20*speed*cooked.time then
-						meta:set_float("stime",0)
-						if inv:room_for_item("dst",cooked.item) then
-							inv:add_item("dst", cooked.item)
-							inv:set_stack("src", 1, aftercooked.items[1])
-						else
-							meta:set_int("energy",energy) -- Don't waste energy
-							meta:set_float("stime",20*speed*cooked.time)
-							state = false
-						end
-					end
-				else
-					state = false
-				end
-			end
-			consumers.discharge(pos)
-		end
-		if inv:is_empty("src") then state = false end
-		if state then
-			hacky_swap_node(pos,"voltbuild:electric_furnace_active")
-		else
-			hacky_swap_node(pos,"voltbuild:electric_furnace")
-		end
-		meta:set_string("formspec", consumers.get_formspec(pos)..
-				voltbuild.production_spec)
-		end
+	action = voltbuild.production_abm,
 })

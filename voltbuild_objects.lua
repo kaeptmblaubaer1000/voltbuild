@@ -1,3 +1,4 @@
+voltbuild.spec_refresh_rate = 5
 voltbuild.size_spec ="size[8,9]"
 voltbuild.charge_spec = "list[current_name;charge;2,1;1,1;]"
 voltbuild.discharge_spec = "list[current_name;discharge;2,3;1,1;]"
@@ -49,7 +50,7 @@ function voltbuild.stressbar_spec (pos)
 		return ("image[1,2;1,1;itest_charge_bg.png^itest_charge_fg.png^[crack:1:9]")
 	end
 	if percent > 75 then
-		return ("image[1,2;1,1;itest_charge_bg.png^[crack:1:2]")
+		return ("image[1,2;1,1;itest_charge_bg.png^itest_charge_fg.png^[crack:1:2]")
 	end
 	return ("image[1,2;1,1;itest_charge_bg.png^[lowpart:"..
 		percent..
@@ -188,31 +189,30 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 			meta:set_float("stime", 0.0)
 		end
 		
-		local state = false
+		local state = true
 		
-		for i = 1,20 do
-			local srclist = inv:get_list("src")
-			local produced = nil
-			local afterproduction
+		local srclist = inv:get_list("src")
+		local produced = nil
+		local afterproduction
 		
-			if srclist then
-				produced, afterproduction = voltbuild.get_craft_result({method = cooking_method,
-					width = 1, items = srclist})
-			end
+		if srclist then
+			produced, afterproduction = voltbuild.get_craft_result({method = cooking_method,
+				width = 1, items = srclist})
+		end
 
-			if produced.item:is_empty() then
-				state = false
-				break
-			elseif produced.item:get_name() == "air" then
-				produced.item = ItemStack(nil)
-			end
+		if produced.item:is_empty() then
+			state = false
+		elseif produced.item:get_name() == "air" then
+			produced.item = ItemStack(nil)
+		end
 		
-			local energy = meta:get_int("energy")
+		local energy = meta:get_int("energy")
+		if state then
 			if energy >= energy_cost then
 				if produced and produced.item then
 					state = true
 					meta:set_int("energy",energy-energy_cost)
-					meta:set_float("stime", meta:get_float("stime") + 1)
+					meta:set_float("stime", meta:get_float("stime") + 10)
 					if meta:get_float("stime")>=20*speed*produced.time then
 						meta:set_float("stime",0)
 						if inv:room_for_item("dst",produced.item) then
@@ -227,9 +227,12 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 				else
 					state = false
 				end
+			else
+				state = false
 			end
 			consumers.discharge(pos)
 		end
+		
 		local srclist = inv:get_list("src")
 		local produced = nil
 		local afterproduction
@@ -262,4 +265,3 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 					"itest_extractor_progress_bg.png",
 					"itest_extractor_progress_fg.png"))
 end
-

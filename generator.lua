@@ -8,7 +8,7 @@ minetest.register_node("voltbuild:generator", {
 	groups = {energy=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_energy=4000,max_tier=1,energy_produce=10,max_stress=2000},
+	voltbuild = {max_energy=4000,max_tier=1,max_stress=2000,energy_produce=10},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -68,50 +68,48 @@ components.register_abm({
 		end
 		
 		local state=false
-		for i=1,20 do
-			local fuel = nil
-			local afterfuel
-			local fuellist = inv:get_list("fuel")
-			
-			if fuellist then
-				fuel, afterfuel = minetest.get_craft_result(
-					{method = "fuel", width = 1, items = fuellist})
-			end
-			
-			if meta:get_float("stime") < meta:get_float("fburntime") then
-				meta:set_float("stime", meta:get_float("stime") + 1)
-				generators.produce(pos,energy_produce)
-				local percent = meta:get_float("stime")/meta:get_float("fburntime")*100
-				state = true
-				meta:set_string("formspec", generators.get_formspec(pos)..
-					"image["..voltbuild.image_location.."default_furnace_fire_bg.png^[lowpart:"..
-							(100-percent)..":default_furnace_fire_fg.png]"..
-					fuel_spec)
-			else
-				local energy = meta:get_int("energy")
-				local use = math.min(energy,energy_produce)
-				meta:set_int("energy",energy-use)
-				generators.produce(pos,use)
-				if fuellist then
-					fuel, afterfuel = minetest.get_craft_result({method = "fuel", width = 1, items = fuellist})
-				end
-	
-				if (not fuel) or fuel.time <= 0 then
-					state = false
-					meta:set_string("formspec", generators.get_formspec(pos)..
-						"image["..voltbuild.image_location.."default_furnace_fire_bg.png]"..
-						fuel_spec)
-					break
-				end
+		local fuel = nil
+		local afterfuel
+		local fuellist = inv:get_list("fuel")
 		
-				meta:set_float("stime", meta:get_float("stime")-meta:get_float("fburntime"))
-				meta:set_float("fburntime", fuel.time*5) -- Fuel will last 4 times less, but we have 20 ticks in a second
-				meta:set_string("formspec", generators.get_formspec(pos)..
-						"image["..voltbuild.image_location.."default_furnace_fire_fg.png]"..
-						fuel_spec)
-				inv:set_stack("fuel", 1, afterfuel.items[1])
-			end
+		if fuellist then
+			fuel, afterfuel = minetest.get_craft_result(
+				{method = "fuel", width = 1, items = fuellist})
 		end
+		
+		if meta:get_float("stime") < meta:get_float("fburntime") then
+			meta:set_float("stime", meta:get_float("stime") + 1)
+			generators.produce(pos,energy_produce)
+			local percent = meta:get_float("stime")/meta:get_float("fburntime")*100
+			state = true
+			meta:set_string("formspec", generators.get_formspec(pos)..
+				"image["..voltbuild.image_location.."default_furnace_fire_bg.png^[lowpart:"..
+						(100-percent)..":default_furnace_fire_fg.png]"..
+				fuel_spec)
+		else
+			local energy = meta:get_int("energy")
+			local use = math.min(energy,energy_produce)
+			meta:set_int("energy",energy-use)
+			generators.produce(pos,use)
+			if fuellist then
+				fuel, afterfuel = minetest.get_craft_result({method = "fuel", width = 1, items = fuellist})
+			end
+	
+			if (not fuel) or fuel.time <= 0 then
+				state = false
+				meta:set_string("formspec", generators.get_formspec(pos)..
+					"image["..voltbuild.image_location.."default_furnace_fire_bg.png]"..
+					fuel_spec)
+			end
+		
+			meta:set_float("stime", meta:get_float("stime")-meta:get_float("fburntime"))
+			meta:set_float("fburntime", fuel.time*5) 
+			meta:set_string("formspec", generators.get_formspec(pos)..
+					"image["..voltbuild.image_location.."default_furnace_fire_fg.png]"..
+					fuel_spec)
+			inv:set_stack("fuel", 1, afterfuel.items[1])
+		end
+		
 
 		if state then
 			hacky_swap_node(pos,"voltbuild:generator_active")
