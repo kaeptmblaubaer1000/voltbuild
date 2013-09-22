@@ -8,11 +8,12 @@ end
 
 storage.discharge = voltbuild.discharge_item
 
-
 function storage.send(pos,energy,dir)
+	local node = minetest.env:get_node(pos)
 	local meta = minetest.env:get_meta(pos)
 	local e = meta:get_int("energy")
-	energy = math.min(e,energy)
+	local packet_size = minetest.registered_nodes[node.name]["voltbuild"]["max_psize"]
+	energy = math.min(e,packet_size)
 	local sent = send_packet(pos,dir,energy)
 	if sent~=nil then
 		local meta = minetest.env:get_meta(pos)
@@ -38,6 +39,16 @@ function storage.get_formspec(pos)
 	voltbuild.chargebar_spec(pos)..
 	voltbuild.stressbar_spec(pos)
 	return formspec
+end
+
+function storage.energy_release(pos)
+	local node = minetest.env:get_node(pos)
+	local senddir = param22dir(node.param2)
+	local meta = minetest.env:get_meta(pos)
+	local e = meta:get_int("energy")
+	local packet_size = minetest.registered_nodes[node.name]["voltbuild"]["max_psize"]
+	energy = math.min(e,packet_size)
+	return energy,e-energy,senddir
 end
 
 function storage.abm (pos, node, active_object_count, active_objects_wider)

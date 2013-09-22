@@ -67,7 +67,7 @@ components.register_abm({
 			meta:set_float("fburntime", 0.0)
 		end
 		
-		local state=false
+		local state=true
 		local fuel = nil
 		local afterfuel
 		local fuellist = inv:get_list("fuel")
@@ -81,7 +81,6 @@ components.register_abm({
 			meta:set_float("stime", meta:get_float("stime") + 1)
 			generators.produce(pos,energy_produce)
 			local percent = meta:get_float("stime")/meta:get_float("fburntime")*100
-			state = true
 			meta:set_string("formspec", generators.get_formspec(pos)..
 				"image["..voltbuild.image_location.."default_furnace_fire_bg.png^[lowpart:"..
 						(100-percent)..":default_furnace_fire_fg.png]"..
@@ -95,18 +94,19 @@ components.register_abm({
 				fuel, afterfuel = minetest.get_craft_result({method = "fuel", width = 1, items = fuellist})
 			end
 	
-			if (not fuel) or fuel.time <= 0 then
-				state = false
-			else
-				state = true
+			while meta:get_float("stime") >= meta:get_float("fburntime") do
+				meta:set_float("stime", meta:get_float("stime")-meta:get_float("fburntime"))
+				meta:set_float("fburntime", fuel.time)
+				inv:set_stack("fuel", 1, afterfuel.items[1])
+				fuel, afterfuel = minetest.get_craft_result({method = "fuel", width = 1, items = afterfuel.items})
+				if (not fuel) or fuel.time <= 0 then
+					state = false
+					break
+				end
 			end
-		
-			meta:set_float("stime", meta:get_float("stime")-meta:get_float("fburntime"))
-			meta:set_float("fburntime", fuel.time*5) 
 			meta:set_string("formspec", generators.get_formspec(pos)..
-					"image["..voltbuild.image_location.."default_furnace_fire_fg.png]"..
+					"image["..voltbuild.image_location.."default_furnace_fire_bg.png]"..
 					fuel_spec)
-			inv:set_stack("fuel", 1, afterfuel.items[1])
 		end
 		
 

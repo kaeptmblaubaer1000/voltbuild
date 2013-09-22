@@ -1,7 +1,18 @@
 minetest.register_node("voltbuild:solar_panel",{description="Solar panel",
 	groups={energy=1,cracky=2},
 	tiles={"itest_solar_panel_top.png", "itest_solar_panel_side.png", "itest_solar_panel_side.png"},
-	voltbuild = {max_energy=500,max_tier=1,max_stress=2000},
+	voltbuild = {max_energy=500,max_tier=1,max_stress=2000, active=true,
+		energy_produce = function (pos)
+			local l=minetest.env:get_node_light({x=pos.x, y=pos.y+1, z=pos.z})
+			local meta=minetest.env:get_meta(pos)
+			if l<15 then
+				local energy = meta:get_int("energy")
+				local use = math.min(energy,2)
+				return use,energy-use
+			else
+				return 2
+			end
+		end},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -19,16 +30,12 @@ components.register_abm({
 	interval=1.0,
 	chance=1,
 	action = function(pos, node, active_object_count, active_objects_wider)
-		local l=minetest.env:get_node_light({x=pos.x, y=pos.y+1, z=pos.z})
-		local meta=minetest.env:get_meta(pos)
-		if l<15 then
-			local energy = meta:get_int("energy")
-			local use = math.min(energy,2)
-			meta:set_int("energy",energy-use)
-			generators.produce(pos,use)
-		else
-			generators.produce(pos,2)
+		local meta = minetest.env:get_meta(pos)
+		local energy,leftover = minetest.registered_nodes[node.name]["voltbuild"]["energy_produce"](pos)
+		if leftover then
+			meta:set_int("energy",leftover)
 		end
+		generators.produce(pos,energy)
 		meta:set_string("formspec",generators.get_formspec(pos)..
 				"image["..voltbuild.image_location.."itest_sun.png]")
 	end

@@ -3,7 +3,26 @@ wind_speed = 15
 minetest.register_node("voltbuild:windmill",{description="Windmill",
 	groups={energy=1,cracky=2},
 	tiles={"itest_windmill_top.png", "itest_windmill_top.png", "itest_windmill_side.png"},
-	voltbuild = {max_energy=500,max_tier=1,max_stress=2000},
+	voltbuild = {max_energy=500,max_tier=1,max_stress=2000,
+		energy_produce=function(pos)
+			local alt = pos.y
+			if alt > 200 then alt = 200 end
+			local meta=minetest.env:get_meta(pos)
+			local prod=wind_speed*(alt-meta:get_int("obstacles"))
+			if prod<=0 then
+				local energy = meta:get_int("energy")
+				local use = math.min(energy,5)
+				return use,energy-use
+			else 
+				meta:set_int("energyf",meta:get_int("energyf")+prod%750)
+				if meta:get_int("energyf") >= 300 then
+					meta:set_int("energyf",meta:get_int("energyf")-750)
+					return (math.floor(prod/300))+1
+				else
+					return math.floor(prod/300)
+				end
+			end
+		end},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -27,24 +46,14 @@ components.register_abm({
 		if alt > 200 then alt = 200 end
 		local meta=minetest.env:get_meta(pos)
 		local prod=wind_speed*(alt-meta:get_int("obstacles"))
-		if prod<=0 then
-			local energy = meta:get_int("energy")
-			local use = math.min(energy,5)
-			meta:set_int("energy",energy-use)
-			generators.produce(pos,use)
-		else
-			meta:set_int("energyf",meta:get_int("energyf")+prod%750)
-			if meta:get_int("energyf") >= 750 then
-				meta:set_int("energyf",meta:get_int("energyf")-750)
-				generators.produce(pos,(math.floor(prod/750)*3)+1)
-			else
-				generators.produce(pos,math.floor(prod/750)*3)
-			end
+		local prod_energy, leftover = minetest.registered_nodes[node.name]["voltbuild"]["energy_produce"](pos)
+		if leftover then
+			meta:set_int("energy",leftover)
 		end
-		if prod >= 3750 then
-			if math.random()<=(prod-3750)/3750000 then
-				minetest.env:set_node(pos,{name = "air"})
-			end
+		generators.produce(pos,prod_energy)
+		if prod >= 2050 then
+			local stress = meta:get_int("stress")
+			meta:set_int("stress",stress+(math.random(1,((prod-2050)+10))))
 		end
 		meta:set_string("formspec",generators.get_formspec(pos)..
 				"image["..voltbuild.image_location.."voltbuild_wind_symbol.png]")
@@ -70,5 +79,7 @@ minetest.register_abm({
 		end
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("obstacles",obstacles)
+		math.randomseed(os.time())
+		wind_speed =  math.random(0,15)
 	end
 })

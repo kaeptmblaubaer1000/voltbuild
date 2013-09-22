@@ -3,8 +3,8 @@ minetest.register_node("voltbuild:batbox",{description="BatBox",
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_batbox_side.png", "itest_batbox_side.png", "itest_batbox_output.png", "itest_batbox_side.png", "itest_batbox_side.png", "itest_batbox_side.png"},
-	voltbuild = {max_energy = 40000,
-		max_psize = 32, max_tier=1,max_stress=2000},
+	voltbuild = {max_energy = 40000, max_psize = 32, max_tier=1,
+		max_stress=2000,energy_release=storage.energy_release,active=true},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -28,8 +28,8 @@ minetest.register_node("voltbuild:mfe_unit",{description="MFE Unit",
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_mfe_side.png", "itest_mfe_side.png", "itest_mfe_output.png", "itest_mfe_side.png", "itest_mfe_side.png", "itest_mfe_side.png"},
-	voltbuild = {max_energy = 600000,
-		max_psize = 128, max_tier=2,max_stress=2000},
+	voltbuild = {max_energy = 600000, max_psize = 128, max_tier=2,max_stress=2000,
+		energy_release=storage.energy_release,active=true},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -53,8 +53,8 @@ minetest.register_node("voltbuild:mfs_unit",{description="MFS Unit",
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_mfsu_side.png", "itest_mfsu_side.png", "itest_mfsu_output.png", "itest_mfsu_side.png", "itest_mfsu_side.png", "itest_mfsu_side.png"},
-	voltbuild = {max_energy = 10000000,
-		max_psize = 512,max_tier=3,max_stress=2000},
+	voltbuild = {max_energy = 10000000, max_psize = 512,max_tier=3,max_stress=2000,
+		energy_release=storage.energy_release,active=true},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)

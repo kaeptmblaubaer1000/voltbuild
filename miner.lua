@@ -38,11 +38,11 @@ minetest.register_node("voltbuild:miner", {
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	sounds = default.node_sound_stone_defaults(),
 	voltbuild = {max_psize = 32,
-		max_energy = 10000,max_tier=1,max_stress=2000},
+		max_energy = 10000,max_tier=1,max_stress=2000,active=true},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
-		meta:set_int("mtime",0)
+		meta:set_int("stime",0)
 		local inv = meta:get_inventory()
 		inv:set_size("pipe", 1)
 		inv:set_size("drill",1)
@@ -142,13 +142,13 @@ components.register_abm({
 		else
 			radius = 0
 		end
-		local mtime = meta:get_int("mtime")
-		meta:set_int("mtime",mtime+1)
-		if mtime >= ntime-1 then
-			meta:set_int("mtime",0)
+		local stime = meta:get_int("stime")
+		meta:set_int("stime",stime+1)
+		if stime >= ntime-1 then
+			meta:set_int("stime",0)
 			local energy = meta:get_int("energy")
 			if energy < e then
-				meta:set_int("mtime",mtime)
+				meta:set_int("stime",stime)
 				return
 			end
 
@@ -159,7 +159,7 @@ components.register_abm({
 				name = minetest.env:get_node(tpos).name
 			end
 			if name == "ignore" then
-				meta:set_int("mtime",mtime)
+				meta:set_int("stime",stime)
 				return
 			end
 			

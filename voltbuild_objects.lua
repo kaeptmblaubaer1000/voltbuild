@@ -171,9 +171,12 @@ end
 
 function voltbuild.get_craft_result(c)
 	local input = c.items[1]
-	local output = voltbuild.recipes[c.method][input:get_name()]
-	input:take_item()
-	return {item = ItemStack(output), time = 20},{items = {input}}
+	local output,after_input = voltbuild.recipes[c.method][input:get_name()]
+	if not after_input then
+		input:take_item()
+		after_input = {items = {input}}
+	end
+	return {item = ItemStack(output), time = 20},after_input
 end
 
 function voltbuild.production_abm (pos,node, active_object_count, active_object_count_wider)
