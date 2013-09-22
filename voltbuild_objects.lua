@@ -1,4 +1,3 @@
-voltbuild.spec_refresh_rate = 5
 voltbuild.size_spec ="size[8,9]"
 voltbuild.charge_spec = "list[current_name;charge;2,1;1,1;]"
 voltbuild.discharge_spec = "list[current_name;discharge;2,3;1,1;]"
@@ -255,9 +254,9 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 			base_node_name = node.name
 		end
 		if state then
-			hacky_swap_node(pos,base_node_name.."_active")
+			voltbuild_hacky_swap_node(pos,base_node_name.."_active")
 		else
-			hacky_swap_node(pos,base_node_name)
+			voltbuild_hacky_swap_node(pos,base_node_name)
 		end
 		meta:set_string("formspec", consumers.get_formspec(pos)..
 				voltbuild.production_spec..

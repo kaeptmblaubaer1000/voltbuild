@@ -207,9 +207,9 @@ minetest.register_abm({
 		end
 		if inv:is_empty("src") then state = false end
 		if state then
-			hacky_swap_node(pos,"voltbuild:iron_furnace_active")
+			voltbuild_hacky_swap_node(pos,"voltbuild:iron_furnace_active")
 		else
-			hacky_swap_node(pos,"voltbuild:iron_furnace")
+			voltbuild_hacky_swap_node(pos,"voltbuild:iron_furnace")
 		end
 		meta:set_string("formspec", iron_furnace.get_formspec(pos))
 	end,

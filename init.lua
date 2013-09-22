@@ -10,10 +10,9 @@ function voltbuild.register_ore(name,value)
 	voltbuild.registered_ores[name]=value
 end
 
-function hacky_swap_node(pos,name)
+function voltbuild_hacky_swap_node(pos,name)
 	local node = minetest.env:get_node(pos)
 	local meta = minetest.env:get_meta(pos)
-	local meta0 = meta:to_table()
 	if node.name == name then
 		return
 	end

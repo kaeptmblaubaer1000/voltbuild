@@ -97,9 +97,8 @@ components.register_abm({
 	
 			if (not fuel) or fuel.time <= 0 then
 				state = false
-				meta:set_string("formspec", generators.get_formspec(pos)..
-					"image["..voltbuild.image_location.."default_furnace_fire_bg.png]"..
-					fuel_spec)
+			else
+				state = true
 			end
 		
 			meta:set_float("stime", meta:get_float("stime")-meta:get_float("fburntime"))
@@ -112,9 +111,9 @@ components.register_abm({
 		
 
 		if state then
-			hacky_swap_node(pos,"voltbuild:generator_active")
+			voltbuild_hacky_swap_node(pos,"voltbuild:generator_active")
 		else
-			hacky_swap_node(pos,"voltbuild:generator")
+			voltbuild_hacky_swap_node(pos,"voltbuild:generator")
 		end
 	end,
 })
