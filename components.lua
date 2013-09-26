@@ -91,10 +91,15 @@ minetest.register_craftitem("voltbuild:overclock", {
 	voltbuild = {component=1,
 		run_before_effects = function (pos)
 			local node = minetest.get_node(pos)
+			local meta = minetest.env:get_meta(pos)
 			local active = string.find(node.name,"_active") or 
 				minetest.registered_nodes[node.name]["voltbuild"]["active"]
-			if active then
-				local meta = minetest.env:get_meta(pos)
+			if active == nil then
+				if meta:get_string("active") ~= "" then
+					active = meta:get_int("active")
+				end
+			end
+			if active and active ~= 0 then
 				local energy_cost = minetest.registered_nodes[node.name]["voltbuild"]["energy_cost"]
 				local energy_produce = minetest.registered_nodes[node.name]["voltbuild"]["energy_produce"]
 				local energy_release = minetest.registered_nodes[node.name]["voltbuild"]["energy_release"]

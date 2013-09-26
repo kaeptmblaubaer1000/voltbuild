@@ -574,6 +574,20 @@ minetest.register_craft({
 	recipe = "voltbuild:gold_dust"
 })
 
+minetest.register_craft({
+	output = "voltbuild:medpack",
+	recipe = {{"default:glass","default:apple","default:glass"},
+		  {"default:apple","default:apple","default:apple"},
+		  {"default:glass","default:apple","default:glass"}},
+})
+
+minetest.register_craft({
+	output = "voltbuild:hospital",
+	recipe = {{"voltbuild:medpack","voltbuild:medpack","voltbuild:medpack"},
+		  {"voltbuild:medpack","voltbuild:machine","voltbuild:medpack"},
+		  {"voltbuild:extractor","voltbuild:circuit","voltbuild:compressor"}},
+})
+
 macerator.register_macerator_recipe("default:iron_lump","voltbuild:iron_dust 2")
 macerator.register_macerator_recipe("default:gold_lump","voltbuild:gold_dust 2")
 macerator.register_macerator_recipe("default:coal_lump","voltbuild:coal_dust")

@@ -34,5 +34,6 @@ dofile(modpath.."/macerator.lua")
 dofile(modpath.."/extractor.lua")
 dofile(modpath.."/compressor.lua")
 dofile(modpath.."/recycler.lua")
+dofile(modpath.."/hospital.lua")
 
 dofile(modpath.."/miner.lua")
