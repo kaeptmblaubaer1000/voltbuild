@@ -85,62 +85,89 @@ function components.register_abm(table)
 	minetest.register_abm(table)
 end
 
-minetest.register_craftitem("voltbuild:overclock", {
+function components.register_clockitem(name, properties)
+	properties.voltbuild.run_before_effects = function(pos)
+		local node = minetest.get_node(pos)
+		local meta = minetest.env:get_meta(pos)
+		local active = string.find(node.name,"_active") or 
+			minetest.registered_nodes[node.name]["voltbuild"]["active"]
+		if active == nil then
+			if meta:get_string("active") ~= "" then
+				active = meta:get_int("active")
+			end
+		end
+		if active and active ~= 0 then
+			local energy_cost = minetest.registered_nodes[node.name]["voltbuild"]["energy_cost"]
+			local energy_produce = minetest.registered_nodes[node.name]["voltbuild"]["energy_produce"]
+			local energy_release = minetest.registered_nodes[node.name]["voltbuild"]["energy_release"]
+			local energy = meta:get_int("energy")
+			local energy_cost_effect = properties.voltbuild.energy_cost_effect
+			local pay_cost = false
+			if energy_cost  then
+				local clock_energy_cost = energy_cost_effect(energy_cost)
+				if energy > energy_cost + clock_energy_cost then
+					meta:set_int("energy",energy-clock_energy_cost)
+					pay_cost = true
+				end
+			elseif energy_produce then
+				local energy_produce_effect = properties.voltbuild.energy_produce_effect
+				if type(energy_produce) == "function" then
+					local energy_p,leftover_energy = energy_produce(pos)
+					generators.produce(pos,energy_produce_effect(energy_p))
+					if leftover_energy then
+						leftover_energy = energy_p+leftover_energy-energy_produce_effect(energy_p)
+						meta:set_int("energy",leftover_energy)
+					end
+				elseif type(energy_produce) == "number" then
+					generators.produce(pos,energy_produce_effect(energy_produce))
+				end
+				pay_cost = true
+			elseif energy_release then
+				if type(energy_release) == "function" then
+					local energy_release_effect = properties.voltbuild.energy_release_effect
+					local energy_p, leftover_energy,dir = energy_release(pos)
+					local sent = send_packet(pos,dir,energy_release_effect(energy_p))
+					if sent then
+						leftover_energy = energy_p+leftover_energy-energy_release_effect(energy_p)
+						meta:set_int("energy",leftover_energy)
+					end
+				end
+				pay_cost = true
+			end
+			if pay_cost then
+				local stress = meta:get_int("stress")
+				local stress_cost_effect = properties.voltbuild.stress_cost_effect
+				meta:set_int("stress",stress_cost_effect(stress))
+				if meta:get_string("stime") ~= "" then
+					local stime = meta:get_float("stime")
+					local speed = minetest.registered_nodes[node.name]["voltbuild"]["speed"] or 1.0
+					local clock_effect = properties.voltbuild.clock_effect
+					meta:set_float("stime",stime+clock_effect(speed))
+				end
+			end
+		end
+	end
+	minetest.register_craftitem(name,properties)
+end
+
+do 
+local function overclock_effect(x)
+	return x
+end
+components.register_clockitem("voltbuild:overclock", {
 	description = "Overclock",
 	inventory_image = "voltbuild_overclock.png",
 	voltbuild = {component=1,
-		run_before_effects = function (pos)
-			local node = minetest.get_node(pos)
-			local meta = minetest.env:get_meta(pos)
-			local active = string.find(node.name,"_active") or 
-				minetest.registered_nodes[node.name]["voltbuild"]["active"]
-			if active == nil then
-				if meta:get_string("active") ~= "" then
-					active = meta:get_int("active")
-				end
-			end
-			if active and active ~= 0 then
-				local energy_cost = minetest.registered_nodes[node.name]["voltbuild"]["energy_cost"]
-				local energy_produce = minetest.registered_nodes[node.name]["voltbuild"]["energy_produce"]
-				local energy_release = minetest.registered_nodes[node.name]["voltbuild"]["energy_release"]
-				local energy = meta:get_int("energy")
-				local stress = meta:get_int("stress")
-				local pay_cost = false
-				if energy_cost and energy > 2*energy_cost then
-					meta:set_int("energy",energy-energy_cost)
-					pay_cost = true
-				elseif energy_produce then
-					if type(energy_produce) == "function" then
-						local energy_p,leftover_energy = energy_produce(pos)
-						generators.produce(pos,energy_p)
-						if leftover_energy then
-							meta:set_int("energy",leftover_energy)
-						end
-					elseif type(energy_produce) == "number" then
-						generators.produce(pos,energy_produce)
-					end
-					pay_cost = true
-				elseif energy_release then
-					if type(energy_release) == "function" then
-						local energy_p, leftover_energy,dir = energy_release(pos)
-						local sent = send_packet(pos,dir,energy_p)
-						if sent then
-							meta:set_int("energy",leftover_energy)
-						end
-					end
-					pay_cost = true
-				end
-				if pay_cost then
-					meta:set_int("stress",stress+20)
-					if meta:get_string("stime") ~= "" then
-						local stime = meta:get_float("stime")
-						meta:set_float("stime",stime+10.0)
-					end
-				end
-			end
-		end},
+		energy_cost_effect = overclock_effect,
+		energy_produce_effect = overclock_effect,
+		energy_release_effect = overclock_effect,
+		stress_cost_effect = function(stress)
+			return stress+20
+		end,
+		clock_effect = overclock_effect},
 	stack_max = 1,
 })
+end
 
 minetest.register_craft({
 	output = "voltbuild:overclock",
