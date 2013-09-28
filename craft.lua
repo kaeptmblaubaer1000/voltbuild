@@ -588,6 +588,13 @@ minetest.register_craft({
 		  {"voltbuild:extractor","voltbuild:circuit","voltbuild:compressor"}},
 })
 
+minetest.register_craft({
+	output = "voltbuild:nuclear_reactor",
+	recipe = {{"voltbuild:advanced_alloy","voltbuild:windmill","voltbuild:advanced_alloy"},
+		{"voltbuild:lapotron_crystal","voltbuild:advanced_machine","voltbuild:lapotron_crystal"},
+		{"voltbuild:advanced_alloy","voltbuild:advanced_circuit","voltbuild:advanced_alloy"}},
+})
+
 macerator.register_macerator_recipe("default:iron_lump","voltbuild:iron_dust 2")
 macerator.register_macerator_recipe("default:gold_lump","voltbuild:gold_dust 2")
 macerator.register_macerator_recipe("default:coal_lump","voltbuild:coal_dust")

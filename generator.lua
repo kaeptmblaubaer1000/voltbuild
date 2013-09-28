@@ -8,7 +8,7 @@ minetest.register_node("voltbuild:generator", {
 	groups = {energy=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_energy=4000,max_tier=1,max_stress=2000,energy_produce=10},
+	voltbuild = {max_energy=4000,max_tier=1,max_stress=2000,energy_produce=50},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -34,7 +34,7 @@ minetest.register_node("voltbuild:generator_active", {
 	groups = {energy=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_energy=4000,max_tier=1,energy_produce=10,max_stress=2000},
+	voltbuild = {max_energy=4000,max_tier=1,energy_produce=50,max_stress=2000},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)

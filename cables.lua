@@ -332,7 +332,7 @@ function register_cables(name, desc, max_insulate, max_energy, res_table, wtable
 	end
 end
 
-register_cables("voltbuild:copper_cable","copper cable",1,32,{0.3, 0.2},{4/16, 6/16},
+register_cables("voltbuild:copper_cable","copper cable",1,64,{0.3, 0.2},{4/16, 6/16},
 	{"itest_copper_cable_0.png","itest_copper_cable_1.png"},
 	{"itest_copper_cable_inv_0.png","itest_copper_cable_inv_1.png"})
 
@@ -340,7 +340,7 @@ register_cables("voltbuild:gold_cable","gold cable",2,128,{0.5, 0.45, 0.4},{4/16
 	{"itest_gold_cable_0.png","itest_gold_cable_1.png","itest_gold_cable_2.png"},
 	{"itest_gold_cable_inv_0.png","itest_gold_cable_inv_1.png","itest_gold_cable_inv_2.png"})
 
-register_cables("voltbuild:tin_cable","tin cable",0,5,{0.025},{5/16},
+register_cables("voltbuild:tin_cable","tin cable",0,25,{0.025},{5/16},
 	{"itest_tin_cable_0.png"},
 	{"itest_tin_cable_inv_0.png"})
 

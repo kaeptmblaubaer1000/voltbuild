@@ -17,9 +17,9 @@ minetest.register_node("voltbuild:windmill",{description="Windmill",
 				meta:set_int("energyf",meta:get_int("energyf")+prod%750)
 				if meta:get_int("energyf") >= 300 then
 					meta:set_int("energyf",meta:get_int("energyf")-750)
-					return (math.floor(prod/300))+1
+					return (math.floor(prod/100))+1
 				else
-					return math.floor(prod/300)
+					return math.floor(prod/100)
 				end
 			end
 		end},

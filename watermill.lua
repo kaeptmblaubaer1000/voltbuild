@@ -23,9 +23,9 @@ minetest.register_node("voltbuild:watermill",{description="Watermill",
 			meta:set_int("energyf",meta:get_int("energyf")+prod%100)
 			if meta:get_int("energyf") >= 100 then
 				meta:set_int("energyf",meta:get_int("energyf")-100)
-				return (math.floor(prod/100)*2)+1
+				return ((math.floor(prod/2)*2)+1)
 			else
-				return (math.floor(prod/100))*2
+				return ((math.floor(prod/2))*2)
 			end
 		end
 		end},

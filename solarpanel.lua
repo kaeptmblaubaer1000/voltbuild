@@ -10,7 +10,7 @@ minetest.register_node("voltbuild:solar_panel",{description="Solar panel",
 				local use = math.min(energy,2)
 				return use,energy-use
 			else
-				return 2
+				return l
 			end
 		end},
 	on_construct = function(pos)
