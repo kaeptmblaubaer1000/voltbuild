@@ -37,7 +37,7 @@ minetest.register_node("voltbuild:miner", {
 	tiles = {"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_front.png"},
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_psize = 32,
+	voltbuild = {max_psize = 64,
 		max_energy = 10000,max_tier=1,max_stress=2000,active=true},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)

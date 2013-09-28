@@ -17,7 +17,7 @@ minetest.register_node("voltbuild:hospital", {
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
 		meta:set_int("max_energy",800)
-		meta:set_int("max_psize",32)
+		meta:set_int("max_psize",64)
 		local inv = meta:get_inventory()
 		meta:set_string("formspec", consumers.get_formspec(pos)..
 				consumers.get_progressbar(0,1,

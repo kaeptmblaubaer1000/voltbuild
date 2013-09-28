@@ -3,7 +3,7 @@ minetest.register_node("voltbuild:batbox",{description="BatBox",
 	paramtype2 = "facedir",
 	legacy_facedir_simple = true,
 	tiles={"itest_batbox_side.png", "itest_batbox_side.png", "itest_batbox_output.png", "itest_batbox_side.png", "itest_batbox_side.png", "itest_batbox_side.png"},
-	voltbuild = {max_energy = 40000, max_psize = 32, max_tier=1,
+	voltbuild = {max_energy = 40000, max_psize = 64, max_tier=1,
 		max_stress=2000,energy_release=storage.energy_release,active=true},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
