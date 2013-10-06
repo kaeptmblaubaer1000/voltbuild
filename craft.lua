@@ -577,15 +577,15 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "voltbuild:medpack",
 	recipe = {{"default:glass","default:apple","default:glass"},
-		  {"default:apple","default:apple","default:apple"},
-		  {"default:glass","default:apple","default:glass"}},
+		{"default:apple","default:apple","default:apple"},
+		{"default:glass","default:apple","default:glass"}},
 })
 
 minetest.register_craft({
 	output = "voltbuild:hospital",
 	recipe = {{"voltbuild:medpack","voltbuild:medpack","voltbuild:medpack"},
-		  {"voltbuild:medpack","voltbuild:machine","voltbuild:medpack"},
-		  {"voltbuild:extractor","voltbuild:circuit","voltbuild:compressor"}},
+		{"voltbuild:medpack","voltbuild:machine","voltbuild:medpack"},
+		{"voltbuild:extractor","voltbuild:circuit","voltbuild:compressor"}},
 })
 
 minetest.register_craft({
@@ -593,6 +593,38 @@ minetest.register_craft({
 	recipe = {{"voltbuild:advanced_alloy","voltbuild:windmill","voltbuild:advanced_alloy"},
 		{"voltbuild:lapotron_crystal","voltbuild:advanced_machine","voltbuild:lapotron_crystal"},
 		{"voltbuild:advanced_alloy","voltbuild:advanced_circuit","voltbuild:advanced_alloy"}},
+})
+
+minetest.register_craft({
+	output = "voltbuild:radioactive_shielding",
+	recipe = {{"voltbuild:advanced_alloy","voltbuild:coal_dust","voltbuild:advanced_alloy"}},
+})
+
+minetest.register_craft({
+	output = "voltbuild:casing",
+	recipe = {{"voltbuild:refined_iron_ingot","voltbuild:advanced_alloy","voltbuild:refined_iron_ingot"}},
+})
+
+minetest.register_craft({
+	output = "voltbuild:reactor_wiring",
+	recipe = {{"voltbuild:hv_cable3_000000"}},
+})
+
+minetest.register_craft({
+	output = "voltbuild:hv_cable3_000000",
+	recipe = {{"voltbuild:reactor_wiring"}},
+})
+
+minetest.register_craft({
+	output = "voltbuild:nuclear_reaction_chamber",
+	recipe = {{"voltbuild:lapotron_crystal","voltbuild:generator","voltbuild:lapotron_crystal"}},
+})
+
+minetest.register_craft({
+	output = "voltbuild:shielded_reactor_wiring",
+	recipe = {{"","voltbuild:radioactive_shielding",""},
+		{"voltbuild:radioactive_shielding","voltbuild:reactor_wiring","voltbuild:radioactive_shielding"},
+		{"","voltbuild:radioactive_shielding",""}},
 })
 
 macerator.register_macerator_recipe("default:iron_lump","voltbuild:iron_dust 2")

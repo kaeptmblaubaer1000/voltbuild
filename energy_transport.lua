@@ -19,11 +19,34 @@ function posintbl(tbl,pos)
 	return false
 end
 
-function blast(pos)
-	for _,dir in ipairs(adjlist) do
-		minetest.env:set_node(addVect(pos,dir),{name="air"})
+function voltbuild.blast(pos,intensity)
+	if intensity == nil then
+		intensity = 1
 	end
-	minetest.env:set_node(pos,{name="air"})
+	local node = minetest.env:get_node(pos)
+	local destroy = minetest.registered_nodes[node.name]["on_blast"]
+	if destroy and type(destroy) == "function" then
+		destroy(pos,intensity)
+	else 
+		minetest.env:set_node(pos,{name="air"})
+	end
+end
+
+function voltbuild.blast_all(pos,intensity,range)
+	local xVect,yVect,zVect
+	for xVect=-range,range do
+		for yVect=-range+math.abs(xVect),range-math.abs(xVect) do
+			for zVect=-range+math.abs(xVect)+math.abs(yVect),range-math.abs(xVect)-math.abs(yVect) do
+				local node = minetest.env:get_node(addVect(pos,dir))
+				local destroy = minetest.registered_nodes[node.name]["on_blast"]
+				if destroy and type(destroy) == "function" then
+					destroy({x=pos.x+xVect,y=pos.y+yVect,z=pos.z+zVect},intensity)
+				else 
+					voltbuild.blast({x=pos.x+xVect,y=pos.y+yVect,z=pos.z+zVect},intensity)
+				end
+			end
+		end
+	end
 end
 
 function round0(x) -- This function removes precision error when using decimal
@@ -64,7 +87,7 @@ function send(pos,dir,power,explored)
 		local c=meta:get_int("current")
 		meta:set_int("current",c+p)
 	end
-	if maxcurrent<power then minetest.env:set_node(pos,{name="air"}) end -- Melt cable
+	if maxcurrent<power then voltbuild.blast(pos) end -- Melt cable
 	return ret
 end
 
@@ -88,7 +111,7 @@ function send_packet(fpos,dir,psize)
 			local current_energy=meta:get_int("energy")
 			local max_psize=get_node_field(node.name,meta,"max_psize")
 			if psize>max_psize then
-				blast(npos)
+				voltbuild.blast_all(npos,1,1)
 				return psize
 			elseif psize <= max_energy-current_energy then 
 				meta:set_int("energy",meta:get_int("energy")+psize)
@@ -174,7 +197,7 @@ function enegy_go_next(pos,dir,power)
 		n=(cmeta:get_int("cdir"))%i+1
 		cmeta:set_int("cdir",n)
 		if consumers[n].overcharge then
-			blast(consumers[n].pos)
+			voltbuild.blast_all(consumers[n].pos,1,1)
 			return 1
 		end
 		local meta=minetest.env:get_meta(consumers[n].pos)

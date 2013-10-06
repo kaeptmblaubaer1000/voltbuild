@@ -46,14 +46,14 @@ function voltbuild.stressbar_spec (pos)
 	local max_stress = minetest.registered_nodes[node.name]["voltbuild"]["max_stress"]
 	local percent = math.min(((stress/max_stress)*100),100)
 	if percent > 90 then
-		return ("image[1,2;1,1;itest_charge_bg.png^itest_charge_fg.png^[crack:1:9]")
+		return ("image[1,2;1,1;itest_charge_bg.png^voltbuild_stress_bar.png^[crack:1:9]")
 	end
 	if percent > 75 then
-		return ("image[1,2;1,1;itest_charge_bg.png^itest_charge_fg.png^[crack:1:2]")
+		return ("image[1,2;1,1;itest_charge_bg.png^voltbuild_stress_bar.png^[crack:1:2]")
 	end
 	return ("image[1,2;1,1;itest_charge_bg.png^[lowpart:"..
 		percent..
-		":itest_charge_fg.png]")
+		":voltbuild_stress_bar.png]")
 end
 
 function voltbuild.charge_item(pos,energy)

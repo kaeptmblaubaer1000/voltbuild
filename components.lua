@@ -73,7 +73,7 @@ function components.abm_wrapper(pos,node,active_object_count,active_object_count
 	local stress = meta:get_int("stress")
 	local max_stress = minetest.registered_nodes[node.name]["voltbuild"]["max_stress"]
 	if stress >= max_stress then
-		minetest.env:set_node(pos,{name = "air"})
+		voltbuild.blast(pos)
 	end
 end
 
