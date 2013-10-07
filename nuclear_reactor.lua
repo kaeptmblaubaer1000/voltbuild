@@ -296,7 +296,7 @@ minetest.register_node("voltbuild:nuclear_reactor", {
 						local node = minetest.env:get_node(p)
 						local destroy = minetest.registered_nodes[node.name]["on_blast"]
 						local immortal = minetest.registered_nodes[node.name]["groups"]["immortal"]
-						if node.name == "ignore" then
+						if node.name == "ignore" or node.name == "air" then
 						elseif destroy then
 							destroy(p,10)
 						elseif immortal then
