@@ -286,6 +286,11 @@ minetest.register_node("voltbuild:nuclear_reactor", {
 		local xVect,yVect,zVect
 		local blast_size = 20
 		local objects = minetest.get_objects_inside_radius(pos,blast_size)
+		local manip = minetest.get_voxel_manip()
+		local air = minetest.get_content_id("air")
+		local min_edge,max_edge= manip:read_from_map({x=pos.x-20,y=pos.y-20,z=pos.z-20},{x=pos.x+20,y=pos.y+20,z=pos.z+20})
+		local area = VoxelArea:new({MinEdge=min_edge,MaxEdge=max_edge})
+		local data = manip:get_data()
 		for xVect=pos.x-blast_size,pos.x+blast_size do
 			local yLimit = math.max(blast_size-math.abs(pos.x-xVect),1)
 			for yVect=pos.y-yLimit,pos.y+yLimit do
@@ -301,13 +306,19 @@ minetest.register_node("voltbuild:nuclear_reactor", {
 							destroy(p,10)
 						elseif immortal then
 						else
-							minetest.env:remove_node(p)
+							local ind = area:indexp(p)
+							data[ind] = air
 						end
+					else
+						local ind = area:indexp(pos)
+						data[ind] = air
 					end
 				end
 			end
 		end
-		minetest.env:remove_node(pos)
+		manip:set_data(data)
+		manip:write_to_map()
+		manip:update_map()
 		local object=nil
 		local key = nil
 		for  key,object in pairs(objects) do
