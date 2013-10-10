@@ -185,7 +185,13 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 		local cooking_method = minetest.registered_nodes[node.name]["cooking_method"]
 		local energy_cost = minetest.registered_nodes[node.name]["voltbuild"]["energy_cost"]
 		
-		local speed = 1
+		local speed = minetest.registered_nodes[node.name]["voltbuild"]["speed"]
+		if speed then
+		elseif meta:get_string("speed") ~= "" then
+			speed = meta:get_float("speed")
+		else
+			speed = 1.0
+		end
 		
 		if meta:get_string("stime") == "" then
 			meta:set_float("stime", 0.0)
@@ -214,17 +220,20 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 				if produced and produced.item then
 					state = true
 					meta:set_int("energy",energy-energy_cost)
-					meta:set_float("stime", meta:get_float("stime") + 10)
-					if meta:get_float("stime")>=20*speed*produced.time then
-						meta:set_float("stime",0)
+					meta:set_float("stime", meta:get_float("stime") + speed)
+					while meta:get_float("stime")>= produced.time do
 						if inv:room_for_item("dst",produced.item) then
 							inv:add_item("dst", produced.item)
 							inv:set_stack("src", 1, afterproduction.items[1])
+							meta:set_float("stime",meta:get_float("stime")-produced.time)
 						else
 							meta:set_int("energy",energy) -- Don't waste energy
-							meta:set_float("stime",20*speed*produced.time)
 							state = false
+							break
 						end
+					end
+					if meta:get_float("stime") < 0 then
+						meta:set_float("stime",0.0)
 					end
 				else
 					state = false
@@ -246,7 +255,7 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 		local progress = meta:get_float("stime")
 		local maxprogress = 1
 		if produced and produced.time then
-			maxprogress = 20*speed*produced.time
+			maxprogress = produced.time
 		end
 		if inv:is_empty("src") then state = false end
 		local active = string.find(node.name,"_active")

@@ -24,7 +24,7 @@ minetest.register_node("voltbuild:recycler", {
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
 	cooking_method = "recycle",
-	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
+	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000,speed=2},
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -72,7 +72,7 @@ minetest.register_node("voltbuild:recycler_active", {
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
 	cooking_method = "recycle",
-	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
+	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000,speed=2},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
