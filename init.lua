@@ -1,7 +1,7 @@
-itest_world_upgrade = false
+itest_world_upgrade = minetest.setting_getbool("voltbuild_itest_world_upgrade") or false
 
-modpath=minetest.get_modpath("voltbuild")
-
+modpath = minetest.get_modpath("voltbuild")
+moreores_path = minetest.get_modpath("moreores")
 
 voltbuild = {}
 voltbuild.registered_ores = {}
@@ -100,4 +100,7 @@ dofile(modpath.."/consumers.lua")
 dofile(modpath.."/craft.lua")
 if itest_world_upgrade then
 	dofile(modpath.."/itest_upgrade_compat.lua")
+	print("voltbuild is using one way upgrade")
 end
+
+print("voltbuild loaded!")
