@@ -10,6 +10,10 @@ function voltbuild.register_ore(name,value)
 	voltbuild.registered_ores[name]=value
 end
 
+function voltbuild_create_infotext(name)
+	return(string.gsub(string.sub(name,string.find(name,":")+1),"_"," "))
+end
+
 function voltbuild_hacky_swap_node(pos,name)
 	local node = minetest.env:get_node(pos)
 	local meta = minetest.env:get_meta(pos)
@@ -21,6 +25,7 @@ function voltbuild_hacky_swap_node(pos,name)
 	minetest.env:set_node(pos,node)
 	meta = minetest.env:get_meta(pos)
 	meta:from_table(meta0)
+	meta:set_string("infotext",voltbuild_create_infotext(node.name))
 end
 
 function addVect(pos1,pos2)

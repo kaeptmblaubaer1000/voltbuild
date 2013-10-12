@@ -266,6 +266,8 @@ minetest.register_node("voltbuild:nuclear_reactor", {
 		end,},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
+		local node = minetest.env:get_node(pos)
+		meta:set_string("infotext",voltbuild_create_infotext(node.name))
 		meta:set_string("formspec",nuclear.get_formspec(pos))
 		meta:set_int("rads",0)
 		local inv = meta:get_inventory()

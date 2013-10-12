@@ -28,9 +28,11 @@ minetest.register_node("voltbuild:iron_furnace", {
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		local inv = meta:get_inventory()
+		local node = minetest.env:get_node(pos)
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)
 		inv:set_size("fuel", 1)
+		meta:set_string("infotext",voltbuild_create_infotext(node.name))
 		meta:set_string("formspec", iron_furnace.get_formspec(pos))
 	end,
 	can_dig = function(pos,player)

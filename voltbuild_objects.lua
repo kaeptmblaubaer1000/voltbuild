@@ -147,6 +147,8 @@ end
 function voltbuild.on_construct(pos)
 	local meta = minetest.env:get_meta(pos)
 	local inv = meta:get_inventory()
+	local node = minetest.get_node(pos)
+	meta:set_string("infotext",voltbuild_create_infotext(node.name))
 	inv:set_size("components",4)
 	meta:set_int("stress",0)
 end
