@@ -228,6 +228,8 @@ function voltbuild.production_abm (pos,node, active_object_count, active_object_
 							inv:add_item("dst", produced.item)
 							inv:set_stack("src", 1, afterproduction.items[1])
 							meta:set_float("stime",meta:get_float("stime")-produced.time)
+							produced, afterproduction = voltbuild.get_craft_result({
+								method = cooking_method, width = 1, items = srclist})
 						else
 							meta:set_int("energy",energy) -- Don't waste energy
 							state = false
