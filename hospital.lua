@@ -12,12 +12,10 @@ minetest.register_node("voltbuild:hospital", {
 	groups = {energy=1,energy_consumer=1,cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
+	voltbuild = {max_tier=2,energy_cost=40,max_stress=2000,max_energy=120,max_psize=128,optime=10.0},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
-		meta:set_int("max_energy",800)
-		meta:set_int("max_psize",64)
 		local inv = meta:get_inventory()
 		meta:set_string("formspec", consumers.get_formspec(pos)..
 				consumers.get_progressbar(0,1,
@@ -48,7 +46,7 @@ components.register_abm({
 			meta:set_int("active",0)
 		end
 
-		local heal_time = 10.0
+		local heal_time = minetest.registered_nodes[node.name]["voltbuild"]["optime"]
 		local objects = minetest.get_objects_inside_radius(pos,3)
 		local players = {}
 		for k,object in pairs(objects) do

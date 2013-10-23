@@ -284,8 +284,15 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "voltbuild:re_battery",
 	recipe = {{"","voltbuild:copper_cable1_000000",""},
-		{"voltbuild:tin_ingot","mesecons:wire_00000000_off","voltbuild:tin_ingot"},
-		{"voltbuild:tin_ingot","mesecons:wire_00000000_off","voltbuild:tin_ingot"}}
+		{"voltbuild:tin_ingot","voltbuild:copper_cable1_000000","voltbuild:tin_ingot"},
+		{"voltbuild:tin_ingot","voltbuild:copper_cable1_000000","voltbuild:tin_ingot"}}
+})
+
+minetest.register_craft({
+	output = "voltbuild:single_use_battery 20",
+	recipe = {{"","voltbuild:tin_cable0_000000",""},
+		{"voltbuild:rubber","voltbuild:tin_cable0_000000","voltbuild:rubber"},
+		{"voltbuild:rubber","voltbuild:tin_cable0_000000","voltbuild:rubber"}},
 })
 
 minetest.register_craft({
@@ -428,21 +435,22 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "voltbuild:extractor",
 	recipe = {{"voltbuild:treetap","voltbuild:machine","voltbuild:treetap"},
-		{"voltbuild:treetap","voltbuild:circuit","voltbuild:treetap"}}
+		{"voltbuild:treetap","voltbuild:circuit","voltbuild:treetap"},
+		{"default:brick","default:brick","default:brick"}}
 })
 
 minetest.register_craft({
 	output = "voltbuild:macerator",
-	recipe = {{"default:desert_stone","default:desert_stone","default:desert_stone"},
-		{"default:cobble","voltbuild:machine","default:cobble"},
-		{"","voltbuild:circuit",""}}
+	recipe = {{"default:gravel","voltbuild:re_battery","default:gravel"},
+		{"default:sandstonebrick","voltbuild:machine","default:sandstonebrick"},
+		{"default:desert_stone","default:desert_stone","default:desert_stone"}}
 })
 
 minetest.register_craft({
 	output = "voltbuild:compressor",
-	recipe = {{"default:stone","","default:stone"},
-		{"default:stone","voltbuild:machine","default:stone"},
-		{"default:stone","voltbuild:circuit","default:stone"}}
+	recipe = {{"voltbuild:bronze_ingot","","voltbuild:bronze_ingot"},
+		{"voltbuild:bronze_ingot","voltbuild:machine","voltbuild:bronze_ingot"},
+		{"voltbuild:bronze_ingot","voltbuild:circuit","voltbuild:bronze_ingot"}}
 })
 
 minetest.register_craft({
@@ -461,7 +469,7 @@ minetest.register_craft({
 
 minetest.register_craft({
 	output = "voltbuild:miner",
-	recipe = {{"voltbuild:circuit","voltbuild:machine","voltbuild:circuit"},
+	recipe = {{"voltbuild:advanced_circuit","voltbuild:extractor","voltbuild:advanced_circuit"},
 		{"","voltbuild:mining_pipe",""},
 		{"","voltbuild:mining_pipe",""}}
 })
@@ -470,11 +478,11 @@ minetest.register_craft({
 	output = "voltbuild:solar_panel",
 	recipe = {{"voltbuild:coal_dust","default:glass","voltbuild:coal_dust"},
 		{"default:glass","voltbuild:coal_dust","default:glass"},
-		{"voltbuild:circuit","voltbuild:generator","voltbuild:circuit"}}
+		{"voltbuild:tin_ingot","voltbuild:generator","voltbuild:tin_ingot"}}
 })
 
 minetest.register_craft({
-	output = "voltbuild:watermill 2",
+	output = "voltbuild:watermill",
 	recipe = {{"default:stick","default:wood","default:stick"},
 		{"default:wood","voltbuild:generator","default:wood"},
 		{"default:stick","default:wood","default:stick"}}
@@ -511,13 +519,6 @@ minetest.register_craft({
 	recipe = {{"","voltbuild:gold_dust",""},
 		{"voltbuild:circuit","voltbuild:re_battery","voltbuild:circuit"},
 		{"voltbuild:copper_cable1_000000","voltbuild:copper_cable1_000000","voltbuild:copper_cable1_000000"}}
-})
-
-minetest.register_craft({
-	output = "voltbuild:ov_scanner",
-	recipe = {{"","voltbuild:gold_dust",""},
-		{"voltbuild:gold_dust","voltbuild:advanced_circuit","voltbuild:gold_dust"},
-		{"voltbuild:gold_cable2_000000","voltbuild:re_battery","voltbuild:gold_cable2_000000"}}
 })
 
 minetest.register_craft({
@@ -575,6 +576,12 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	type = "cooking",
+	output = "voltbuild:ignis_dust 2",
+	recipe = "voltbuild:ice_with_ignis",
+})
+
+minetest.register_craft({
 	output = "voltbuild:medpack",
 	recipe = {{"default:glass","default:apple","default:glass"},
 		{"default:apple","default:apple","default:apple"},
@@ -583,7 +590,7 @@ minetest.register_craft({
 
 minetest.register_craft({
 	output = "voltbuild:hospital",
-	recipe = {{"voltbuild:medpack","voltbuild:medpack","voltbuild:medpack"},
+	recipe = {{"voltbuild:medpack","voltbuild:ov_scanner","voltbuild:medpack"},
 		{"voltbuild:medpack","voltbuild:machine","voltbuild:medpack"},
 		{"voltbuild:extractor","voltbuild:circuit","voltbuild:compressor"}},
 })
@@ -638,6 +645,7 @@ macerator.register_macerator_recipe("voltbuild:refined_iron_ingot","voltbuild:ir
 macerator.register_macerator_recipe("default:gold_ingot","voltbuild:gold_dust")
 macerator.register_macerator_recipe("default:copper_ingot","voltbuild:copper_dust")
 macerator.register_macerator_recipe("default:bronze_ingot","voltbuild:bronze_dust")
+macerator.register_macerator_recipe("voltbuild:ignis_gem","voltbuild:ignis_dust")
 
 macerator.register_macerator_recipe("moreores:bronze_ingot","voltbuild:bronze_dust")
 macerator.register_macerator_recipe("moreores:copper_ingot","voltbuild:copper_dust")
@@ -652,7 +660,13 @@ extractor.register_extractor_recipe("voltbuild:rubber_tree","voltbuild:rubber")
 extractor.register_extractor_recipe("voltbuild:rubber_sapling","voltbuild:rubber")
 extractor.register_extractor_recipe("default:mese_crystal","mesecons:wire_00000000_off 32")
 extractor.register_extractor_recipe("default:sand","mesecons_materials:silicon")
+if minetest.get_modpath("bucket") then
+	extractor.register_function_recipe("voltbuild:bucket_water_with_ignis",function (input)
+		return {item = ItemStack("voltbuild:ignis_dust 2"),time=20},{items = {"bucket:bucket_empty"}}
+	end)
+end
 
 compressor.register_compressor_recipe("voltbuild:mixed_metal_ingot","voltbuild:advanced_alloy")
 compressor.register_compressor_recipe("voltbuild:combined_carbon_fibers","voltbuild:carbon_plate")
+compressor.register_compressor_recipe("voltbuild:ignis_dust","voltbuild:ignis_gem")
 

@@ -155,6 +155,13 @@ minetest.register_craftitem("voltbuild:nuclear_reaction_chamber", {
 			local neighbors = nuclear.neighbors[automata_name](index,inv)
 			local num_neighbors = #neighbors
 			local key = nil
+			local fueltime = minetest.registered_nodes["voltbuild:nuclear_reactor"]["voltbuild"]["fueltime"]
+			local optime
+			if meta:get_string("optime") ~= "" then
+				optime = meta:get_float("optime")
+			else
+				optime = minetest.registered_nodes["voltbuild:nuclear_reactor"]["voltbuild"]["optime"]
+			end
 			for key,neighbor in pairs(neighbors) do
 				local n_val = meta:get_int(automata_name..neighbor)
 				if automata_name == "automata_rads" then
@@ -171,12 +178,16 @@ minetest.register_craftitem("voltbuild:nuclear_reaction_chamber", {
 					--prevents rolling over to negative by using previous 
 					--value with max
 					meta:set_float("stime",meta:get_float("stime")+0.1)
-					meta:set_int(automata_name..neighbor,math.max(n_val+128/num_neighbors,n_val))
-					while meta:get_float("stime") > meta:get_float("fburntime") do
+					local time = meta:get_float("stime")
+					while time > optime do
+						meta:set_int(automata_name..neighbor,math.max(n_val+120/num_neighbors,n_val))
+						time = time-optime
+					end
+					while meta:get_float("stime") > fueltime do
 						local leftover = inv:get_stack("nuclear_fuel",1)
 						leftover:take_item()
 						inv:set_stack("nuclear_fuel",1,leftover)
-						meta:set_float("stime",meta:get_float("stime")-meta:get_float("fburntime"))
+						meta:set_float("stime",meta:get_float("stime")-fueltime)
 					end
 					if meta:get_float("stime") < 0.0 then
 						meta:set_float("stime",0.0)
@@ -190,11 +201,11 @@ minetest.register_craftitem("voltbuild:nuclear_reaction_chamber", {
 					meta:set_int("automata_rads"..index,math.min(meta:get_int("automata_rads"..index)+1,nuclear.max_radiation))
 				elseif automata_name == "automata_energy" then
 					meta:set_float("stime",meta:get_float("stime")+0.1)
-					while meta:get_float("stime") > meta:get_float("fburntime") do
+					while meta:get_float("stime") > fueltime do
 						local leftover = inv:get_stack("nuclear_fuel",1)
 						leftover:take_item()
 						inv:set_stack("nuclear_fuel",1,leftover)
-						meta:set_float("stime",meta:get_float("stime")-meta:get_float("fburntime"))
+						meta:set_float("stime",meta:get_float("stime")-fueltime)
 					end
 					if meta:get_float("stime") < 0.0 then
 						meta:set_float("stime",0.0)
@@ -250,7 +261,7 @@ minetest.register_node("voltbuild:nuclear_reactor", {
 		"voltbuild_nuclear_reactor.png","voltbuild_nuclear_reactor.png"},
 	paramtype2 = "facedir",
 	groups = {energy=1, cracky=2},
-	voltbuild = {max_energy=4000,max_tier=1,max_stress=2000,energy_produce=10},
+	voltbuild = {max_energy=12288,max_tier=2,max_stress=2000,fueltime=10.0,optime=1.0},
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
@@ -363,11 +374,7 @@ components.register_abm({
 		if meta:get_string("stime") == "" then
 			meta:set_float("stime",0.0)
 		end
-		if meta:get_string("fburntime") == "" then
-			meta:set_float("fburntime", 10.0)
-		elseif meta:get_float("fburntime") ~= 10.0 then
-			meta:set_float("fburntime", 10.0)
-		end
+		local fueltime = minetest.registered_nodes[node.name]["voltbuild"]["fueltime"]
 		automata:get(pos,"nuclear","automata_rads"):step()
 		automata:get(pos,"nuclear","automata_heat"):step()
 		automata:get(pos,"nuclear","automata_energy"):step()

@@ -1,10 +1,14 @@
-itest_world_upgrade = minetest.setting_getbool("voltbuild_itest_world_upgrade") or false
+local itest_world_upgrade = minetest.setting_getbool("voltbuild_itest_world_upgrade") or false
 
 modpath = minetest.get_modpath("voltbuild")
 moreores_path = minetest.get_modpath("moreores")
 
 voltbuild = {}
 voltbuild.registered_ores = {}
+--enables more assert checks
+voltbuild.debug = false
+--upgrades nodes in their abm to reset their energy and max energy
+voltbuild.upgrade = true or itest_world_upgrade
 
 function voltbuild.register_ore(name,value)
 	voltbuild.registered_ores[name]=value
@@ -90,6 +94,24 @@ function clone_node(name)
 	end
 	return node2
 end
+
+function voltbuild.deep_copy (table_from,table_to)
+	local key,value
+	for key,value in pairs(table_from) do
+		if table_to[key] == nil then
+			if type(value) == "table" then
+				local deep_value = voltbuild.deep_copy(value,{})
+				table_to[key]=deep_value
+			else
+				table_to[key]=value
+			end
+		elseif type(table_to[key]) == "table" and type(value) == "table" then
+			table_to[key] = voltbuild.deep_copy(value,table_to[key])
+		end
+	end
+	return table_to
+end
+
 
 dofile(modpath.."/builtin.lua")
 dofile(modpath.."/mapgen.lua")

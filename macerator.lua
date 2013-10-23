@@ -15,7 +15,7 @@ minetest.register_node("voltbuild:macerator", {
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000,speed=5},
+	voltbuild = {max_energy=12,max_tier=1,energy_cost=2,max_stress=2000,speed=5,max_psize=32},
 	cooking_method="grinding",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
@@ -32,8 +32,6 @@ minetest.register_node("voltbuild:macerator", {
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
-		meta:set_int("max_energy",800)
-		meta:set_int("max_psize",64)
 		local inv = meta:get_inventory()
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)
@@ -63,7 +61,7 @@ minetest.register_node("voltbuild:macerator_active", {
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000,speed=5},
+	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000,speed=5,max_psize=32,max_energy=12},
 	cooking_method="grinding",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
@@ -80,7 +78,6 @@ minetest.register_node("voltbuild:macerator_active", {
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
-		meta:set_int("max_energy",800)
 		meta:set_int("max_psize",64)
 		local inv = meta:get_inventory()
 		inv:set_size("src", 1)

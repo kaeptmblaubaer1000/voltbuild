@@ -5,12 +5,12 @@ generators.charge = voltbuild.charge_item
 
 function generators.send(pos,energy)
 	local sent = send_packet_alldirs(pos,energy)
-	if sent==0 then
+	if sent~=nil then
 		local meta = minetest.env:get_meta(pos)
 		local node = minetest.env:get_node(pos)
 		local e = meta:get_int("energy")
 		local m = get_node_field(node.name,meta,"max_energy")
-		meta:set_int("energy",math.min(m,e+energy))
+		meta:set_int("energy",math.min(m,e+(energy-sent)))
 	end
 end
 

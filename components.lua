@@ -31,8 +31,8 @@ function components.each_with_method(component_inv,method_name)
 	for i=1,component_inv:get_size("components") do
 		component_stack = component_inv:get_stack("components",i)
 		if not component_stack:is_empty() then
-			ret_comp = component_stack:peek_item():get_definition()["voltbuild"]
-			if ret_comp[method_name] then
+			local ret_comp = component_stack:peek_item():get_definition()["voltbuild"]
+			if ret_comp and ret_comp[method_name] then
 				table.insert(ret_comps,ret_comp)
 			end
 		end
@@ -77,12 +77,39 @@ function components.abm_wrapper(pos,node,active_object_count,active_object_count
 	end
 end
 
-function components.register_abm(table)
-	local register_action = table.action
-	table.action = function (pos,node,active_object_count,active_object_count_wider)
-		components.abm_wrapper(pos,node,active_object_count,active_object_count_wider,register_action)
+if voltbuild.upgrade then
+	function components.register_abm(table)
+		local register_action = table.action
+		table.action = function (pos,node,active_object_count,active_object_count_wider)
+			local meta = minetest.env:get_meta(pos)
+			if meta:get_string("energy") ~= "" then
+				local max_energy
+				local current_max = meta:get_int("max_energy")
+				if minetest.registered_nodes[node.name]["voltbuild"] then
+					max_energy = minetest.registered_nodes[node.name]["voltbuild"]["max_energy"]
+				end
+				if max_energy and max_energy < meta:get_int("energy") then
+					meta:set_int("energy",math.min(meta:get_int("energy"),max_energy))
+				end
+				if current_max ~= 0 and current_max > max_energy then
+					meta:set_string("max_energy","")
+				end
+				if meta:get_string("max_psize") ~= "" then
+					meta:set_string("max_psize","")
+				end
+			end
+			components.abm_wrapper(pos,node,active_object_count,active_object_count_wider,register_action)
+		end
+		minetest.register_abm(table)
 	end
-	minetest.register_abm(table)
+else
+	function components.register_abm(table)
+		local register_action = table.action
+		table.action = function (pos,node,active_object_count,active_object_count_wider)
+			components.abm_wrapper(pos,node,active_object_count,active_object_count_wider,register_action)
+		end
+		minetest.register_abm(table)
+	end
 end
 
 function components.register_clockitem(name, properties)
@@ -97,82 +124,110 @@ function components.register_clockitem(name, properties)
 			end
 		end
 		if active and active ~= 0 then
-			local energy_cost = minetest.registered_nodes[node.name]["voltbuild"]["energy_cost"]
-			local energy_produce = minetest.registered_nodes[node.name]["voltbuild"]["energy_produce"]
-			local energy_release = minetest.registered_nodes[node.name]["voltbuild"]["energy_release"]
-			local energy = meta:get_int("energy")
-			local energy_cost_effect = properties.voltbuild.energy_cost_effect
-			local pay_cost = false
-			if energy_cost  then
-				local clock_energy_cost = energy_cost_effect(energy_cost)
-				if energy > energy_cost + clock_energy_cost then
-					meta:set_int("energy",energy-clock_energy_cost)
-					pay_cost = true
-				end
-			elseif energy_produce then
-				local energy_produce_effect = properties.voltbuild.energy_produce_effect
-				if type(energy_produce) == "function" then
-					local energy_p,leftover_energy = energy_produce(pos)
-					generators.produce(pos,energy_produce_effect(energy_p))
-					if leftover_energy then
-						leftover_energy = energy_p+leftover_energy-energy_produce_effect(energy_p)
-						meta:set_int("energy",leftover_energy)
-					end
-				elseif type(energy_produce) == "number" then
-					generators.produce(pos,energy_produce_effect(energy_produce))
-				end
-				pay_cost = true
-			elseif energy_release then
-				if type(energy_release) == "function" then
-					local energy_release_effect = properties.voltbuild.energy_release_effect
-					local energy_p, leftover_energy,dir = energy_release(pos)
-					local sent = send_packet(pos,dir,energy_release_effect(energy_p))
-					if sent then
-						leftover_energy = energy_p+leftover_energy-energy_release_effect(energy_p)
-						meta:set_int("energy",leftover_energy)
-					end
-				end
-				pay_cost = true
+			local speed = minetest.registered_nodes[node.name]["voltbuild"]["speed"] or 1.0
+			local operation_time = minetest.registered_nodes[node.name]["voltbuild"]["optime"]
+			local fuel_time = minetest.registered_nodes[node.name]["voltbuild"]["fueltime"]
+			local clock_speed_effect = properties.voltbuild.clock_speed_effect
+			local clock_optime_effect = properties.voltbuild.clock_optime_effect
+			local clock_fueltime_effect = properties.voltbuild.clock_fueltime_effect
+			if type(speed)== "function" then
+				speed = clock_speed_effect(speed(pos))
+			else
+				speed = clock_speed_effect(speed)
 			end
-			if pay_cost then
-				local stress = meta:get_int("stress")
-				local stress_cost_effect = properties.voltbuild.stress_cost_effect
-				meta:set_int("stress",stress_cost_effect(stress))
-				if meta:get_string("stime") ~= "" then
-					local stime = meta:get_float("stime")
-					local speed = minetest.registered_nodes[node.name]["voltbuild"]["speed"] or 1.0
-					local clock_effect = properties.voltbuild.clock_effect
-					meta:set_float("stime",stime+clock_effect(speed))
+			if operation_time then
+				if clock_optime_effect then
+					if type(operation_time)== "function" then
+						if meta:get_string("optime_prev") ~= "" then
+							operation_time = clock_optime_effect(meta:get_float("optime"))
+							if operation_time then
+								meta:set_float("optime_prev",meta:get_float("optime"))
+								meta:set_float("optime",operation_time)
+							end
+						else
+							operation_time = clock_optime_effect(operation_time(pos))
+							if operation_time then
+								meta:set_float("optime_prev",-1.0)
+								meta:set_float("optime",operation_time)
+							end
+						end
+					else
+						if meta:get_string("optime_prev") ~= "" then
+							operation_time = clock_optime_effect(meta:get_float("optime"))
+							meta:set_float("optime_prev",meta:get_float("optime"))
+						else
+							operation_time = clock_optime_effect(operation_time)
+							meta:set_float("optime_prev",-1.0)
+						end
+						meta:set_float("optime",operation_time)
+					end
 				end
+			end
+			if fuel_time then
+				if clock_fueltime_effect then
+					if type(fuel_time)== "function" then
+						if meta:get_string("fueltime") ~= "" then
+							fuel_time = clock_fueltime_effect(meta:get_float("fueltime"))
+							meta:set_float("ftime_prev",meta:get_float("fueltime"))
+						else
+							fuel_time = clock_fueltime_effect(fuel_time(pos))
+							meta:set_float("ftime_prev",-1.0)
+						end
+					else
+						if meta:get_string("ftime_prev") ~= "" then
+							fuel_time = clock_fueltime_effect(meta:get_float("fueltime"))
+							meta:set_float("ftime_prev",meta:get_float("fueltime"))
+						else
+							fuel_time = clock_fueltime_effect(fuel_time)
+							meta:set_float("ftime_prev",-1.0)
+						end
+					end
+					meta:set_float("fueltime",fuel_time)
+				end
+			end
+			local stress = meta:get_int("stress")
+			local stress_cost_effect = properties.voltbuild.stress_cost_effect
+			meta:set_int("stress",stress_cost_effect(stress))
+			if meta:get_string("stime") ~= "" then
+				local stime = meta:get_float("stime")
+				meta:set_float("stime",stime+speed)
+			end
+		end
+	end
+	properties.voltbuild.run_after_effects = function(pos)
+		local meta = minetest.env:get_meta(pos)
+		local clock_optime_effect = properties.voltbuild.clock_optime_effect
+		if clock_optime_effect then
+			if meta:get_string("optime") ~= "" then
+				meta:set_string("optime","")
+				meta:set_string("optime_prev","")
+			end
+			if meta:get_string("fueltime") ~= "" then
+				meta:set_string("fueltime","")
+				meta:set_string("ftime_prev","")
 			end
 		end
 	end
 	minetest.register_craftitem(name,properties)
 end
 
-do 
-local function overclock_effect(x)
-	return x
-end
 components.register_clockitem("voltbuild:overclock", {
 	description = "Overclock",
 	inventory_image = "voltbuild_overclock.png",
 	voltbuild = {component=1,
-		energy_cost_effect = overclock_effect,
-		energy_produce_effect = overclock_effect,
-		energy_release_effect = overclock_effect,
 		stress_cost_effect = function(stress)
 			return stress+20
 		end,
-		clock_effect = overclock_effect},
+		clock_speed_effect = function (x)
+			return x
+		end},
 	stack_max = 1,
 })
-end
 
 minetest.register_craft({
 	output = "voltbuild:overclock",
 	recipe = {{"default:bronze_ingot","voltbuild:hv_cable0_000000","default:bronze_ingot"},
-		{"","voltbuild:circuit","voltbuild:energy_crystal"}}
+		{"voltbuild;energy_crystal","voltbuild:circuit","voltbuild:energy_crystal"}}
 })
 
 minetest.register_craftitem("voltbuild:halt", {
@@ -188,7 +243,7 @@ minetest.register_craftitem("voltbuild:halt", {
 minetest.register_craft({
 	output = "voltbuild:halt",
 	recipe = {{"default:gold_ingot","voltbuild:splitter_cable_000000","default:gold_ingot"},
-		{"","voltbuild:circuit","voltbuild:re_battery"}}
+		{"voltbuild:re_battery","voltbuild:circuit","voltbuild:re_battery"}}
 })
 
 minetest.register_craftitem("voltbuild:fan",{

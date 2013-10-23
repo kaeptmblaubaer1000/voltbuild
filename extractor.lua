@@ -6,7 +6,9 @@ function extractor.register_extractor_recipe(string1,string2)
 	voltbuild.register_machine_recipe(string1,string2,"extracting")
 end
 extractor.get_craft_result = voltbuild.get_craft_result
-
+function extractor.register_function_recipe(string1,func)
+	voltbuild.register_function_recipe(string1,func,"extracting")
+end
 
 minetest.register_node("voltbuild:extractor", {
 	description = "Extractor",
@@ -15,7 +17,7 @@ minetest.register_node("voltbuild:extractor", {
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
+	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000,max_psize=32,max_energy=12},
 	cooking_method = "extracting",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
@@ -32,8 +34,6 @@ minetest.register_node("voltbuild:extractor", {
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
-		meta:set_int("max_energy",800)
-		meta:set_int("max_psize",64)
 		local inv = meta:get_inventory()
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)
@@ -62,7 +62,7 @@ minetest.register_node("voltbuild:extractor_active", {
 	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000},
+	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000,max_psize=32,max_energy=12},
 	cooking_method = "extracting",
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
@@ -79,8 +79,6 @@ minetest.register_node("voltbuild:extractor_active", {
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
-		meta:set_int("max_energy",800)
-		meta:set_int("max_psize",64)
 		local inv = meta:get_inventory()
 		inv:set_size("src", 1)
 		inv:set_size("dst", 4)

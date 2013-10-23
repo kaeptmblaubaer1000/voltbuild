@@ -33,7 +33,7 @@ end
 minetest.register_tool("voltbuild:re_battery",{
 	description = "RE Battery",
 	inventory_image = "itest_re_battery.png",
-	voltbuild = {max_charge = 10000,
+	voltbuild = {max_charge = 240,
 		max_speed = 100,
 		charge_tier = 1},
 	tool_capabilities =
@@ -44,7 +44,7 @@ minetest.register_tool("voltbuild:re_battery",{
 minetest.register_tool("voltbuild:energy_crystal",{
 	description = "Energy crystal",
 	inventory_image = "itest_energy_crystal.png",
-	voltbuild = {max_charge = 100000,
+	voltbuild = {max_charge = 10000,
 		max_speed = 250,
 		charge_tier = 2},
 	tool_capabilities =
@@ -55,7 +55,7 @@ minetest.register_tool("voltbuild:energy_crystal",{
 minetest.register_tool("voltbuild:lapotron_crystal",{
 	description = "Lapotron crystal",
 	inventory_image = "itest_lapotron_crystal.png",
-	voltbuild = {max_charge = 1000000,
+	voltbuild = {max_charge = 100000,
 		max_speed = 600,
 		charge_tier = 3},
 	tool_capabilities =
@@ -67,17 +67,18 @@ minetest.register_craftitem("voltbuild:single_use_battery",{
 	description = "Single use battery",
 	inventory_image = "itest_single_use_battery.png",
 	voltbuild = {single_use = 1,
-		singleuse_energy = 1000}
+		singleuse_energy = 12,
+		charge_tier = 1}
 })
 
-minetest.register_tool("voltbuild:mining_drill",{
+local drill_properties = {
 	description = "Mining drill",
 	inventory_image = "voltbuild_mining_drill.png",
-	voltbuild = {max_charge = 10000,
-		max_speed = 100,
+	voltbuild = {max_charge = 180,
+		max_speed = 5,
 		charge_tier = 1,
 		cnames = {{0,"voltbuild:mining_drill_discharged"},
-			{50,"voltbuild:mining_drill"}}},
+			{1,"voltbuild:mining_drill"}}},
 	tool_capabilities =
 		{max_drop_level=0,
 		-- Uses are specified, but not used since there is a after_use function
@@ -86,35 +87,24 @@ minetest.register_tool("voltbuild:mining_drill",{
 		local stack = itemstack:to_table()
 		local chr = charge.get_charge(stack)
 		local max_charge = get_item_field(stack.name, "max_charge")
-		nchr = math.max(0,chr-50)
+		nchr = math.max(0,chr-1)
 		charge.set_charge(stack,nchr)
 		charge.set_wear(stack,nchr,max_charge)
 		return ItemStack(stack)
 	end
-})
+}
+minetest.register_tool("voltbuild:mining_drill",drill_properties)
+drill_properties.after_use=nil
+minetest.register_tool("voltbuild:mining_drill_discharged",drill_properties)
 
--- Used to prevent digging when discharged
-minetest.register_tool("voltbuild:mining_drill_discharged",{
-	description = "Mining drill",
-	inventory_image = "voltbuild_mining_drill.png",
-	voltbuild = {max_charge = 10000,
-		max_speed = 100,
-		charge_tier = 1,
-		cnames = {{0,"voltbuild:mining_drill_discharged"},
-			{50,"voltbuild:mining_drill"}}},
-	tool_capabilities =
-		{max_drop_level=0,
-		groupcaps={}},
-})
-
-minetest.register_tool("voltbuild:diamond_drill",{
+local diamond_drill = {
 	description = "Diamond drill",
 	inventory_image = "voltbuild_diamond_drill.png",
-	voltbuild = {max_charge = 10000,
-		max_speed = 100,
+	voltbuild = {max_charge = 240,
+		max_speed = 10,
 		charge_tier = 1,
 		cnames = {{0,"voltbuild:diamond_drill_discharged"},
-			{84,"voltbuild:diamond_drill"}}},
+			{2,"voltbuild:diamond_drill"}}},
 	tool_capabilities =
 		{max_drop_level=0,
 		-- Uses are specified, but not used since there is a after_use function
@@ -123,43 +113,33 @@ minetest.register_tool("voltbuild:diamond_drill",{
 		local stack = itemstack:to_table()
 		local chr = charge.get_charge(stack)
 		local max_charge = get_item_field(stack.name, "max_charge")
-		nchr = math.max(0,chr-84)
+		nchr = math.max(0,chr-2)
 		charge.set_charge(stack,nchr)
 		charge.set_wear(stack,nchr,max_charge)
 		return ItemStack(stack)
 	end
-})
+}
+minetest.register_tool("voltbuild:diamond_drill",diamond_drill)
+diamond_drill.after_use = nil
+minetest.register_tool("voltbuild:diamond_drill_discharged",diamond_drill)
 
--- Used to prevent digging when discharged
-minetest.register_tool("voltbuild:diamond_drill_discharged",{
-	description = "Diamond drill",
-	inventory_image = "voltbuild_diamond_drill.png",
-	voltbuild = {max_charge = 10000,
-		max_speed = 100,
-		charge_tier = 1,
-		cnames = {{0,"voltbuild:diamond_drill_discharged"},
-			{84,"voltbuild:diamond_drill"}}},
-	tool_capabilities =
-		{max_drop_level=0,
-		groupcaps={}},
-})
 
 minetest.register_tool("voltbuild:od_scanner",{
 	description = "OD Scanner",
 	inventory_image = "voltbuild_od_scanner.png",
-	voltbuild = {max_charge = 10000,
-		max_speed = 100,
+	voltbuild = {max_charge = 360,
+		max_speed = 10,
 		charge_tier = 1},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={}},
 	on_place = function(itemstack, user, pointed_thing)
 		local stack = itemstack:to_table()
-		if charge.get_charge(stack) < 48 then return itemstack end -- Not enough energy
+		if charge.get_charge(stack) < 2 then return itemstack end -- Not enough energy
 		local chr = charge.get_charge(stack)
 		local max_charge = get_item_field(stack.name, "max_charge")
-		charge.set_charge(stack, chr - 48)
-		charge.set_wear(stack, chr - 48, max_charge)
+		charge.set_charge(stack, chr - 2)
+		charge.set_wear(stack, chr - 2, max_charge)
 		local pos = user:getpos()
 		local y = 0
 		local nnodes = 0
@@ -191,19 +171,19 @@ minetest.register_tool("voltbuild:od_scanner",{
 minetest.register_tool("voltbuild:ov_scanner",{
 	description = "OV Scanner",
 	inventory_image = "voltbuild_ov_scanner.png",
-	voltbuild = {max_charge = 10000,
-		max_speed = 100,
-		charge_tier = 2},
+	voltbuild = {max_charge = 480,
+		max_speed = 20,
+		charge_tier = 1},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={}},
 	on_place = function(itemstack, user, pointed_thing)
 		local stack = itemstack:to_table()
-		if charge.get_charge(stack) < 250 then return itemstack end -- Not enough energy
+		if charge.get_charge(stack) < 4 then return itemstack end -- Not enough energy
 		local chr = charge.get_charge(stack)
 		local max_charge = get_item_field(stack.name, "max_charge")
-		charge.set_charge(stack, chr - 250)
-		charge.set_wear(stack, chr - 250, max_charge)
+		charge.set_charge(stack, chr - 4)
+		charge.set_wear(stack, chr - 4, max_charge)
 		local pos = user:getpos()
 		local y = 0
 		local nnodes = 0
@@ -234,5 +214,5 @@ minetest.register_tool("voltbuild:ov_scanner",{
 
 -- Add power to mesecons
 mcon = clone_node("mesecons:wire_00000000_off")
-mcon.voltbuild = {single_use = 1, singleuse_energy = 500}
+mcon.voltbuild = {single_use = 1, singleuse_energy = 60}
 minetest.register_node(":mesecons:wire_00000000_off",mcon)

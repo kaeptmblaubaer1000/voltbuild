@@ -13,12 +13,12 @@ function storage.send(pos,energy,dir)
 	local meta = minetest.env:get_meta(pos)
 	local e = meta:get_int("energy")
 	local packet_size = minetest.registered_nodes[node.name]["voltbuild"]["max_psize"]
-	energy = math.min(e,packet_size)
+	energy = math.min(e,packet_size,energy)
 	local sent = send_packet(pos,dir,energy)
 	if sent~=nil then
 		local meta = minetest.env:get_meta(pos)
 		local e = meta:get_int("energy")
-		meta:set_int("energy",e-energy)
+		meta:set_int("energy",e-sent)
 	end
 end
 
@@ -54,7 +54,7 @@ end
 function storage.abm (pos, node, active_object_count, active_objects_wider)
 	local senddir = param22dir(node.param2)
 	local meta = minetest.env:get_meta(pos)
-	local psize = meta:get_int("max_psize")
+	local psize = minetest.registered_nodes[node.name]["voltbuild"]["max_psize"]
 	storage.charge(pos)
 	storage.send(pos,psize,senddir)
 	storage.discharge(pos)

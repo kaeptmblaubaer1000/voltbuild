@@ -7,6 +7,49 @@ minetest.register_node( "voltbuild:stone_with_uranium", {
 	drop = 'voltbuild:uranium_lump',
 }) 
 
+local sand_with_alunra = {
+	description = "Alunra ore",
+	tiles = { "default_sand.png^voltbuild_alunra_gem_ore.png" },
+	groups = {crumbly=0,choppy=0,fleshy=0,cracky=2,oddly_breakable_by_hand=0},
+	drop = "voltbuild:alunra_gem",
+}
+local sand_properties = minetest.registered_nodes["default:sand"]
+sand_with_alunra = voltbuild.deep_copy(sand_properties,sand_with_alunra)
+minetest.register_node( "voltbuild:sand_with_alunra", sand_with_alunra)
+
+local water_properties = minetest.registered_nodes["default:water_source"]
+local water_with_ignis = {
+	description = "Ignis ore",
+	tiles = { "default_water.png^voltbuild_ignis_gem_ore.png" },
+	drawtype = "allfaces_optional",
+	groups = {oddly_breakable_by_hand=3},
+	drop = "voltbuild:ignis_dust",
+	buildable_to = false,
+	pointable = true,
+	liquid_alternative_source = "voltbuild:water_source_with_ignis",
+	liquid_alternative_flowing = "voltbuild:water_flowing_with_ignis",
+	liquid_renewable = false,
+	freezemelt = "voltbuild:ice_with_ignis",
+	after_dig_node = function (pos, oldnode, oldmetadata, digger)
+		minetest.env:set_node(pos,{name="default:water_source"})
+	end,
+}
+water_with_ignis = voltbuild.deep_copy(water_properties,water_with_ignis)
+minetest.register_node( "voltbuild:water_source_with_ignis",water_with_ignis)
+
+local flowing_water = minetest.registered_nodes["default:water_flowing"]
+local ignis_flowing_water = voltbuild.deep_copy(flowing_water,{liquid_alternative_source = "voltbuild:water_source_with_ignis",liquid_alternaitve_flowing="voltbuild:water_flowing_with_ignis"})
+minetest.register_node( "voltbuild:water_flowing_with_ignis",ignis_flowing_water)
+
+local ice_properties = minetest.registered_nodes["default:ice"]
+local ignis_ice = {
+	description = "Ice with Ignis",
+	tiles = {"default_ice.png^voltbuild_ignis_gem_ore.png"},
+	freezemelt = "voltbuild:water_source_with_ignis",
+}
+ignis_ice = voltbuild.deep_copy(ice_properties,ignis_ice)
+minetest.register_node( "voltbuild:ice_with_ignis",ignis_ice)
+
 --use moreores tin instead if moreores is loaded
 if not moreores_path then
 	minetest.register_node( "voltbuild:stone_with_tin", {
@@ -27,6 +70,25 @@ end
 minetest.register_craftitem( "voltbuild:uranium_lump", {
 	description = "Uranium lump",
 	inventory_image = "itest_uranium_lump.png",
+})
+
+minetest.register_craftitem( "voltbuild:alunra_gem", {
+	description = "Alunra gem",
+	inventory_image = "voltbuild_alunra_gem.png",
+	wield_image = "voltbuild_alunra_gem_wield.png",
+	voltbuild = {single_use = 1,
+		singleuse_energy = 60,
+		charge_tier = 1},
+})
+
+minetest.register_craftitem( "voltbuild:ignis_gem", {
+	description = "Ignis gem",
+	inventory_image = "voltbuild_ignis_gem.png",
+})
+
+minetest.register_craftitem( "voltbuild:ignis_dust", {
+	description = "Ignis dust",
+	inventory_image = "voltbuild_ignis_gem_dust.png",
 })
 
 if not moreores_path then
@@ -120,6 +182,50 @@ minetest.register_ore({
 	flags          = "absheight",
 })
 
+minetest.register_ore({
+	ore_type       = "scatter",
+	ore            = "voltbuild:sand_with_alunra",
+	wherein        = "default:sand",
+	clust_scarcity = 16*1*32,
+	clust_num_ores = 1,
+	clust_size     = 1,
+	height_min     = -12,
+	height_max     = -10,
+})
+
+minetest.register_ore({
+	ore_type       = "scatter",
+	ore            = "voltbuild:sand_with_alunra",
+	wherein        = "default:sand",
+	clust_scarcity = 16*1*16,
+	clust_num_ores = 2,
+	clust_size     = 3,
+	height_min     = -14,
+	height_max     = -13,
+})
+
+
+minetest.register_ore({
+	ore_type       = "scatter",
+	ore            = "voltbuild:sand_with_alunra",
+	wherein        = "default:sand",
+	clust_scarcity = 49*1*7,
+	clust_num_ores = 3,
+	clust_size     = 5,
+	height_min     = -40,
+	height_max     = -15,
+})
+
+minetest.register_ore({
+	ore_type       = "scatter",
+	ore            = "voltbuild:water_source_with_ignis",
+	wherein        = {"default:water_source","default:water_flowing"},
+	clust_scarcity = 20*10*20,
+	clust_num_ores = 1,
+	clust_size     = 1,
+	height_min     = -31000,
+	height_max     = -13,
+})
 
 if moreores_path then
 	minetest.register_alias("voltbuild:stone_with_tin","moreores:mineral_tin")
@@ -131,4 +237,12 @@ else
 	minetest.register_alias("moreores:tin_lump","voltbuild:tin_lump")
 	minetest.register_alias("moreores:tin_ingot","voltbuild:tin_ingot")
 	minetest.register_alias("moreores:tin_block","voltbuild:tin_block")
+end
+
+if minetest.get_modpath("bucket") then
+	bucket.register_liquid("voltbuild:water_source_with_ignis",
+		"voltbuild:water_flowing_with_ignis",
+		"voltbuild:bucket_water_with_ignis",
+		"bucket_water.png",
+		"Water with Ignis Bucket")
 end

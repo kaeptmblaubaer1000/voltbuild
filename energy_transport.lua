@@ -37,6 +37,7 @@ function voltbuild.blast_all(pos,intensity,range)
 	for xVect=-range,range do
 		for yVect=-range+math.abs(xVect),range-math.abs(xVect) do
 			for zVect=-range+math.abs(xVect)+math.abs(yVect),range-math.abs(xVect)-math.abs(yVect) do
+				local dir=({x=xVect,y=yVect,z=zVect})
 				local node = minetest.env:get_node(addVect(pos,dir))
 				local destroy = minetest.registered_nodes[node.name]["on_blast"]
 				if destroy and type(destroy) == "function" then
@@ -62,33 +63,42 @@ function send(pos,dir,power,explored)
 	local maxcurrent=get_node_field(cnode.name,nil,"max_current",pos)
 	local currentloss=get_node_field_float(cnode.name,nil,"current_loss",pos)
 	local p=math.ceil(round0(power-currentloss))
-	local l={}
-	local ret
-	for i=1,6 do -- 6 should be a maximum
-		local next=enegy_go_next(pos,dir,p)
-		if next==1 then
-			ret=1
+	local next=energy_go_next(pos,dir,p)
+	local diff = 0
+	if not next then
+		return nil
+	end
+	while next do
+		if type(next) == "table" then
+			next = send(addVect(pos,next),next,p,explored)
+			if type(next) == "number" then
+				diff = diff + next
+			end
 			break
-		end
-		if next==nil or next==0 then
-			break
-		end
-		if posintbl(l,next) then break end
-		l[#l+1]=next
-		local s=send(addVect(pos,next),next,power-currentloss,explored)
-		if s==1 then
-			ret=1
-			break
+		elseif type(next) == "number" then
+			if next < 1 then
+				break
+			else
+				diff = diff+next
+				p = p-next
+			end
+			next = energy_go_next(pos,dir,p)
 		end
 	end
-	if ret==nil then return nil end
 	local meta=minetest.env:get_meta(pos)
-	if meta:get_int("get_current")>0 then -- We want to mesure current through cable.
-		local c=meta:get_int("current")
-		meta:set_int("current",c+p)
+	local node = minetest.get_node(pos)
+	local conductor = minetest.registered_nodes[node.name]["voltbuild"]["energy_conductor"]
+	if conductor and conductor >= 1 then
+		if meta:get_int("get_current")>0 then -- We want to mesure current through cable.
+			local c=meta:get_int("current")
+			meta:set_int("current",c+p)
+		end
+		if maxcurrent<power then 
+			-- Melt cable
+			voltbuild.blast(pos) 
+		end
 	end
-	if maxcurrent<power then voltbuild.blast(pos) end -- Melt cable
-	return ret
+	return diff
 end
 
 function send_packet(fpos,dir,psize)
@@ -104,18 +114,27 @@ function send_packet(fpos,dir,psize)
 		local npos = addVect(fpos,dir)
 		local node = minetest.env:get_node(npos)
 		local meta = minetest.env:get_meta(npos)
-		if not (minetest.registered_nodes[node.name].voltbuild and
-			minetest.registered_nodes[node.name].voltbuild.can_receive and
-				(not minetest.registered_nodes[node.name].voltbuild.can_receive(npos,vect))) then
+		if minetest.registered_nodes[node.name].voltbuild then
 			local max_energy=get_node_field(node.name,meta,"max_energy")
 			local current_energy=meta:get_int("energy")
 			local max_psize=get_node_field(node.name,meta,"max_psize")
+			local diff = max_energy-current_energy
 			if psize>max_psize then
 				voltbuild.blast_all(npos,1,1)
 				return psize
-			elseif psize <= max_energy-current_energy then 
-				meta:set_int("energy",meta:get_int("energy")+psize)
-				return psize
+			elseif diff > 0 then 
+				if meta:get_int("energy")+psize > max_energy then
+					meta:set_int("energy",max_energy)
+					s = diff
+					local split_sent = send(fpos,dir,psize-diff,{})
+					if split_sent then
+						s = s+split_sent
+					end
+				else
+					meta:set_int("energy",meta:get_int("energy")+psize)
+					s = psize
+				end
+				return s
 			end
 		end
 	end
@@ -126,13 +145,13 @@ function send_packet_alldirs(pos,power)
 	for _,dir in ipairs(adjlist) do
 		local s=send_packet(pos,dir,power)
 		if s~= nil then
-			return 1
+			return s
 		end
 	end
 	return 0
 end
 
-function enegy_go_next(pos,dir,power)
+function energy_go_next(pos,dir,power)
 	local consumers={}
 	local cables={}
 	local cnode=minetest.env:get_node(pos)
@@ -157,9 +176,7 @@ function enegy_go_next(pos,dir,power)
 		conductor=minetest.get_item_group(node.name,"energy_conductor")
 		meta=minetest.env:get_meta(npos)
 		if consumer==1 then
-			if not (minetest.registered_nodes[node.name].voltbuild and
-				minetest.registered_nodes[node.name].voltbuild.can_receive and
-					(not minetest.registered_nodes[node.name].voltbuild.can_receive(npos,vect))) then
+			if minetest.registered_nodes[node.name].voltbuild  then
 				local max_energy=get_node_field(node.name,meta,"max_energy")
 				local current_energy=meta:get_int("energy")
 				local max_psize=get_node_field(node.name,meta,"max_psize")
@@ -169,7 +186,7 @@ function enegy_go_next(pos,dir,power)
 					consumers[i].pos=npos
 					consumers[i].vect=vect
 					consumers[i].overcharge=true
-				elseif power <= max_energy-current_energy then -- We don't want to waste power 
+				elseif max_energy-current_energy > 0 then
 					local i=#consumers+1
 					consumers[i]={}
 					consumers[i].pos=npos
@@ -198,10 +215,19 @@ function enegy_go_next(pos,dir,power)
 		cmeta:set_int("cdir",n)
 		if consumers[n].overcharge then
 			voltbuild.blast_all(consumers[n].pos,1,1)
-			return 1
+			return power
 		end
 		local meta=minetest.env:get_meta(consumers[n].pos)
-		meta:set_int("energy",meta:get_int("energy")+power)
-		return 1
+		local name = minetest.get_node(consumers[n].pos)["name"]
+		local max_energy = get_node_field(name,meta,"max_energy")
+		if meta:get_int("energy")+power > max_energy then
+			local surplus = (meta:get_int("energy")+power) - max_energy
+			cmeta:set_int("energy",cmeta:get_int("energy")+surplus)
+			meta:set_int("energy",max_energy)
+			return power-surplus
+		else
+			meta:set_int("energy",meta:get_int("energy")+power)
+		end
+		return power
 	end
 end
