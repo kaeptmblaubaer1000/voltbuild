@@ -137,31 +137,37 @@ if generate_docs then
 	local craft_file = io.open(modpath.."/doc/crafts.txt","w")
 	for key, value in pairs(minetest.registered_items) do
 		if string.match(key,"voltbuild:") then
-			local crafts = minetest.get_craft_recipe(key)
-			if crafts.items then
+			local crafts = minetest.get_all_craft_recipes(key)
+			if crafts then
 				craft_file:write("output is ",key,"\n")
 				craft_file:write("In game description is ",value["description"],"\n")
-				if crafts.type then
-					craft_file:write("method is ",crafts.type,"\n")
+				local recipe 
+				for k,recipe in pairs(crafts) do
+					if recipe.type then
+						craft_file:write("method is ",recipe.type,"\n")
+					end
+					if recipe.width == 0 then
+						craft_file:write("shapeless is true\n")
+					end
+					craft_file:write("recipe is\n")
+					for k=1,9 do
+						if k % 3 == 1 then
+							craft_file:write("   ")
+						end
+						if recipe.items[k] then
+							craft_file:write(recipe.items[k],"")
+						else
+							craft_file:write("\"\"")
+						end
+						if k ~= 9 then
+							craft_file:write(", ")
+						end
+						if k % 3 == 0 then
+							craft_file:write("\n")
+						end
+					end
 				end
-				craft_file:write("recipe is\n")
-				for k=1,9 do
-					if k % 3 == 1 then
-						craft_file:write("   ")
-					end
-					if crafts.items[k] then
-						craft_file:write(crafts.items[k],"")
-					else
-						craft_file:write("\"\"")
-					end
-					if k ~= 9 then
-						craft_file:write(", ")
-					end
-					if k % 3 == 0 then
-						craft_file:write("\n")
-					end
-				end
-				craft_file:write("\n")
+				craft_file:write("\n\n")
 			end
 		end
 	end
