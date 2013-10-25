@@ -1,4 +1,5 @@
 local itest_world_upgrade = minetest.setting_getbool("voltbuild_itest_world_upgrade") or false
+local generate_docs = false
 
 modpath = minetest.get_modpath("voltbuild")
 moreores_path = minetest.get_modpath("moreores")
@@ -128,6 +129,67 @@ dofile(modpath.."/craft.lua")
 if itest_world_upgrade then
 	dofile(modpath.."/itest_upgrade_compat.lua")
 	print("voltbuild is using one way upgrade")
+end
+if generate_docs then
+	print("Generating voltbuild documentation.")
+	local key,value
+	local  k, v
+	local craft_file = io.open(modpath.."/doc/crafts.txt","w")
+	for key, value in pairs(minetest.registered_items) do
+		if string.match(key,"voltbuild:") then
+			local crafts = minetest.get_craft_recipe(key)
+			if crafts.items then
+				craft_file:write("output is ",key,"\n")
+				craft_file:write("In game description is ",value["description"],"\n")
+				if crafts.type then
+					craft_file:write("method is ",crafts.type,"\n")
+				end
+				craft_file:write("recipe is\n")
+				for k=1,9 do
+					if k % 3 == 1 then
+						craft_file:write("   ")
+					end
+					if crafts.items[k] then
+						craft_file:write(crafts.items[k],"")
+					else
+						craft_file:write("\"\"")
+					end
+					if k ~= 9 then
+						craft_file:write(", ")
+					end
+					if k % 3 == 0 then
+						craft_file:write("\n")
+					end
+				end
+				craft_file:write("\n")
+			end
+		end
+	end
+	for key, value in pairs(voltbuild.recipes) do
+		for k, v in pairs (value) do 
+			--ignore __index and other metatable functions
+			if string.find(k,"__") ~= 1 then
+				local v_name
+				if type(v) == "string" then
+					craft_file:write("output is ",v,"\n")
+					if not string.find(v," ") then 
+						v_name = v
+					else
+						v_name = string.sub(v,1,string.find(v," ")-1)
+					end
+				else
+					local craft_result,leftover = v(ItemStack(k))
+					v_name = craft_result.item:get_name()
+					craft_file:write("output is ",v_name,"\n")
+				end
+				local desc = minetest.registered_items[v_name]["description"]
+				craft_file:write("In game description is ",desc,"\n")
+				craft_file:write("method is ",key,"\n")
+				craft_file:write("recipe is ",k,"\n\n")
+			end
+		end
+	end
+	io.close(craft_file)
 end
 
 print("voltbuild loaded!")
