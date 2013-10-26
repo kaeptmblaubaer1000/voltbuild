@@ -641,6 +641,12 @@ minetest.register_craft({
 		{"","voltbuild:radioactive_shielding",""}},
 })
 
+minetest.register_craft({
+	type = "fuel",
+	recipe = "voltbuild:ignis_dust",
+	burntime = 40
+})
+
 macerator.register_macerator_recipe("default:iron_lump","voltbuild:iron_dust 2")
 macerator.register_macerator_recipe("default:gold_lump","voltbuild:gold_dust 2")
 macerator.register_macerator_recipe("default:coal_lump","voltbuild:coal_dust")
