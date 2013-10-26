@@ -7,6 +7,11 @@ nuclear.chargebar_location =  "2,4;1,1"
 nuclear.inventory_width = 7
 nuclear.max_radiation = 100
 
+minetest.register_privilege("nuclear", {
+	description = "allows one to build and use voltbuild:nuclear_reactor",
+	give_to_singleplayer = true
+})
+
 nuclear.neighbor_left = function (index,width,size)
 	if (index%width ~= 1 and index > 0 and index <= size) then
 		return (index-1)
@@ -291,8 +296,27 @@ minetest.register_node("voltbuild:nuclear_reactor", {
 		automata:new(pos,"nuclear","automata_energy")
 	end,
 	can_dig = voltbuild.can_dig,
-	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
-	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
+	allow_metadata_inventory_put = function (pos, listname, index, stack, player)
+		local privs = minetest.get_player_privs(player:get_player_name())
+		if privs.nuclear == true then
+			return voltbuild.allow_metadata_inventory_put(pos, listname, index, stack, player)
+		end
+		return 0
+	end,
+	allow_metadata_inventory_move = function (pos, from_list, from_index, to_list, to_index, count, player)
+		local privs = minetest.get_player_privs(player:get_player_name())
+		if privs.nuclear == true then
+			return voltbuild.allow_metadata_inventory_move (pos, from_list, from_index, to_list, to_index, count, player)
+		end
+		return 0
+	end,
+	allow_metadata_inventory_take = function (pos, listname, index, stack, player)
+		local privs = minetest.get_player_privs(player:get_player_name())
+		if privs.nuclear == true then
+			return stack:get_count()
+		end
+		return 0
+	end,
 	on_blast = function(pos,intensity)
 		local meta = minetest.env:get_meta(pos)
 		local rads = meta:get_int("rads")
