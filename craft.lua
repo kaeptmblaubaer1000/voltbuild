@@ -141,6 +141,13 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "voltbuild:alunra_treetap",
+	recipe = {{"","voltbuild:alunra_gem",""},
+		{"voltbuild:alunra_gem","voltbuild:treetap","voltbuild:alunra_gem"},
+		{"","voltbuild:alunra_gem",""}}
+})
+
+minetest.register_craft({
 	output = "default:wood 3",
 	recipe = {{"voltbuild:rubber_tree"}}
 })

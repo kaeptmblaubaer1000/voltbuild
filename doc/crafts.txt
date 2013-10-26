@@ -555,6 +555,24 @@ recipe is
    "", voltbuild:radioactive_shielding, ""
 
 
+output is voltbuild:hv_cable0_000000
+In game description is Uninsulated HV cable
+method is normal
+recipe is
+   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
+   "", "", "", 
+   "", "", ""
+
+
+output is voltbuild:alunra_treetap
+In game description is Alunra Treetap
+method is normal
+recipe is
+   "", voltbuild:alunra_gem, "", 
+   voltbuild:alunra_gem, voltbuild:treetap, voltbuild:alunra_gem, 
+   "", voltbuild:alunra_gem, ""
+
+
 output is voltbuild:gold_cable1_000000
 In game description is Insulated gold cable
 method is normal
@@ -600,15 +618,6 @@ recipe is
    "", voltbuild:re_battery, "", 
    voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
    "", voltbuild:iron_furnace, ""
-
-
-output is voltbuild:hv_cable0_000000
-In game description is Uninsulated HV cable
-method is normal
-recipe is
-   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
-   "", "", "", 
-   "", "", ""
 
 
 output is voltbuild:tin_ingot

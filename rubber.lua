@@ -177,3 +177,39 @@ minetest.register_tool("voltbuild:treetap",{
 		return minetest.item_place(itemstack,user,pointed_thing)
 	end,
 })
+
+minetest.register_tool("voltbuild:alunra_treetap",{
+	description = "Alunra Treetap",
+	inventory_image = "voltbuild_alunra_treetap.png",
+	tool_capabilities =
+		{max_drop_level=0,
+		groupcaps={fleshy={times={}, uses=50, maxlevel=0}}},
+	on_place = function (itemstack, user, pointed_thing)
+		local npos = pointed_thing.under
+		local node = minetest.env:get_node(npos)
+		if node.param2 == nil then node.param2 = 1 end
+		local droppos = addVect(addVect(npos,param22dir((node.param2+1)%4)),
+			{x=math.random()/2-0.25,y=0,z=math.random()/2-0.25})
+		while string.match(node.name,"voltbuild:rubber_tree") do
+			npos.y = npos.y-1
+			node = minetest.env:get_node(npos)
+		end
+		npos.y = npos.y+1
+		node = minetest.env:get_node(npos)
+		while string.match(node.name,"voltbuild:rubber_tree") do
+			if node.name == "voltbuild:rubber_tree_full" then
+				node.name = "voltbuild:rubber_tree_empty"
+				local drop = math.random(1,3)
+				minetest.env:set_node(npos,node)
+				local dropstack = ItemStack(
+					{name = "voltbuild:sticky_resin", count = drop})
+				minetest.env:add_item(droppos,dropstack)
+				itemstack = damage_treetap(itemstack)
+			elseif node.name == "voltbuild:rubber_tree_empty" then
+			end
+			npos.y = npos.y+1
+			node = minetest.env:get_node(npos)
+		end
+		return minetest.item_place(itemstack,user,pointed_thing)
+	end,
+})
