@@ -3,6 +3,7 @@ local generate_docs = false
 
 modpath = minetest.get_modpath("voltbuild")
 moreores_path = minetest.get_modpath("moreores")
+pipeworks_path = minetest.get_modpath("pipeworks")
 
 voltbuild = {}
 voltbuild.registered_ores = {}

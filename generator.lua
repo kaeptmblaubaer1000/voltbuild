@@ -43,6 +43,19 @@ local generator_definition = {
 			end
 			return("default_furnace_fire_bg.png^[lowpart:"..(100-percent)..":default_furnace_fire_fg.png]")
 		end},
+	tube={insert_object=function(pos,node,stack,direction)
+			local meta=minetest.env:get_meta(pos)
+			local inv=meta:get_inventory()
+			return inv:add_item("fuel",stack)
+		end,
+		can_insert=function(pos,node,stack,direction)
+			local meta=minetest.env:get_meta(pos)
+			local inv=meta:get_inventory()
+			return (voltbuild.allow_metadata_inventory_put(pos,"fuel",
+				nil,stack,nil) and
+				inv:room_for_item("fuel",stack))
+			end,
+		connect_sides={left=1, right=1, back=1, bottom=1, top=1, front=1}},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -57,6 +70,14 @@ local generator_definition = {
 	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
 	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 }
+if pipeworks_path then
+	generator_definition.after_place_node = function (pos)
+		tube_scanforobjects(pos)
+	end
+	generator_definition.after_dig_node = function(pos)
+		tube_scanforobjects(pos)
+	end
+end
 minetest.register_node("voltbuild:generator",generator_definition)
 
 local copy = {}

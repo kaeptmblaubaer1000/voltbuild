@@ -259,13 +259,13 @@ voltbuild.metadata_check.nuclear = function (pos,listname,stack,maxtier)
 end
 
 
-minetest.register_node("voltbuild:nuclear_reactor", {
+local nuclear_reactor = {
 	description="Nuclear Reactor",
 	tiles = {"voltbuild_nuclear_reactor.png","voltbuild_nuclear_reactor.png",
 		"voltbuild_nuclear_reactor.png","voltbuild_nuclear_reactor.png",
 		"voltbuild_nuclear_reactor.png","voltbuild_nuclear_reactor.png"},
 	paramtype2 = "facedir",
-	groups = {energy=1, cracky=2},
+	groups = {energy=1, cracky=2,tubedevice=1,tubedevice_receiver=1},
 	voltbuild = {max_energy=12288,max_tier=2,max_stress=2000,fueltime=10.0,optime=1.0},
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
@@ -278,8 +278,9 @@ minetest.register_node("voltbuild:nuclear_reactor", {
 			return (voltbuild.allow_metadata_inventory_put(pos,"nuclear_fuel",
 				nil,stack,nil) and
 				inv:room_for_item("nuclear_fuel",stack))
+			end,
 
-		end,},
+		connect_sides={left=1, right=1, back=1, bottom=1, top=1, front=1}},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		local node = minetest.env:get_node(pos)
@@ -364,7 +365,16 @@ minetest.register_node("voltbuild:nuclear_reactor", {
 			end
 		end
 	end
-})
+}
+if pipeworks_path then
+	nuclear_reactor.after_place_node = function (pos)
+		tube_scanforobjects(pos)
+	end
+	nuclear_reactor.after_dig_node = function(pos)
+		tube_scanforobjects(pos)
+	end
+end
+minetest.register_node("voltbuild:nuclear_reactor",nuclear_reactor)
 
 local propagate_units = function (automata_name,pos,unit_max)
 	local meta = minetest.env:get_meta(pos)

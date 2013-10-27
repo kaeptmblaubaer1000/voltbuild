@@ -18,11 +18,13 @@ function iron_furnace.get_formspec(pos)
 	return formspec..chrbar
 end
 
-minetest.register_node("voltbuild:iron_furnace", {
+local default_furnace_prop = minetest.registered_nodes["default:furnace"]
+local furnace_properties = {
 	description = "Iron furnace",
 	tiles = {"itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_side.png","itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_front.png"},
 	paramtype2 = "facedir",
 	groups = {energy=1, energy_consumer=1, cracky=2},
+	tube = default_furnace_prop.tube,
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
 	on_construct = function(pos)
@@ -70,62 +72,20 @@ minetest.register_node("voltbuild:iron_furnace", {
 			end
 		end
 	end,
-})
-
-minetest.register_node("voltbuild:iron_furnace_active", {
-	description = "Iron furnace",
+}
+if pipeworks_path then
+	furnace_properties.after_place_node = default_furnace_prop.after_place_node
+	furnace_properties.after_dig_node = default_furnace_prop.after_dig_node
+end
+minetest.register_node("voltbuild:iron_furnace", furnace_properties)
+local active_furnace= {
+	drop = "voltbuild:iron_furnace", 
 	tiles = {"itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_side.png","itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_front_active.png"},
 	paramtype2 = "facedir",
-	drop = "voltbuild:iron_furnace",
-	light_source = 8,
-	groups = {energy=1, energy_consumer=1, cracky=2, not_in_creative_inventory=1},
-	legacy_facedir_simple = true,
-	sounds = default.node_sound_stone_defaults(),
-	voltbuild = {max_energy=4000},
-	on_construct = function(pos)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		inv:set_size("src", 1)
-		inv:set_size("dst", 4)
-		inv:set_size("fuel", 1)
-		meta:set_string("formspec", iron_furnace.get_formspec(pos))
-	end,
-	can_dig = function(pos,player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		return inv:is_empty("src") and inv:is_empty("dst") and
-			inv:is_empty("fuel")
-	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		if listname == "dst" then
-			return 0
-		elseif listname == "src" then
-			return stack:get_count()
-		elseif listname == "fuel" then
-			if is_fuel_no_lava(stack) then
-				return stack:get_count()
-			else
-				return 0
-			end
-		end
-	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		local stack = inv:get_stack(from_list, from_index)
-		if to_list == "dst" then
-			return 0
-		elseif to_list == "src" then
-			return stack:get_count()
-		elseif to_list == "fuel" then
-			if is_fuel_no_lava(stack) then
-				return stack:get_count()
-			else
-				return 0
-			end
-		end
-	end,
-})
+	groups={not_in_creative_inventory=1},
+}
+active_furnace = voltbuild.deep_copy(active_furnace,furnace_properties)
+minetest.register_node("voltbuild:iron_furnace_active", active_furnace)
 
 minetest.register_abm({
 	nodenames = {"voltbuild:iron_furnace","voltbuild:iron_furnace_active"},
