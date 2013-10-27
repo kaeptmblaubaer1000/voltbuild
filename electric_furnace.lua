@@ -7,7 +7,7 @@ voltbuild.recipes.cooking.__index = function (table,key)
 end
 setmetatable(voltbuild.recipes.cooking,voltbuild.recipes.cooking)
 
-local generator_properties = {
+local electric_furnace = {
 	description = "Electric furnace",
 	tiles = {"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_front.png"},
 	paramtype2 = "facedir",
@@ -47,17 +47,17 @@ local generator_properties = {
 	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
 	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 }
-minetest.register_node("voltbuild:electric_furnace", generator_properties)
+minetest.register_node("voltbuild:electric_furnace", electric_furnace)
 
-local active_gen = {
-	drop = "voltbuild:generator", 
+local active_furnace = {
+	drop = "voltbuild:electric_furnace", 
 	groups={not_in_creative_inventory=1},
 	tiles = {"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", 
 		"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", 
 		"itest_electric_furnace_side.png", "itest_electric_furnace_front_active.png"}
 }
-active_gen = voltbuild.deep_copy(active_gen,generator_properties)
-minetest.register_node("voltbuild:electric_furnace_active", active_gen)
+active_furnace = voltbuild.deep_copy(active_furnace,electric_furnace)
+minetest.register_node("voltbuild:electric_furnace_active", active_furnace)
 
 components.register_abm({
 	nodenames = {"voltbuild:electric_furnace","voltbuild:electric_furnace_active"},
