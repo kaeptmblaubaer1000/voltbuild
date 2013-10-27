@@ -642,6 +642,13 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "voltbuild:scuba_gear",
+	recipe = {{"","default:steel_ingot",""},
+		{"default:steel_ingot","voltbuild:rubber","default:steel_ingot"},
+		{"default:steel_ingot","default:mese_fragment","default:steel_ingot"}}
+})
+
+minetest.register_craft({
 	type = "fuel",
 	recipe = "voltbuild:ignis_dust",
 	burntime = 40

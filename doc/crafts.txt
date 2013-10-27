@@ -196,6 +196,15 @@ output is voltbuild:mining_drill
 In game description is Mining drill
 
 
+output is voltbuild:air_compressor
+In game description is Air Compressor
+method is normal
+recipe is
+   voltbuild:advanced_circuit, voltbuild:extractor, default:mese_crystal_fragment, 
+   voltbuild:fan, "", voltbuild:casing, 
+   voltbuild:advanced_circuit, voltbuild:extractor, default:mese_crystal_fragment
+
+
 output is voltbuild:recycler
 In game description is recycler
 method is normal
@@ -477,6 +486,15 @@ recipe is
    default:wood, default:wood, default:wood
 
 
+output is voltbuild:alunra_treetap
+In game description is Alunra Treetap
+method is normal
+recipe is
+   "", voltbuild:alunra_gem, "", 
+   voltbuild:alunra_gem, voltbuild:treetap, voltbuild:alunra_gem, 
+   "", voltbuild:alunra_gem, ""
+
+
 output is voltbuild:fan
 In game description is Fan
 method is normal
@@ -564,13 +582,13 @@ recipe is
    "", "", ""
 
 
-output is voltbuild:alunra_treetap
-In game description is Alunra Treetap
+output is voltbuild:scuba_gear
+In game description is Scuba Gear
 method is normal
 recipe is
-   "", voltbuild:alunra_gem, "", 
-   voltbuild:alunra_gem, voltbuild:treetap, voltbuild:alunra_gem, 
-   "", voltbuild:alunra_gem, ""
+   "", default:steel_ingot, "", 
+   default:steel_ingot, voltbuild:rubber, default:steel_ingot, 
+   default:steel_ingot, default:mese_fragment, default:steel_ingot
 
 
 output is voltbuild:gold_cable1_000000
@@ -726,6 +744,11 @@ recipe is
    default:diamond, voltbuild:mining_drill, default:diamond, 
    "", "", ""
 
+
+output is voltbuild:air_cell
+In game description is Air Cell
+method is air_compressing
+recipe is air
 
 output is mesecons:wire_00000000_off 32
 In game description is Mesecon

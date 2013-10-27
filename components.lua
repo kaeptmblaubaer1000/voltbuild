@@ -64,7 +64,7 @@ function components.abm_wrapper(pos,node,active_object_count,active_object_count
 		end
 	else
 		for i,comp in ipairs(components.each_with_method(inv,"not_run_effects")) do
-			comp.run_before_effects(pos)
+			comp.not_run_effects(pos)
 		end
 	end
 	for i,comp in ipairs(components.each_with_method(inv,"after_effects")) do
@@ -263,4 +263,62 @@ minetest.register_craft({
 	recipe = {{"voltbuild:refined_iron_ingot","voltbuild:refined_iron_ingot","voltbuild:refined_iron_ingot"},
 		{"voltbuild:windmill","voltbuild:batbox",""},
 		{"voltbuild:refined_iron_ingot","voltbuild:refined_iron_ingot","voltbuild:refined_iron_ingot"}},
+})
+
+--added to have it in the documentation
+voltbuild.recipes.air_compressing = {}
+voltbuild.register_machine_recipe("air","voltbuild:air_cell","air_compressing")
+--A component specific to the compressor
+minetest.register_craftitem("voltbuild:air_compressor", {
+	description = "Air Compressor",
+	inventory_image = "voltbuild_air_compressor.png",
+	voltbuild = {component=1,
+		can_run = function(pos)
+			if minetest.get_node(pos)["name"] == "voltbuild:compressor" then
+				return false
+			end
+		end,
+		not_run_effects = function(pos)
+			local meta = minetest.env:get_meta(pos)
+			local node = minetest.get_node(pos)
+			local optime
+			local speed = minetest.registered_nodes[node.name]["voltbuild"]["speed"]
+			if meta:get_string("speed") ~= "" then
+				speed = meta:get_float("speed")
+			elseif speed then
+			else
+				speed = 1.0
+			end
+			local optime = 20
+
+			if meta:get_int("energy") > 6 then
+				local inv = meta:get_inventory()
+				if meta:get_string("stime") == "" then
+					meta:set_float("stime", 0.0)
+				end
+				meta:set_float("stime",meta:get_float("stime")+speed)
+				if meta:get_float("stime") > optime then
+					meta:set_float("stime",meta:get_float("stime")-optime)
+					if inv:room_for_item("dst",ItemStack("voltbuild:air_cell")) then
+						inv:add_item("dst",ItemStack("voltbuild:air_cell"))
+					end
+				end
+				meta:set_int("energy",meta:get_int("energy")-6)
+				voltbuild_hacky_swap_node(pos,"voltbuild:compressor_active")
+			else
+				voltbuild_hacky_swap_node(pos,"voltbuild:compressor")
+			end
+			meta:set_string("formspec", consumers.get_formspec(pos)..
+					voltbuild.production_spec..
+					consumers.get_progressbar(meta:get_float("stime"),optime,
+						"itest_extractor_progress_bg.png",
+						"itest_extractor_progress_fg.png"))
+		end}
+})
+
+minetest.register_craft({
+	output = "voltbuild:air_compressor",
+	recipe = {{"voltbuild:advanced_circuit","voltbuild:extractor","default:mese_crystal_fragment"},
+		{"voltbuild:fan","","voltbuild:casing"},
+		{"voltbuild:advanced_circuit","voltbuild:extractor","default:mese_crystal_fragment"}},
 })
