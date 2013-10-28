@@ -11,7 +11,10 @@ consumers.tube = {
 		return inv:room_for_item("src",stack)
 
 	end,
-	connect_sides={left=1, right=1, back=1, bottom=1, top=1},
+	connect_sides={left=1, right=1, back=1, bottom=1, top=1, front=1},
+	connects = function (param2)
+		return true
+	end,
 	input_inventory="dst",
 }
 

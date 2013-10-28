@@ -55,6 +55,9 @@ local generator_definition = {
 				nil,stack,nil) and
 				inv:room_for_item("fuel",stack))
 			end,
+		connects = function (param2)
+			return true
+		end,
 		connect_sides={left=1, right=1, back=1, bottom=1, top=1, front=1}},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
