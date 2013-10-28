@@ -38,6 +38,11 @@ minetest.register_craftitem( "voltbuild:tin_dust", {
 	inventory_image = "itest_tin_dust.png",
 })
 
+minetest.register_craftitem( "voltbuild:silver_dust", {
+	description = "Silver dust",
+	inventory_image = "itest_tin_dust.png",
+})
+
 minetest.register_craftitem( "voltbuild:copper_dust", {
 	description = "Copper dust",
 	inventory_image = "itest_copper_dust.png",
@@ -578,6 +583,12 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
+	output = "moreores:silver_ingot",
+	recipe = "voltbuild:silver_dust"
+})
+
+minetest.register_craft({
+	type = "cooking",
 	output = "default:gold_ingot",
 	recipe = "voltbuild:gold_dust"
 })
@@ -674,6 +685,7 @@ macerator.register_macerator_recipe("moreores:tin_lump","voltbuild:tin_dust 2")
 macerator.register_macerator_recipe("moreores:gold_ingot","voltbuild:gold_dust")
 macerator.register_macerator_recipe("moreores:gold_lump","voltbuild:gold_dust 2")
 macerator.register_macerator_recipe("moreores:copper_lump","voltbuild:copper_dust 2")
+macerator.register_macerator_recipe("moreores:silver_lump","voltbuild:silver_dust 2")
 
 extractor.register_extractor_recipe("voltbuild:sticky_resin","voltbuild:rubber 3")
 extractor.register_extractor_recipe("voltbuild:rubber_tree","voltbuild:rubber")
