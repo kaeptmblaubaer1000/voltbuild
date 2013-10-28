@@ -686,6 +686,7 @@ macerator.register_macerator_recipe("moreores:gold_ingot","voltbuild:gold_dust")
 macerator.register_macerator_recipe("moreores:gold_lump","voltbuild:gold_dust 2")
 macerator.register_macerator_recipe("moreores:copper_lump","voltbuild:copper_dust 2")
 macerator.register_macerator_recipe("moreores:silver_lump","voltbuild:silver_dust 2")
+macerator.register_macerator_recipe("moreores:silver_ingot","voltbuild:silver_dust")
 
 extractor.register_extractor_recipe("voltbuild:sticky_resin","voltbuild:rubber 3")
 extractor.register_extractor_recipe("voltbuild:rubber_tree","voltbuild:rubber")
