@@ -460,9 +460,9 @@ minetest.register_craft({
 
 minetest.register_craft({
 	output = "voltbuild:compressor",
-	recipe = {{"voltbuild:bronze_ingot","","voltbuild:bronze_ingot"},
-		{"voltbuild:bronze_ingot","voltbuild:machine","voltbuild:bronze_ingot"},
-		{"voltbuild:bronze_ingot","voltbuild:circuit","voltbuild:bronze_ingot"}}
+	recipe = {{"default:bronze_ingot","","default:bronze_ingot"},
+		{"default:bronze_ingot","voltbuild:machine","default:bronze_ingot"},
+		{"default:bronze_ingot","voltbuild:circuit","default:bronze_ingot"}}
 })
 
 minetest.register_craft({

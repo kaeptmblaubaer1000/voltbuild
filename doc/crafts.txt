@@ -328,9 +328,9 @@ output is voltbuild:compressor
 In game description is compressor
 method is normal
 recipe is
-   voltbuild:bronze_ingot, "", voltbuild:bronze_ingot, 
-   voltbuild:bronze_ingot, voltbuild:machine, voltbuild:bronze_ingot, 
-   voltbuild:bronze_ingot, voltbuild:circuit, voltbuild:bronze_ingot
+   default:bronze_ingot, "", default:bronze_ingot, 
+   default:bronze_ingot, voltbuild:machine, default:bronze_ingot, 
+   default:bronze_ingot, voltbuild:circuit, default:bronze_ingot
 
 
 output is voltbuild:gold_cable2_000000
