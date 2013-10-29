@@ -8,7 +8,15 @@ consumers.tube = {
 	can_insert=function(pos,node,stack,direction)
 		local meta=minetest.env:get_meta(pos)
 		local inv=meta:get_inventory()
-		return inv:room_for_item("src",stack)
+		local cooking_method = minetest.registered_nodes[node.name]["cooking_method"]
+		local produced
+		if cooking_method then 
+			produced = voltbuild.get_craft_result({method = cooking_method,
+			width = 1, items = {stack}})
+		end
+		if produced.items then
+			return inv:room_for_item("src",stack)
+		end
 
 	end,
 	connect_sides={left=1, right=1, back=1, bottom=1, top=1, front=1},
