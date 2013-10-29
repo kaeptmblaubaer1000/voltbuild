@@ -53,7 +53,7 @@ local active_furnace = {
 		"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", 
 		"itest_electric_furnace_side.png", "itest_electric_furnace_front_active.png"}
 }
-active_furnace = voltbuild.deep_copy(active_furnace,electric_furnace)
+active_furnace = voltbuild.deep_copy(electric_furnace,active_furnace)
 minetest.register_node("voltbuild:electric_furnace_active", active_furnace)
 
 components.register_abm({

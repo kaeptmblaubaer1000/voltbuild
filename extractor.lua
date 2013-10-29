@@ -57,7 +57,7 @@ local active_extractor= {
 		"itest_extractor_side.png", "itest_extractor_side.png", "itest_extractor_front_active.png"},
 	groups={not_in_creative_inventory=1},
 }
-active_extractor = voltbuild.deep_copy(active_extractor,extractor_properties)
+active_extractor = voltbuild.deep_copy(extractor_properties,active_extractor)
 minetest.register_node("voltbuild:extractor_active", active_extractor)
 
 components.register_abm({

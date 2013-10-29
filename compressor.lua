@@ -56,7 +56,7 @@ local active_compressor= {
 		"itest_compressor_side.png", "itest_compressor_side.png", "itest_compressor_front_active.png"},
 	groups={not_in_creative_inventory=1},
 }
-active_compressor = voltbuild.deep_copy(active_compressor,compressor_properties)
+active_compressor = voltbuild.deep_copy(compressor_properties,active_compressor)
 minetest.register_node("voltbuild:compressor_active", active_compressor)
 
 components.register_abm({

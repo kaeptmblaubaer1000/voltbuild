@@ -63,7 +63,7 @@ local active_recycler= {
 		"itest_recycler_side.png", "itest_recycler_side.png", "itest_recycler_front_active.png"},
 	groups={not_in_creative_inventory=1},
 }
-active_recycler = voltbuild.deep_copy(active_recycler,recycler_properties)
+active_recycler = voltbuild.deep_copy(recycler_properties,active_recycler)
 minetest.register_node("voltbuild:recycler_active", active_recycler)
 
 components.register_abm({

@@ -84,7 +84,7 @@ local active_furnace= {
 	paramtype2 = "facedir",
 	groups={not_in_creative_inventory=1},
 }
-active_furnace = voltbuild.deep_copy(active_furnace,furnace_properties)
+active_furnace = voltbuild.deep_copy(furnace_properties,active_furnace)
 minetest.register_node("voltbuild:iron_furnace_active", active_furnace)
 
 minetest.register_abm({

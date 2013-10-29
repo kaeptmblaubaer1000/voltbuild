@@ -55,7 +55,7 @@ local active_macerator = {
 	tiles = {"itest_macerator_side.png", "itest_macerator_side.png", "itest_macerator_side.png",
 		"itest_macerator_side.png", "itest_macerator_side.png", "itest_macerator_front_active.png"},
 }
-active_macerator = voltbuild.deep_copy(active_macerator,macerator_properties)
+active_macerator = voltbuild.deep_copy(macerator_properties,active_macerator)
 minetest.register_node("voltbuild:macerator_active",active_macerator) 
 
 components.register_abm({
