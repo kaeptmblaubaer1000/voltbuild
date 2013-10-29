@@ -660,6 +660,13 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "voltbuild:geothermal_generator",
+	recipe = {{"voltbuild:casing","voltbuild:ignis_gem","voltbuild:casing"},
+		{"voltbuild:ignis_gem","voltbuild:generator","voltbuild:ignis_gem"},
+		{"voltbuild:casing","voltbuild:ignis_gem","voltbuild:casing"}}
+})
+
+minetest.register_craft({
 	type = "fuel",
 	recipe = "voltbuild:ignis_dust",
 	burntime = 40
