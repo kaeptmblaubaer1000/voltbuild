@@ -322,3 +322,27 @@ minetest.register_craft({
 		{"voltbuild:fan","","voltbuild:casing"},
 		{"voltbuild:advanced_circuit","voltbuild:extractor","default:mese_crystal_fragment"}},
 })
+
+minetest.register_craftitem("voltbuild:mobile_solar_panel", {
+	description = "Mobile Solar Panel",
+	inventory_image = "voltbuild_mobile_solar_panel.png",
+	voltbuild = {component=1,
+	before_effects = function(pos)
+		local meta = minetest.env:get_meta(pos)
+		local node = minetest.get_node(pos)
+		local node_def = minetest.registered_nodes["voltbuild:solar_panel"]
+		local psize = node_def.voltbuild.psize
+		local speed = node_def.voltbuild.speed
+		local max_energy = minetest.registered_nodes[node.name]["voltbuild"]["max_energy"]
+		if max_energy and speed(pos) >= 1 then
+			meta:set_int("energy",math.min(meta:get_int("energy")+psize,max_energy))
+		end
+	end}
+})
+
+minetest.register_craft({
+	output = "voltbuild:mobile_solar_panel",
+	recipe = {{"","voltbuild:solar_panel",""},
+		{"voltbuild:energy_crystal","voltbuild:alunra_gem","voltbuild:energy_crystal"},
+		{"voltbuild:alunra_gem","voltbuild:advanced_circuit","voltbuild:alunra_gem"}}
+})

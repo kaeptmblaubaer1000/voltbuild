@@ -226,6 +226,15 @@ recipe is
    "", "", ""
 
 
+output is voltbuild:mobile_solar_panel
+In game description is Mobile Solar Panel
+method is normal
+recipe is
+   "", voltbuild:solar_panel, "", 
+   voltbuild:energy_crystal, voltbuild:alunra_gem, voltbuild:energy_crystal, 
+   voltbuild:alunra_gem, voltbuild:advanced_circuit, voltbuild:alunra_gem
+
+
 output is voltbuild:radioactive_shielding
 In game description is Radioactive Shielding
 method is normal
@@ -417,15 +426,6 @@ recipe is
    voltbuild:gold_cable2_000000, voltbuild:od_scanner, voltbuild:gold_cable2_000000
 
 
-output is voltbuild:machine
-In game description is Machine
-method is normal
-recipe is
-   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
-   voltbuild:refined_iron_ingot, "", voltbuild:refined_iron_ingot, 
-   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot
-
-
 output is voltbuild:mixed_metal_ingot
 In game description is Mixed metal ingot
 method is normal
@@ -442,6 +442,15 @@ recipe is
    voltbuild:silicon_mesecon, voltbuild:silicon_mesecon, voltbuild:silicon_mesecon, 
    voltbuild:silicon_mesecon, voltbuild:silicon_mesecon, voltbuild:silicon_mesecon, 
    voltbuild:silicon_mesecon, voltbuild:silicon_mesecon, voltbuild:silicon_mesecon
+
+
+output is voltbuild:machine
+In game description is Machine
+method is normal
+recipe is
+   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
+   voltbuild:refined_iron_ingot, "", voltbuild:refined_iron_ingot, 
+   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot
 
 
 output is voltbuild:carbon_fibers
