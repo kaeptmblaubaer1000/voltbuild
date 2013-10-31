@@ -136,6 +136,46 @@ local reactor_wiring = {
 	},
 }
 
+minetest.register_craftitem("voltbuild:reactor_fan",{
+	description = "Reactor Fan",
+	inventory_image = "voltbuild_reactor_fan.png",
+	voltbuild = {nuclear=1},
+	automata = {step = function(automata_name,automata_pos,index)
+		local meta = minetest.env:get_meta(automata_pos)
+		local inv = meta:get_inventory()
+		if automata_name == "automata_heat" then
+			meta:set_int(automata_name..index,math.max(meta:get_int(automata_name..index)-20,0))
+		end
+	end
+	},
+})
+
+minetest.register_craftitem("voltbuild:reactor_steam_gen",{
+	description = "Reactor Steam Generator",
+	inventory_image = "voltbuild_reactor_steam_gen.png",
+	voltbuild = {nuclear=1},
+	automata = {step = function(automata_name,automata_pos,index)
+		local meta = minetest.env:get_meta(automata_pos)
+		local inv = meta:get_inventory()
+		if automata_name == "automata_energy" then
+			local heat = meta:get_int("automata_heat"..index)
+			if heat > 5 then
+				local energy_produced = math.min(heat/5,40)
+				local neighbors = nuclear.neighbors[automata_name](index,inv)
+				local key, neigh
+				local num_neighbors = #neighbors
+				for key,neigh in pairs(neighbors) do
+					local n_val = meta:get_int(automata_name..neigh)
+					meta:set_int(automata_name..neigh,math.max(n_val+energy_produced/num_neighbors,n_val))
+				end
+				--prevents infinitely using trapped steam
+				meta:set_int("automata_heat"..index,meta:get_int("automata_heat")-5)
+			end
+		end
+	end
+	},
+})
+
 minetest.register_craftitem("voltbuild:reactor_wiring",reactor_wiring) 
 reactor_wiring.description = "Shielded Reactor Wiring"
 reactor_wiring.inventory_image = "voltbuild_shielded_reactor_wiring.png"

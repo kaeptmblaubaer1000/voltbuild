@@ -213,3 +213,13 @@ minetest.register_tool("voltbuild:alunra_treetap",{
 		return minetest.item_place(itemstack,user,pointed_thing)
 	end,
 })
+
+--add once better support is in treecapitator
+--if minetest.get_modpath("treecapitator") then
+--	treecapitator.register_tree({
+--	trees = {"voltbuild:rubber_tree_full","voltbuild:rubber_tree_empty",
+--		"voltbuild:rubber_tree"},
+--	leaves = {"voltbuild:rubber_leaves"},
+--	range = 5,
+--	})
+--end

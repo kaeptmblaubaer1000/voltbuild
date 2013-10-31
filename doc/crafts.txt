@@ -79,7 +79,16 @@ output is voltbuild:tin_cable0_000000
 In game description is Uninsulated tin cable
 method is normal
 recipe is
-   moreores:tin_ingot, moreores:tin_ingot, moreores:tin_ingot, 
+   voltbuild:tin_ingot, voltbuild:tin_ingot, voltbuild:tin_ingot, 
+   "", "", "", 
+   "", "", ""
+
+
+output is voltbuild:reactor_fan
+In game description is Reactor Fan
+method is normal
+recipe is
+   voltbuild:fan, "", "", 
    "", "", "", 
    "", "", ""
 
@@ -161,6 +170,15 @@ recipe is
    voltbuild:casing, voltbuild:ignis_gem, voltbuild:casing, 
    voltbuild:ignis_gem, voltbuild:generator, voltbuild:ignis_gem, 
    voltbuild:casing, voltbuild:ignis_gem, voltbuild:casing
+
+
+output is voltbuild:reactor_steam_gen
+In game description is Reactor Steam Generator
+method is normal
+recipe is
+   voltbuild:advanced_alloy, voltbuild:reactor_wiring, voltbuild:advanced_alloy, 
+   voltbuild:reactor_wiring, voltbuild:windmill, voltbuild:reactor_wiring, 
+   voltbuild:advanced_alloy, voltbuild:reactor_wiring, voltbuild:advanced_alloy
 
 
 output is voltbuild:hv_cable3_000000
@@ -390,13 +408,31 @@ recipe is
    "", mesecons:wire_00000000_off, ""
 
 
+output is voltbuild:ov_scanner
+In game description is OV Scanner
+method is normal
+recipe is
+   "", voltbuild:gold_dust, "", 
+   voltbuild:gold_dust, voltbuild:advanced_circuit, voltbuild:gold_dust, 
+   voltbuild:gold_cable2_000000, voltbuild:od_scanner, voltbuild:gold_cable2_000000
+
+
+output is voltbuild:machine
+In game description is Machine
+method is normal
+recipe is
+   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
+   voltbuild:refined_iron_ingot, "", voltbuild:refined_iron_ingot, 
+   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot
+
+
 output is voltbuild:mixed_metal_ingot
 In game description is Mixed metal ingot
 method is normal
 recipe is
    voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
    default:bronze_ingot, default:bronze_ingot, default:bronze_ingot, 
-   moreores:tin_ingot, moreores:tin_ingot, moreores:tin_ingot
+   voltbuild:tin_ingot, voltbuild:tin_ingot, voltbuild:tin_ingot
 
 
 output is voltbuild:silicon_mese_block
@@ -408,13 +444,13 @@ recipe is
    voltbuild:silicon_mesecon, voltbuild:silicon_mesecon, voltbuild:silicon_mesecon
 
 
-output is voltbuild:machine
-In game description is Machine
+output is voltbuild:carbon_fibers
+In game description is Carbon fibers
 method is normal
 recipe is
-   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
-   voltbuild:refined_iron_ingot, "", voltbuild:refined_iron_ingot, 
-   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot
+   voltbuild:coal_dust, voltbuild:coal_dust, voltbuild:coal_dust, 
+   voltbuild:coal_dust, "", "", 
+   "", "", ""
 
 
 output is voltbuild:bronze_dust
@@ -443,15 +479,6 @@ recipe is
    "", default:steel_ingot, "", 
    default:steel_ingot, voltbuild:rubber, default:steel_ingot, 
    default:steel_ingot, default:mese_fragment, default:steel_ingot
-
-
-output is voltbuild:fan
-In game description is Fan
-method is normal
-recipe is
-   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
-   voltbuild:windmill, voltbuild:batbox, "", 
-   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot
 
 
 output is voltbuild:electric_furnace
@@ -505,7 +532,7 @@ method is normal
 recipe is
    voltbuild:coal_dust, default:glass, voltbuild:coal_dust, 
    default:glass, voltbuild:coal_dust, default:glass, 
-   moreores:tin_ingot, voltbuild:generator, moreores:tin_ingot
+   voltbuild:tin_ingot, voltbuild:generator, voltbuild:tin_ingot
 
 
 output is voltbuild:od_scanner
@@ -549,26 +576,8 @@ In game description is RE Battery
 method is normal
 recipe is
    "", voltbuild:copper_cable1_000000, "", 
-   moreores:tin_ingot, voltbuild:copper_cable1_000000, moreores:tin_ingot, 
-   moreores:tin_ingot, voltbuild:copper_cable1_000000, moreores:tin_ingot
-
-
-output is voltbuild:ov_scanner
-In game description is OV Scanner
-method is normal
-recipe is
-   "", voltbuild:gold_dust, "", 
-   voltbuild:gold_dust, voltbuild:advanced_circuit, voltbuild:gold_dust, 
-   voltbuild:gold_cable2_000000, voltbuild:od_scanner, voltbuild:gold_cable2_000000
-
-
-output is voltbuild:carbon_fibers
-In game description is Carbon fibers
-method is normal
-recipe is
-   voltbuild:coal_dust, voltbuild:coal_dust, voltbuild:coal_dust, 
-   voltbuild:coal_dust, "", "", 
-   "", "", ""
+   voltbuild:tin_ingot, voltbuild:copper_cable1_000000, voltbuild:tin_ingot, 
+   voltbuild:tin_ingot, voltbuild:copper_cable1_000000, voltbuild:tin_ingot
 
 
 output is voltbuild:copper_cable0_000000
@@ -591,6 +600,15 @@ recipe is
    "", voltbuild:gold_dust, "", 
    default:dirt, voltbuild:compressor, default:dirt, 
    voltbuild:refined_iron_ingot, default:dirt, voltbuild:refined_iron_ingot
+
+
+output is voltbuild:tin_block
+In game description is Tin block
+method is normal
+recipe is
+   voltbuild:tin_ingot, voltbuild:tin_ingot, voltbuild:tin_ingot, 
+   voltbuild:tin_ingot, voltbuild:tin_ingot, voltbuild:tin_ingot, 
+   voltbuild:tin_ingot, voltbuild:tin_ingot, voltbuild:tin_ingot
 
 
 output is voltbuild:iron_furnace
@@ -621,21 +639,21 @@ recipe is
    "", voltbuild:advanced_alloy, ""
 
 
+output is voltbuild:ignis_dust
+In game description is Ignis dust
+method is cooking
+recipe is
+   voltbuild:ice_with_ignis, "", "", 
+   "", "", "", 
+   "", "", ""
+
+
 output is voltbuild:hv_cable0_000000
 In game description is Uninsulated HV cable
 method is normal
 recipe is
    voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
    "", "", "", 
-   "", "", ""
-
-
-output is voltbuild:overclock
-In game description is Overclock
-method is normal
-recipe is
-   default:bronze_ingot, voltbuild:hv_cable0_000000, default:bronze_ingot, 
-   voltbuild;energy_crystal, voltbuild:circuit, voltbuild:energy_crystal, 
    "", "", ""
 
 
@@ -662,15 +680,6 @@ recipe is
    voltbuild:extractor, voltbuild:circuit, voltbuild:compressor
 
 
-output is voltbuild:ignis_dust
-In game description is Ignis dust
-method is cooking
-recipe is
-   voltbuild:ice_with_ignis, "", "", 
-   "", "", "", 
-   "", "", ""
-
-
 output is voltbuild:shielded_reactor_wiring
 In game description is Shielded Reactor Wiring
 method is normal
@@ -678,6 +687,48 @@ recipe is
    "", voltbuild:radioactive_shielding, "", 
    voltbuild:radioactive_shielding, voltbuild:reactor_wiring, voltbuild:radioactive_shielding, 
    "", voltbuild:radioactive_shielding, ""
+
+
+output is voltbuild:fan
+In game description is Fan
+method is normal
+recipe is
+   voltbuild:reactor_fan, "", "", 
+   "", "", "", 
+   "", "", ""
+method is normal
+recipe is
+   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, 
+   voltbuild:windmill, voltbuild:batbox, "", 
+   voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot, voltbuild:refined_iron_ingot
+
+
+output is voltbuild:tin_ingot
+In game description is Tin ingot
+method is cooking
+recipe is
+   voltbuild:tin_dust, "", "", 
+   "", "", "", 
+   "", "", ""
+method is cooking
+recipe is
+   voltbuild:tin_lump, "", "", 
+   "", "", "", 
+   "", "", ""
+method is normal
+recipe is
+   voltbuild:tin_block, "", "", 
+   "", "", "", 
+   "", "", ""
+
+
+output is voltbuild:overclock
+In game description is Overclock
+method is normal
+recipe is
+   default:bronze_ingot, voltbuild:hv_cable0_000000, default:bronze_ingot, 
+   voltbuild;energy_crystal, voltbuild:circuit, voltbuild:energy_crystal, 
+   "", "", ""
 
 
 output is voltbuild:halt

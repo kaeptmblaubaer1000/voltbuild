@@ -653,6 +653,23 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "voltbuild:reactor_fan",
+	recipe = {{"voltbuild:fan"}},
+})
+
+minetest.register_craft({
+	output = "voltbuild:fan",
+	recipe = {{"voltbuild:reactor_fan"}},
+})
+
+minetest.register_craft({
+	output = "voltbuild:reactor_steam_gen",
+	recipe = {{"voltbuild:advanced_alloy","voltbuild:reactor_wiring","voltbuild:advanced_alloy"},
+		{"voltbuild:reactor_wiring","voltbuild:windmill","voltbuild:reactor_wiring"},
+		{"voltbuild:advanced_alloy","voltbuild:reactor_wiring","voltbuild:advanced_alloy"}}
+})
+
+minetest.register_craft({
 	output = "voltbuild:scuba_gear",
 	recipe = {{"","default:steel_ingot",""},
 		{"default:steel_ingot","voltbuild:rubber","default:steel_ingot"},
