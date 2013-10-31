@@ -221,7 +221,6 @@ components.register_clockitem("voltbuild:overclock", {
 		clock_speed_effect = function (x)
 			return x
 		end},
-	stack_max = 1,
 })
 
 minetest.register_craft({
@@ -237,7 +236,6 @@ minetest.register_craftitem("voltbuild:halt", {
 		can_run = function(pos)
 			return false
 		end},
-	stack_max = 1,
 })
 
 minetest.register_craft({
@@ -255,7 +253,6 @@ minetest.register_craftitem("voltbuild:fan",{
 			local stress = meta:get_int("stress")
 			meta:set_int("stress",math.max(stress-20,0))
 		end},
-	stack_max = 1,
 })
 
 minetest.register_craft({
