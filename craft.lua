@@ -684,6 +684,13 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "voltbuild:solar_battery",
+	recipe = {{"","voltbuild:mobile_solar_panel",""},
+		{"voltbuild:mobile_solar_panel","voltbuild:re_battery","voltbuild:mobile_solar_panel"},
+		{"","voltbuild:mobile_solar_panel",""}}
+})
+
+minetest.register_craft({
 	type = "fuel",
 	recipe = "voltbuild:ignis_dust",
 	burntime = 40

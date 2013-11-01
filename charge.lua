@@ -41,6 +41,60 @@ minetest.register_tool("voltbuild:re_battery",{
 		groupcaps={fleshy={times={}, uses=1, maxlevel=0}}}
 })
 
+minetest.register_tool("voltbuild:solar_battery",{
+	description = "Solar Battery",
+	inventory_image = "voltbuild_solar_battery.png",
+	voltbuild = {max_charge = 240,
+		max_speed = 60,
+		charge_tier = 1},
+	tool_capabilities =
+		{max_drop_level=0,
+		groupcaps={fleshy={times={}, uses=1, maxlevel=0}},solar=2}
+})
+
+local solar_players = {}
+voltbuild.solar_charge = function (player)
+	if solar_players[player] then
+		local inv = player:get_inventory()
+		local i
+		local solar_items = {}
+		for i=1,inv:get_size("main") do
+			local stack = inv:get_stack("main",i)
+			local stack_def = minetest.registered_items[stack:get_name()]
+			if stack_def and
+				stack_def.tool_capabilities and
+				stack_def.tool_capabilities.solar and
+				stack:get_count() == 1 then
+				table.insert(solar_items,i)
+			end
+		end
+		local light = minetest.get_node_light(player:getpos(),minetest.get_timeofday())
+		if light >= 15 then
+			for _,i in pairs(solar_items) do
+				local stack = inv:get_stack("main",i)
+				local stack_data = stack:to_table()
+				local max_charge = get_item_field(stack:get_name(), "max_charge")
+				local max_speed = get_item_field(stack:get_name(), "max_speed")
+				local c = charge.get_charge(stack_data)
+				charge.set_charge(stack_data,math.min(c+1,max_charge))
+				charge.set_wear(stack_data,math.min(c+1,max_charge),max_charge)
+				inv:set_stack("main",i,ItemStack(stack_data))
+			end
+		end
+		minetest.after(2,voltbuild.solar_charge,player)
+	end
+end
+
+minetest.register_on_joinplayer(function(player)
+	minetest.after(2,voltbuild.solar_charge,player)
+	solar_players[player] = 0
+end)
+
+--to prevent a server crash from the minetest.after loop
+minetest.register_on_leaveplayer(function(player)
+	solar_players[player] = nil
+end)
+
 minetest.register_tool("voltbuild:energy_crystal",{
 	description = "Energy crystal",
 	inventory_image = "itest_energy_crystal.png",

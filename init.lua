@@ -1,5 +1,5 @@
 local itest_world_upgrade = minetest.setting_getbool("voltbuild_itest_world_upgrade") or false
-local generate_docs = false
+local generate_docs = minetest.setting_getbool("voltbuild_generate_docs")
 
 modpath = minetest.get_modpath("voltbuild")
 moreores_path = minetest.get_modpath("moreores")
