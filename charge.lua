@@ -69,7 +69,7 @@ voltbuild.solar_charge = function (player)
 			end
 		end
 		local light = minetest.env:get_node_light(player:getpos())
-		if light >= 15 then
+		if light and light >= 15 then
 			for _,i in pairs(solar_items) do
 				local stack = inv:get_stack("main",i)
 				local stack_data = stack:to_table()

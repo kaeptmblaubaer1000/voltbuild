@@ -5,7 +5,7 @@ minetest.register_node("voltbuild:solar_panel",{description="Solar panel",
 		speed = function (pos)
 			local l=minetest.env:get_node_light({x=pos.x, y=pos.y+1, z=pos.z})
 			local meta=minetest.env:get_meta(pos)
-			if l < 15 then
+			if not l or l < 15 then
 				return 0
 			else
 				return 1
