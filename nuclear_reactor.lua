@@ -1,3 +1,4 @@
+local use_old_voltbuild_blasts = minetest.setting_getbool("use_old_voltbuild_blasts")
 dofile(modpath.."/automata.lua")
 nuclear = {}
 nuclear.neighbors = {}
@@ -298,6 +299,94 @@ voltbuild.metadata_check.nuclear = function (pos,listname,stack,maxtier)
 	return 0
 end
 
+local nuclear_blast
+if use_old_voltbuild_blasts then
+	print("Using old voltbuild blast for nuclear reactor!")
+	nuclear_blast = function(pos,intensity)
+		local meta = minetest.env:get_meta(pos)
+		local rads = meta:get_int("rads")
+		local xVect,yVect,zVect
+		local blast_size = 20
+		local objects = minetest.get_objects_inside_radius(pos,blast_size)
+		for xVect=pos.x-blast_size,pos.x+blast_size do
+			local yLimit = math.max(blast_size-math.abs(pos.x-xVect),1)
+			for yVect=pos.y-yLimit,pos.y+yLimit do
+				local zLimit = math.max(blast_size-math.abs(pos.x-xVect)-math.abs(pos.y-yVect),1)
+				for zVect=pos.z-zLimit,pos.z+zLimit do
+					if xVect ~= pos.x or yVect ~= pos.y or zVect ~= pos.z then
+						local p = {x=xVect,y=yVect,z=zVect}
+						local node = minetest.env:get_node(p)
+						local destroy = minetest.registered_nodes[node.name]["on_blast"]
+						local immortal = minetest.registered_nodes[node.name]["groups"]["immortal"]
+						if node.name == "ignore" or node.name == "air" then
+						elseif destroy then
+							destroy(p,10)
+						elseif immortal then
+						else
+							minetest.env:remove_node(p)
+						end
+					end
+				end
+			end
+		end
+		minetest.env:remove_node(pos)
+		local object=nil
+		local key = nil
+		for  key,object in pairs(objects) do
+			if object.set_hp then
+				object:set_hp(0)
+			end
+		end
+	end
+else
+	nuclear_blast = function (pos, intensity)
+		local meta = minetest.env:get_meta(pos)
+		local rads = meta:get_int("rads")
+		local xVect,yVect,zVect
+		local blast_size = 20
+		local objects = minetest.get_objects_inside_radius(pos,blast_size)
+		local manip = minetest.get_voxel_manip()
+		local air = minetest.get_content_id("air")
+		local min_edge,max_edge= manip:read_from_map({x=pos.x-20,y=pos.y-20,z=pos.z-20},{x=pos.x+20,y=pos.y+20,z=pos.z+20})
+		local area = VoxelArea:new({MinEdge=min_edge,MaxEdge=max_edge})
+		local data = manip:get_data()
+		for xVect=pos.x-blast_size,pos.x+blast_size do
+			local yLimit = math.max(blast_size-math.abs(pos.x-xVect),1)
+			for yVect=pos.y-yLimit,pos.y+yLimit do
+				local zLimit = math.max(blast_size-math.abs(pos.x-xVect)-math.abs(pos.y-yVect),1)
+				for zVect=pos.z-zLimit,pos.z+zLimit do
+					if xVect ~= pos.x or yVect ~= pos.y or zVect ~= pos.z then
+						local p = {x=xVect,y=yVect,z=zVect}
+						local node = minetest.env:get_node(p)
+						local destroy = minetest.registered_nodes[node.name]["on_blast"]
+						local immortal = minetest.registered_nodes[node.name]["groups"]["immortal"]
+						if node.name == "ignore" or node.name == "air" then
+						elseif destroy then
+							destroy(p,10)
+						elseif immortal then
+						else
+							local ind = area:indexp(p)
+							data[ind] = air
+						end
+					else
+						local ind = area:indexp(pos)
+						data[ind] = air
+					end
+				end
+			end
+		end
+		manip:set_data(data)
+		manip:write_to_map()
+		manip:update_map()
+		local object=nil
+		local key = nil
+		for  key,object in pairs(objects) do
+			if object.set_hp then
+				object:set_hp(0)
+			end
+		end
+	end
+end
 
 local nuclear_reactor = {
 	description="Nuclear Reactor",
@@ -360,53 +449,7 @@ local nuclear_reactor = {
 		end
 		return 0
 	end,
-	on_blast = function(pos,intensity)
-		local meta = minetest.env:get_meta(pos)
-		local rads = meta:get_int("rads")
-		local xVect,yVect,zVect
-		local blast_size = 20
-		local objects = minetest.get_objects_inside_radius(pos,blast_size)
-		local manip = minetest.get_voxel_manip()
-		local air = minetest.get_content_id("air")
-		local min_edge,max_edge= manip:read_from_map({x=pos.x-20,y=pos.y-20,z=pos.z-20},{x=pos.x+20,y=pos.y+20,z=pos.z+20})
-		local area = VoxelArea:new({MinEdge=min_edge,MaxEdge=max_edge})
-		local data = manip:get_data()
-		for xVect=pos.x-blast_size,pos.x+blast_size do
-			local yLimit = math.max(blast_size-math.abs(pos.x-xVect),1)
-			for yVect=pos.y-yLimit,pos.y+yLimit do
-				local zLimit = math.max(blast_size-math.abs(pos.x-xVect)-math.abs(pos.y-yVect),1)
-				for zVect=pos.z-zLimit,pos.z+zLimit do
-					if xVect ~= pos.x or yVect ~= pos.y or zVect ~= pos.z then
-						local p = {x=xVect,y=yVect,z=zVect}
-						local node = minetest.env:get_node(p)
-						local destroy = minetest.registered_nodes[node.name]["on_blast"]
-						local immortal = minetest.registered_nodes[node.name]["groups"]["immortal"]
-						if node.name == "ignore" or node.name == "air" then
-						elseif destroy then
-							destroy(p,10)
-						elseif immortal then
-						else
-							local ind = area:indexp(p)
-							data[ind] = air
-						end
-					else
-						local ind = area:indexp(pos)
-						data[ind] = air
-					end
-				end
-			end
-		end
-		manip:set_data(data)
-		manip:write_to_map()
-		manip:update_map()
-		local object=nil
-		local key = nil
-		for  key,object in pairs(objects) do
-			if object.set_hp then
-				object:set_hp(0)
-			end
-		end
-	end
+	on_blast = nuclear_blast,
 }
 if pipeworks_path then
 	nuclear_reactor.after_place_node = function (pos)
