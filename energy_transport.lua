@@ -87,15 +87,17 @@ function send(pos,dir,power,explored)
 	end
 	local meta=minetest.env:get_meta(pos)
 	local node = minetest.get_node(pos)
-	local conductor = minetest.registered_nodes[node.name]["voltbuild"]["energy_conductor"]
-	if conductor and conductor >= 1 then
-		if meta:get_int("get_current")>0 then -- We want to mesure current through cable.
-			local c=meta:get_int("current")
-			meta:set_int("current",c+p)
-		end
-		if maxcurrent<power then 
-			-- Melt cable
-			voltbuild.blast(pos) 
+	if node.name ~= "air" then
+		local conductor = minetest.registered_nodes[node.name]["voltbuild"]["energy_conductor"]
+		if conductor and conductor >= 1 then
+			if meta:get_int("get_current")>0 then -- We want to mesure current through cable.
+				local c=meta:get_int("current")
+				meta:set_int("current",c+p)
+			end
+			if maxcurrent<power then 
+				-- Melt cable
+				voltbuild.blast(pos) 
+			end
 		end
 	end
 	return diff
