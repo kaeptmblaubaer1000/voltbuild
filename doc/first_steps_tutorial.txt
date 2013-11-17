@@ -1,0 +1,156 @@
+Hello, this is the first short text tutorial on the voltbuild mod. All readers are expected to already know the basics of minetest,
+such as mining and crafting.
+
+
+
+----------------ABOUT TREETAP AND RUBBER TREES:
+One of the things easily confusing to a beginner is where do I get rubber? Maybe you don't even know what rubber is. That's fine.
+This tutorial is here to help. Now, one of the most important things to know to someone begining to play with this mod is to know
+how to make a treetap. For this, you will need 5 Wooden Planks (default:wood). You place one wooden plank in the top middle,
+3 wooden planks in middle row, and 1 wooden plank in the bottom right.
+
+Craft a treetap by placing the wood planks in this order
+P = wooden plank
+
+ P 
+PPP
+  P
+
+With your new tree tap, go looking for a rubber tree. They are easily identified by their light green leaves that are more bright
+than the default tree leaves. Keep in mind that if you added this mod to an older world that you'll have to go to a part of the
+world that hasn't generated yet. Once you do find a rubber tree though, you can of course chop it down like a regular tree to
+get wooden planks and have the leaves drop rubber tree sapplings. What you may be wondering now is why even have rubber trees
+if they just seem to craft into regular wooden planks. Well, there are some rubber tree nodes that have an orange circle or dot
+on them. Looking for this orange circle is very important and is why you crafted a treetap. The orange circle can appear on 
+any side of a rubber tree node, so it's important to look at all four sides. When you find this orange circle, equip your
+treetap and right click on the rubber tree node with the orange circle. If done correctly, you should notice the circle is no
+longer orange and that there's an item that has been dropped on the ground. Pick up this new item because when you cook
+sticky resin in a furnace, you get rubber. Once you have collected the sticky resin from a rubber tree node, you can leave that
+tree node alone and it'll end up filling up with more sticky resin eventually. Just keep in mind that any rubber tree node that
+you chop or dig up will no longer be able to produce sticky resin and probably won't even drop a sticky resin, even if it had
+the orange circle. This makes a tree tap and growing rubber trees important in the beginning.
+
+If you're having trouble finding the orange circle, you can always look at and zoom in on the itest_rubber_hole_full.png in the 
+textures folder of this mod.
+
+
+
+------------FIRST BASE:
+You're probably eager to start seeing what this mod can do. Well first, you'll need to do a bit of mining and exploring
+to get a basic setup. Any ingots you see in the recipe are made by cooking their lump version in a furnace. For example,
+you get Tin Ingot by cooking a Tin Lump in a Furnace.
+
+Required Materials:
+2 Gravel (default:gravel)
+32 Sand (default:sand)
+3 Desert Stone (default:desert_stone)
+6 Copper Ingot (default:copper_ingot)
+16 Steel Ingot (default:steel_ingot))
+6 Rubber (voltbuild:rubber)
+8 Tin Ingot (voltbuild:tin_ingot)
+2 Furnaces (default:furnace)
+some Coal (default:coal_lump)
+1 Iron Lump (default:iron_lump)           NOTE: Any other ore can do. This is for use inside the Macerator.
+
+
+Once you have the Required Materials, then you can begin building a simple base. The first step is to use one of those furnaces 
+for cooking. Place the 16 Steel Ingot into the furnace and cook them into Refined Iron Ingot. From those Refined Iron Ingot,
+make 2 Machine.
+
+R = Refined Iron Ingot
+
+RRR
+R R
+RRR
+
+Once you have those 2 Machine, start making 12 Uninsulated copper cable.
+
+C = Copper Ingot
+
+CCC
+
+With those 12 Uninsulated copper cable, make 6 Insulated copper cable
+
+C = Uninsulated copper cable
+R = Rubber
+
+CR
+
+Now with the 6 Insulated copper cable and 8 Tin Ingot you can make 2 RE Battery
+
+C = Insulated copper cable
+T = Tin Ingot
+
+ C
+TCT
+TCT
+
+With 1 RE Battery, 1 Machine, and 1 Furnace, you can make your first generator
+
+R = RE Battery
+M = Machine
+F = Furnace
+
+R
+M
+F
+
+Now with the 32 Sand, make 8 Sandstone
+
+S = Sand
+
+SS
+SS
+
+With the 8 Sandstone, make 2 Sandstone Brick
+
+S = Sandstone
+
+SS
+SS
+
+Now, with the 2 Sandstone Brick, 2 Gravel, 1 RE Battery, 3 Desert Stone, and that last 1 Machine make
+your first macerator.
+
+S = Sandstone Brick
+G = Gravel
+R = RE Battery
+D = Desert Stone
+M = Machine
+
+GRG
+SMS
+DDD
+
+With all these things built, you can now finally make a basic electric setup with your Macerator, Generator, Coal, and
+Uninsulated copper cable.
+
+First, place your Generator. Then, right next to your generator, place a Uninsulated copper cable. If done correctly,
+it should look like the Uninsulated copper cable is connected to your Generator. When the Uninsulated copper cable is
+not connected to anything, it will just look like a floating orange cube that doesn't touch anything. Now with the
+Uninsulated copper cable placed in the node right next to the Generator, go ahead and place your Macerator right next
+to the Uninsulated copper cable. If you correctly place the Macerator, the Uninsulated copper cable will appear to 
+connect to it. With the Uninsulated copper cable connected to both the Generator and the Macerator, place 1 Coal into
+the Generator. When done correctly, you should see flames on the front of your Generator just like a Furnace does.
+While the Coal is burning, notice how the bar right in the middle top fills up. The left side is red and as it progresses,
+it becomes white on the right side. This bar is the energy bar. Inside every machine in this mod, it shows how much energy
+is currently in that machine. Now, when the Generator stopped burning coal, you should've noticed it went back to empty
+(a color similar to the default grey of inventory squares). This means the Generator no longer contains any energy. That
+is because the Generator sends any energy stored in it onto any connected cables or machines. Now, if you take a look at
+the Macerator, you should now notice that same red to white bar in it. However, this time it is in a slightly different
+spot. This red to white bar is still the energy bar, which means your Macerator now has power so it can function. Take
+your Iron Lump and place it into the Macerator. You'll start noticing that the yellow bar in the top center is filling
+up with Red. This is the progress bar that shows how far along the Macerator has come. When the red reaches the end,
+the bar will go back to yellow and your Iron Lump will be gone. However, in the four squares to the right of the yellow
+bar, you'll now notice you have 2 Iron dust. With these 2 Iron dust, you can place them into a Furnace and get 2 Steel
+Ingot. This is the benefit of the Macerator. You use electricity in order to get double the amount of ingots from most
+ores. As you can see, the energy bar is now a little less than half way empty, showing only red. In order to fill it
+back up, you'll have to put another Coal into the Generator. 
+
+At this point, you have constructed and used your first electric base. Continue to enjoy this mod and build upon your
+first electric base, or even create other bases. There's still plenty other machines to build, including alternatives
+to your Generator. From this point on, use the other documentation, including the crafts.txt, to figure out what you
+want to do. If you want an alternative to the Generator, check out the generators.txt to see which alternatives are
+avaialable and then search for that alternative's recipe in the crafts.txt file. If you want other machines that can
+use electricity to do things for you, check out the consumers.txt file. If you choose to start building the consumers,
+you'll probably want to start mining for mese. Just remember, have fun!

@@ -8,18 +8,18 @@ In game description is Mobile Solar Panel
 Summary:
 Add to a machine to make it slowly generate electricity in the sun.
 
-voltbuild:overclock
-In game description is Overclock
+voltbuild:fan
+In game description is Fan
 Summary:
-Speeds up a machine causing the machine to slowly build up stress.
+Slowly relieves a machine's stress.
 
 voltbuild:halt
 In game description is Halt
 Summary:
 Stops a machine from working (stops it abm) while this component is inside.
 
-voltbuild:fan
-In game description is Fan
+voltbuild:overclock
+In game description is Overclock
 Summary:
-Slowly relieves a machine's stress.
+Speeds up a machine causing the machine to slowly build up stress.
 

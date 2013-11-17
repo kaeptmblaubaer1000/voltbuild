@@ -139,7 +139,7 @@ if generate_docs then
 	for key, value in pairs(minetest.registered_items) do
 		if string.match(key,"voltbuild:") then
 			local crafts = minetest.get_all_craft_recipes(key)
-			if crafts then
+			if crafts and #crafts > 0 then
 				craft_file:write("output is ",key,"\n")
 				craft_file:write("In game description is ",value["description"],"\n")
 				local recipe 
@@ -149,21 +149,28 @@ if generate_docs then
 					end
 					if recipe.width == 0 then
 						craft_file:write("shapeless is true\n")
+						recipe.width=3
 					end
 					craft_file:write("recipe is\n")
+					local height
 					for k=1,9 do
-						if k % 3 == 1 then
+						if recipe.items[k] then
+							height = math.ceil(k/recipe.width)
+						end
+					end
+					for k=1,recipe.width*height do
+						if k % recipe.width == 1 or recipe.width == 1 then
 							craft_file:write("   ")
 						end
 						if recipe.items[k] then
-							craft_file:write(recipe.items[k],"")
+							craft_file:write(recipe.items[k])
 						else
 							craft_file:write("\"\"")
 						end
-						if k ~= 9 then
+						if k ~= recipe.width*height then
 							craft_file:write(", ")
 						end
-						if k % 3 == 0 then
+						if k % recipe.width == 0 then
 							craft_file:write("\n")
 						end
 					end
