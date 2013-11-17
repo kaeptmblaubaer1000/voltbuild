@@ -13,6 +13,7 @@ minetest.register_node("voltbuild:hospital", {
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
 	voltbuild = {max_tier=2,energy_cost=40,max_stress=2000,max_energy=120,max_psize=128,optime=10.0},
+	documentation = {summary = "A building that heals nearby players when powered."},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)

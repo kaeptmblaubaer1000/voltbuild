@@ -1,6 +1,8 @@
 minetest.register_node("voltbuild:geothermal_generator",{description="Geothermal Generator",
 	groups={energy=1,cracky=2},
 	tiles = {"voltbuild_geothermal_generator_side.png"},
+	documentation={summary="Generates electricity from lava nodes directly next to this machine.\n"..
+		"More lava nodes surrounding it help generate electricity faster."},
 	voltbuild = {max_energy=15,max_tier=1,max_stress=2000,optime=5.0, 
 		energy_type_image = "default_lava.png", psize = 3,
 		speed = function (pos)

@@ -16,6 +16,8 @@ local macerator_properties = {
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
 	voltbuild = {max_energy=12,max_tier=1,energy_cost=2,max_stress=2000,speed=5,max_psize=32},
+	documentation = {summary="Machine that uses grinding to craft other items.\n"..
+		"Much more efficient to place ores in this machine first before cooking the ores."},
 	cooking_method="grinding",
 	tube = consumers.tube,
 	on_construct = function(pos)

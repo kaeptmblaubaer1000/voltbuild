@@ -1,6 +1,8 @@
 minetest.register_node("voltbuild:watermill",{description="Watermill",
 	groups={energy=1,cracky=2},
 	tiles={"itest_watermill_top.png", "itest_watermill_top.png", "itest_watermill_side.png"},
+	documentation={summary="Generates electricity from water nodes near this machine.\n"..
+		"More water nodes surrounding it help generate electricity faster."},
 	voltbuild = {max_energy=5,max_tier=1,max_stress=2000,optime=52.0, energy_type_image = "voltbuild_water.png", psize = 1,
 		speed = function (pos)
 		local meta=minetest.env:get_meta(pos)

@@ -197,6 +197,101 @@ if generate_docs then
 		end
 	end
 	io.close(craft_file)
+
+	local volt_objects = {
+	generators = {type_check = function (name,table)
+		if table.groups.energy and not table.groups.energy_consumer then
+			return true
+		end
+		return false
+	end},
+	batboxes = {type_check = function (name,table) 
+		if table.groups.energy and table.groups.energy_consumer and table.groups.energy_storage then
+			return true
+		end
+		return false
+	end},
+	transformers = {type_check = function (name,table)
+		if table.groups.energy_consumer and string.match(name,"transformer") then
+			return true
+		end
+		return false
+	end},
+	tools = {type_check = function(name,table)
+		if table.tool_capabilities then
+			return true
+		end
+		return false
+	end},
+	components = {type_check = function(name,table)
+		if table.voltbuild and table.voltbuild.component then
+			return true
+		end
+		return false
+	end},
+	nuclear_parts = {type_check = function(name,table)
+		if table.voltbuild and table.voltbuild.nuclear then
+			return true
+		end
+		return false
+	end},
+	--consumers goes last in list because easier to define it as not the others
+	consumers = {}}
+	volt_objects.consumers.type_check = function (name,table)
+		local ky, vl
+		for ky,vl in pairs(volt_objects) do
+			if ky ~= "consumers" then
+				if vl.type_check(name,table) then
+					return false
+				end
+			end
+		end
+
+		if table.groups.energy_consumer then
+			return true
+		end
+		return false
+	end
+
+	for key, value in pairs(minetest.registered_items) do
+		if string.match(key,"voltbuild:") and not string.match(key,"_active") then
+			for k, v in pairs(volt_objects) do
+				if v.type_check(key,value) then
+					volt_objects[k][key] = value
+				end
+			end
+		end
+	end
+	for key, value in  pairs(volt_objects) do
+		local doc_file = io.open(modpath.."/doc/"..key..".txt","w")
+		local ky,vl
+		for ky, vl in  pairs(value) do
+			if ky ~= "type_check" and ky ~= "file_summary"  then
+				if vl and vl.documentation then
+					doc_file:write(ky,"\n")
+					if vl.description then
+						doc_file:write("In game description is ",vl.description,"\n")
+					else
+						print("WARNING! "..ky.." does not have description!!!!")
+					end
+					local required_fields = {"summary"}
+					for k,v in pairs(required_fields) do
+						if not vl.documentation[v] then
+							print("WARNING! "..ky.." does not have documentation."..v.." table!!!!")
+						end
+					end
+					for k, v in pairs(vl.documentation) do
+						doc_file:write(string.sub(k,1,1):upper(),string.sub(k,2),":\n")
+						doc_file:write(v,"\n")
+					end
+					doc_file:write("\n")
+				else
+					print("WARNING! "..ky.." does not have documentation table!!!!")
+				end
+			end
+		end
+		io.close(doc_file)
+	end
 end
 
 print("voltbuild loaded!")

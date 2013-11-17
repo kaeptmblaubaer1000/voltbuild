@@ -36,6 +36,7 @@ minetest.register_tool("voltbuild:re_battery",{
 	voltbuild = {max_charge = 240,
 		max_speed = 100,
 		charge_tier = 1},
+	documentation = {summary="Stores energy and can be placed into a machine to charge the machine."},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={fleshy={times={}, uses=1, maxlevel=0}}}
@@ -47,6 +48,8 @@ minetest.register_tool("voltbuild:solar_battery",{
 	voltbuild = {max_charge = 240,
 		max_speed = 60,
 		charge_tier = 1},
+	documentation = {summary="Solar powered version of RE Battery.\n"..
+		" It slowly generates energy in the sun while in your inventory."},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={fleshy={times={}, uses=1, maxlevel=0}},solar=2}
@@ -101,6 +104,7 @@ minetest.register_tool("voltbuild:energy_crystal",{
 	voltbuild = {max_charge = 10000,
 		max_speed = 250,
 		charge_tier = 2},
+	documentation = {summary="Medium voltage RE Battery."},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={fleshy={times={}, uses=1, maxlevel=0}}}
@@ -112,6 +116,7 @@ minetest.register_tool("voltbuild:lapotron_crystal",{
 	voltbuild = {max_charge = 100000,
 		max_speed = 600,
 		charge_tier = 3},
+	documentation = {summary="High voltage RE Battery."},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={fleshy={times={}, uses=1, maxlevel=0}}}
@@ -122,7 +127,9 @@ minetest.register_craftitem("voltbuild:single_use_battery",{
 	inventory_image = "itest_single_use_battery.png",
 	voltbuild = {single_use = 1,
 		singleuse_energy = 12,
-		charge_tier = 1}
+		charge_tier = 1},
+	documentation = {summary="Single time charge of a machine.\n"..
+		"Think of it like coal for a furnace, except it's for electric machines and unneccessary."},
 })
 
 local drill_properties = {
@@ -133,6 +140,7 @@ local drill_properties = {
 		charge_tier = 1,
 		cnames = {{0,"voltbuild:mining_drill_discharged"},
 			{1,"voltbuild:mining_drill"}}},
+	documentation = {summary="The electric alternative to the pick."},
 	tool_capabilities =
 		{max_drop_level=0,
 		-- Uses are specified, but not used since there is a after_use function
@@ -159,6 +167,7 @@ local diamond_drill = {
 		charge_tier = 1,
 		cnames = {{0,"voltbuild:diamond_drill_discharged"},
 			{2,"voltbuild:diamond_drill"}}},
+	documentation = {summary="A faster mining drill with less durability."},
 	tool_capabilities =
 		{max_drop_level=0,
 		-- Uses are specified, but not used since there is a after_use function
@@ -184,6 +193,7 @@ minetest.register_tool("voltbuild:od_scanner",{
 	voltbuild = {max_charge = 360,
 		max_speed = 10,
 		charge_tier = 1},
+	documentation = {summary="Notifies the player of the number of ores in an area by right clicking."},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={}},
@@ -228,6 +238,7 @@ minetest.register_tool("voltbuild:ov_scanner",{
 	voltbuild = {max_charge = 480,
 		max_speed = 20,
 		charge_tier = 1},
+	documentation = {summary="Notifies the player of the value of ores in an area by right clicking."},
 	tool_capabilities =
 		{max_drop_level=0,
 		groupcaps={}},

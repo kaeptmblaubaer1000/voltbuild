@@ -21,6 +21,7 @@ end
 local default_furnace_prop = minetest.registered_nodes["default:furnace"]
 local furnace_properties = {
 	description = "Iron furnace",
+	documentation = {summary = "An improved furnace created by steel ingots."},
 	tiles = {"itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_side.png","itest_iron_furnace_side.png", "itest_iron_furnace_side.png", "itest_iron_furnace_front.png"},
 	paramtype2 = "facedir",
 	groups = {energy=1, energy_consumer=1, cracky=2},

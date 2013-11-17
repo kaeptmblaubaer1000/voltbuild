@@ -3,6 +3,8 @@ wind_speed = math.random(0,7)
 minetest.register_node("voltbuild:windmill",{description="Windmill",
 	groups={energy=1,cracky=2},
 	tiles={"itest_windmill_top.png", "itest_windmill_top.png", "itest_windmill_side.png"},
+	documentation = {summary = "Generator that produces more electricity the higher it is.\n"..
+		"Minimize the number of nodes anywhere near this generator for best electricity production."},
 	voltbuild = {max_energy=15,max_tier=1,max_stress=2000,optime=10.0,energy_type_image= "voltbuild_wind.png", psize = 1,
 		speed=function(pos)
 			local alt = pos.y/30

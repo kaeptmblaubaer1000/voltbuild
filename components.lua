@@ -221,6 +221,7 @@ components.register_clockitem("voltbuild:overclock", {
 		clock_speed_effect = function (x)
 			return x
 		end},
+	documentation = {summary="Speeds up a machine causing the machine to slowly build up stress."}
 })
 
 minetest.register_craft({
@@ -236,6 +237,7 @@ minetest.register_craftitem("voltbuild:halt", {
 		can_run = function(pos)
 			return false
 		end},
+	documentation = {summary="Stops a machine from working (stops it abm) while this component is inside."}
 })
 
 minetest.register_craft({
@@ -253,6 +255,7 @@ minetest.register_craftitem("voltbuild:fan",{
 			local stress = meta:get_int("stress")
 			meta:set_int("stress",math.max(stress-20,0))
 		end},
+	documentation = {summary="Slowly relieves a machine's stress."}
 })
 
 minetest.register_craft({
@@ -310,7 +313,8 @@ minetest.register_craftitem("voltbuild:air_compressor", {
 					consumers.get_progressbar(meta:get_float("stime"),optime,
 						"itest_extractor_progress_bg.png",
 						"itest_extractor_progress_fg.png"))
-		end}
+		end},
+	documentation = {summary="Add to a compressor to make it compress air into air cells instead of items."}
 })
 
 minetest.register_craft({
@@ -334,7 +338,8 @@ minetest.register_craftitem("voltbuild:mobile_solar_panel", {
 		if max_energy and speed(pos) >= 1 then
 			meta:set_int("energy",math.min(meta:get_int("energy")+psize,max_energy))
 		end
-	end}
+	end},
+	documentation = {summary="Add to a machine to make it slowly generate electricity in the sun."}
 })
 
 minetest.register_craft({

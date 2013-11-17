@@ -8,6 +8,9 @@ local generator_definition = {
 	groups = {energy=1, cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
+	documentation = {summary = "A generator that uses coal to generate electricty.\n"..
+		"Place in coal to be burned into electricity and attach cable nodes to send the electricity to other machines."..
+		"This will be the first type of generator you build"},
 	voltbuild = {max_energy=60,max_tier=1,max_stress=2000,psize=10,
 		speed = function (pos)
 			local meta = minetest.env:get_meta(pos)

@@ -25,6 +25,8 @@ local recycler_properties = {
 	sounds = default.node_sound_stone_defaults(),
 	cooking_method = "recycle",
 	voltbuild = {max_energy=12,max_tier=1,energy_cost=2,max_stress=2000,speed=2,max_psize=32},
+	documentation = {summary = "Machine that pulverizes items by using electricity.\n"..
+		"Occassionally, it produces scrap from the items it pulverizes."},
 	tube = consumers.tube,
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)

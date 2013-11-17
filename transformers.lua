@@ -18,6 +18,7 @@ minetest.register_node("voltbuild:lv_transformer",{description="LV Transformer",
 	legacy_facedir_simple = true,
 	tiles={"itest_lv_transformer_lv.png", "itest_lv_transformer_lv.png", "itest_lv_transformer_mv.png", "itest_lv_transformer_lv.png", "itest_lv_transformer_lv.png", "itest_lv_transformer_lv.png"},
 	voltbuild = {max_energy=2560,max_psize=128},
+	documentation = {summary = "Low voltage transformer for ramping up or down electricity."},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -55,6 +56,7 @@ minetest.register_node("voltbuild:mv_transformer",{description="MV Transformer",
 	legacy_facedir_simple = true,
 	tiles={"itest_mv_transformer_mv.png", "itest_mv_transformer_mv.png", "itest_mv_transformer_hv.png", "itest_mv_transformer_mv.png", "itest_mv_transformer_mv.png", "itest_mv_transformer_mv.png"},
 	voltbuild = {max_energy=10240,max_psize=512},
+	documentation = {summary = "Medium voltage transformer for ramping up or down electricity."},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)
@@ -92,6 +94,8 @@ minetest.register_node("voltbuild:hv_transformer",{description="HV Transformer",
 	legacy_facedir_simple = true,
 	tiles={"itest_hv_transformer_hv.png", "itest_hv_transformer_hv.png", "itest_hv_transformer_ev.png", "itest_hv_transformer_hv.png", "itest_hv_transformer_hv.png", "itest_hv_transformer_hv.png"},
 	voltbuild = {max_energy=40960,max_psize=1000000000},
+	documentation = {summary = "High voltage transformer for ramping up or down electricity.\n"..
+		"Only thing capable of handling any size packet of electricity."},
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_int("energy",0)

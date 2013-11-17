@@ -15,6 +15,7 @@ local electric_furnace = {
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
 	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000,max_psize=32,max_energy=12},
+	documentation = {summary = "An electric version of the furnace. No coal required! Just electricity."},
 	cooking_method="cooking",
 	tube = consumers.tube,
 	on_construct = function(pos)

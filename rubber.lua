@@ -154,6 +154,8 @@ end
 
 minetest.register_tool("voltbuild:treetap",{
 	description = "Treetap",
+	documentation = {summary="Extracts sticky resin from trees with sticky resin by right clicking.\n"..
+		"You should see a full orange circle on one side of the rubber tree node if that node has sticky resin in it."},
 	inventory_image = "itest_treetap.png",
 	tool_capabilities =
 		{max_drop_level=0,
@@ -180,6 +182,8 @@ minetest.register_tool("voltbuild:treetap",{
 
 minetest.register_tool("voltbuild:alunra_treetap",{
 	description = "Alunra Treetap",
+	documentation = {summary="An improved Treetap.\n"..
+		"Extracts sticky resin from the entire tree instead of just a rubber tree node"},
 	inventory_image = "voltbuild_alunra_treetap.png",
 	tool_capabilities =
 		{max_drop_level=0,

@@ -17,6 +17,7 @@ local compressor_properties = {
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_stone_defaults(),
 	voltbuild = {max_tier=1,energy_cost=2,max_stress=2000,max_energy=12,max_psize=32},
+	documentation = {summary="Machine that uses compression to craft other items."},
 	cooking_method="compressing",
 	tube = consumers.tube,
 	on_construct = function(pos)

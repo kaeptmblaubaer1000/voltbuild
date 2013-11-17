@@ -37,6 +37,10 @@ minetest.register_node("voltbuild:miner", {
 	tiles = {"itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_side.png", "itest_electric_furnace_front.png"},
 	groups = {energy=1, energy_consumer=1, cracky=2},
 	sounds = default.node_sound_stone_defaults(),
+	documentation = {summary = "Machine that does mining up to a certain distance.\n"..
+		"Requires mining pipes, a drill, and electricity to function. Also recommended is a scanner.\n"..
+		"The better the drill and the better the scanner, the better this machine gets\n"..
+		"However, a better miner uses more electricity."},
 	voltbuild = {max_psize = 128,
 		max_energy = 240,max_tier=2,max_stress=2000,active=true,
 		optime = function (pos)

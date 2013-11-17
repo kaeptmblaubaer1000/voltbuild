@@ -111,12 +111,22 @@ minetest.register_craftitem("voltbuild:radioactive_shielding", {
 	description = "Radioactive Shielding",
 	inventory_image = "voltbuild_radioactive_shielding.png",
 	voltbuild = {nuclear=1},
+	documentation = {summary = "Stops radiation from going through this square in the design\n"..
+		"Radiation travels up, down, left, and right inside the design.\n"..
+		"Any radiation that reaches the edges will start being released from the machine\n"..
+		"The radiation that leaves the machine can hurt you within a certain distance.\n"..
+		"Radiation slowly fades away when the uranium is removed from the machine."},
 })
 
 local reactor_wiring = {
 	description = "Reactor Wiring",
 	inventory_image = "voltbuild_reactor_wiring.png",
 	voltbuild = {nuclear=1},
+	documentation = {summary = 
+		"Connect to nuclear parts that generate electricity or to other reactor wires.\n"..
+		"Use reactor wires like this item to carry internal electricity to the\n"..
+		"bottom middle of the design for electricity to leave the nuclear reactor.\n"..
+		"For connecting to a Reaction Chamber, the Shielded Reactor Wiring is best."},
 	automata = {step = function(automata_name,automata_pos,index)
 		local meta = minetest.env:get_meta(automata_pos)
 		local inv = meta:get_inventory()
@@ -141,6 +151,7 @@ minetest.register_craftitem("voltbuild:reactor_fan",{
 	description = "Reactor Fan",
 	inventory_image = "voltbuild_reactor_fan.png",
 	voltbuild = {nuclear=1},
+	documentation = {summary="Slowly relieves internal stress from one square in the design."},
 	automata = {step = function(automata_name,automata_pos,index)
 		local meta = minetest.env:get_meta(automata_pos)
 		local inv = meta:get_inventory()
@@ -155,6 +166,7 @@ minetest.register_craftitem("voltbuild:reactor_steam_gen",{
 	description = "Reactor Steam Generator",
 	inventory_image = "voltbuild_reactor_steam_gen.png",
 	voltbuild = {nuclear=1},
+	documentation = {summary = "Takes a little heat from a square in the design and turns it into internal electricity."},
 	automata = {step = function(automata_name,automata_pos,index)
 		local meta = minetest.env:get_meta(automata_pos)
 		local inv = meta:get_inventory()
@@ -178,20 +190,29 @@ minetest.register_craftitem("voltbuild:reactor_steam_gen",{
 })
 
 minetest.register_craftitem("voltbuild:reactor_wiring",reactor_wiring) 
-reactor_wiring.description = "Shielded Reactor Wiring"
-reactor_wiring.inventory_image = "voltbuild_shielded_reactor_wiring.png"
-minetest.register_craftitem("voltbuild:shielded_reactor_wiring",reactor_wiring) 
+local shield_wiring = {}
+shield_wiring.description = "Shielded Reactor Wiring"
+shield_wiring.inventory_image = "voltbuild_shielded_reactor_wiring.png"
+shield_wiring.documentation = {summary="Same as Reactor Wiring except prevents radiation from going through this square."}
+shield_wiring = voltbuild.deep_copy(reactor_wiring,shield_wiring)
+minetest.register_craftitem("voltbuild:shielded_reactor_wiring",shield_wiring) 
 
 minetest.register_craftitem("voltbuild:casing", {
 	description = "Reactor Heat Casing",
 	inventory_image = "voltbuild_casing.png",
 	voltbuild = {nuclear=1},
+	documentation = {summary = "Prevents stress in the form of heat from passing through this square.\n"..
+		"Stress travels left, right, and up inside the design.\n"..
+		"Once stress reaches the edges of the design or builds up too much in one square,\n"..
+		"it then starts affecting the machine and becomes visible on the stress bar.\n"}
 })
 
 minetest.register_craftitem("voltbuild:nuclear_reaction_chamber", {
 	description = "Reaction Chamber",
 	inventory_image = "voltbuild_reaction_chamber.png",
 	voltbuild = {nuclear=1},
+	documentation = {summary = "Uses uranium to produce internal electricity, radiation, and stress.\n"..
+		"All three of those must be managed within the design if you want electricity safely."},
 	automata = {step = function(automata_name,automata_pos,index)
 		local meta = minetest.env:get_meta(automata_pos)
 		local inv = meta:get_inventory()
@@ -396,6 +417,11 @@ local nuclear_reactor = {
 	paramtype2 = "facedir",
 	groups = {energy=1, cracky=2,tubedevice=1,tubedevice_receiver=1},
 	voltbuild = {max_energy=12288,max_tier=2,max_stress=2000,fueltime=10.0,optime=1.0},
+	documentation = {summary = "A complicated DANGEROUS generator.\n"..
+		"It requires a Reaction Chamber and uranium to start generating internal electricity, radiation, and blow up.\n"..
+		"Sending out electricity from the machine also requires internal wiring in the design\n"..
+		"Only electricity that reaches the bottom middle of the design will reach the outside\n"..
+		"Read up on the individual nuclear parts to better understand managing and optimizing your nuclear reactor."},
 	tube={insert_object=function(pos,node,stack,direction)
 			local meta=minetest.env:get_meta(pos)
 			local inv=meta:get_inventory()
