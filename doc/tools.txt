@@ -1,7 +1,8 @@
-voltbuild:mining_drill
-In game description is Mining drill
+voltbuild:alunra_treetap
+In game description is Alunra Treetap
 Summary:
-The electric alternative to the pick.
+An improved Treetap.
+Extracts sticky resin from the entire tree instead of just a rubber tree node
 
 voltbuild:lapotron_crystal
 In game description is Lapotron crystal
@@ -13,10 +14,10 @@ In game description is OD Scanner
 Summary:
 Notifies the player of the number of ores in an area by right clicking.
 
-voltbuild:ov_scanner
-In game description is OV Scanner
+voltbuild:diamond_drill
+In game description is Diamond drill
 Summary:
-Notifies the player of the value of ores in an area by right clicking.
+A faster mining drill with less durability.
 
 voltbuild:energy_crystal
 In game description is Energy crystal
@@ -33,17 +34,10 @@ In game description is RE Battery
 Summary:
 Stores energy and can be placed into a machine to charge the machine.
 
-voltbuild:treetap
-In game description is Treetap
+voltbuild:mining_drill
+In game description is Mining drill
 Summary:
-Extracts sticky resin from trees with sticky resin by right clicking.
-You should see a full orange circle on one side of the rubber tree node if that node has sticky resin in it.
-
-voltbuild:alunra_treetap
-In game description is Alunra Treetap
-Summary:
-An improved Treetap.
-Extracts sticky resin from the entire tree instead of just a rubber tree node
+The electric alternative to the pick.
 
 voltbuild:solar_battery
 In game description is Solar Battery
@@ -51,10 +45,16 @@ Summary:
 Solar powered version of RE Battery.
  It slowly generates energy in the sun while in your inventory.
 
-voltbuild:diamond_drill
-In game description is Diamond drill
+voltbuild:ov_scanner
+In game description is OV Scanner
 Summary:
-A faster mining drill with less durability.
+Notifies the player of the value of ores in an area by right clicking.
+
+voltbuild:treetap
+In game description is Treetap
+Summary:
+Extracts sticky resin from trees with sticky resin by right clicking.
+You should see a full orange circle on one side of the rubber tree node if that node has sticky resin in it.
 
 voltbuild:mining_drill_discharged
 In game description is Mining drill

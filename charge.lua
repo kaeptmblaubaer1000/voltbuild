@@ -156,8 +156,10 @@ local drill_properties = {
 	end
 }
 minetest.register_tool("voltbuild:mining_drill",drill_properties)
-drill_properties.after_use=nil
-minetest.register_tool("voltbuild:mining_drill_discharged",drill_properties)
+discharged_drill = voltbuild.deep_copy(drill_properties,{})
+discharged_drill.after_use=nil
+discharged_drill.tool_capabilities = {max_drop_level=0,groupcaps={}}
+minetest.register_tool("voltbuild:mining_drill_discharged",discharged_drill)
 
 local diamond_drill = {
 	description = "Diamond drill",
@@ -183,8 +185,10 @@ local diamond_drill = {
 	end
 }
 minetest.register_tool("voltbuild:diamond_drill",diamond_drill)
-diamond_drill.after_use = nil
-minetest.register_tool("voltbuild:diamond_drill_discharged",diamond_drill)
+discharged_diamond_drill = voltbuild.deep_copy(diamond_drill,{})
+discharged_diamond_drill.after_use=nil
+discharged_diamond_drill.tool_capabilities = {max_drop_level=0,groupcaps={}}
+minetest.register_tool("voltbuild:diamond_drill_discharged",discharged_diamond_drill)
 
 
 minetest.register_tool("voltbuild:od_scanner",{
