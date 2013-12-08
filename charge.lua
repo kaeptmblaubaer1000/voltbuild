@@ -281,6 +281,48 @@ minetest.register_tool("voltbuild:ov_scanner",{
 	end
 })
 
+local teleport_gloves = {
+	description = "Teleportation Gloves",
+	inventory_image = "voltbuild_teleport_gloves.png",
+	voltbuild = {max_charge = 20000,
+		max_speed = 100,
+		charge_tier = 3,
+		cnames = {{0,"voltbuild:teleport_gloves_discharged"},
+			{100,"voltbuild:teleport_gloves"}}},
+	documentation = {summary="Short range teleportation by right clicking. HV voltage tool.\n"..
+		"Requires an MFS Unit to charge it."},
+	tool_capabilities =
+		{max_drop_level=0,
+		groupcaps={}},
+	on_place = function(itemstack, user, pointed_thing)
+		local cost = 100
+		local stack = itemstack:to_table()
+		local max_charge = get_item_field(stack.name, "max_charge")
+		local chr = charge.get_charge(stack)
+		if pointed_thing.type == "node" and chr >= cost then
+			local above = vector.add(pointed_thing.under,(vector.new({x=0,y=1,z=0})))
+			if minetest.get_node(above).name == "air" then
+				user:setpos(above)
+				nchr = math.max(0,chr-cost)
+				charge.set_charge(stack,nchr)
+				charge.set_wear(stack,nchr,max_charge)
+				return ItemStack(stack)
+			else
+				user:moveto(pointed_thing.above)
+				nchr = math.max(0,chr-cost)
+				charge.set_charge(stack,nchr)
+				charge.set_wear(stack,nchr,max_charge)
+				return ItemStack(stack)
+			end
+		end
+	end,
+}
+minetest.register_tool("voltbuild:teleport_gloves",teleport_gloves)
+discharged_tgloves = voltbuild.deep_copy(teleport_gloves,{})
+discharged_tgloves.after_use=nil
+discharged_tgloves.on_place = nil
+minetest.register_tool("voltbuild:teleport_gloves_discharged",discharged_tgloves)
+
 -- Add power to mesecons
 mcon = clone_node("mesecons:wire_00000000_off")
 mcon.voltbuild = {single_use = 1, singleuse_energy = 60}

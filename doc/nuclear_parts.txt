@@ -1,10 +1,8 @@
-voltbuild:reactor_wiring
-In game description is Reactor Wiring
+voltbuild:nuclear_reaction_chamber
+In game description is Reaction Chamber
 Summary:
-Connect to nuclear parts that generate electricity or to other reactor wires.
-Use reactor wires like this item to carry internal electricity to the
-bottom middle of the design for electricity to leave the nuclear reactor.
-For connecting to a Reaction Chamber, the Shielded Reactor Wiring is best.
+Uses uranium to produce internal electricity, radiation, and stress.
+All three of those must be managed within the design if you want electricity safely.
 
 voltbuild:reactor_fan
 In game description is Reactor Fan
@@ -16,11 +14,18 @@ In game description is Shielded Reactor Wiring
 Summary:
 Same as Reactor Wiring except prevents radiation from going through this square.
 
-voltbuild:nuclear_reaction_chamber
-In game description is Reaction Chamber
+voltbuild:reactor_steam_gen
+In game description is Reactor Steam Generator
 Summary:
-Uses uranium to produce internal electricity, radiation, and stress.
-All three of those must be managed within the design if you want electricity safely.
+Takes a little heat from a square in the design and turns it into internal electricity.
+
+voltbuild:reactor_wiring
+In game description is Reactor Wiring
+Summary:
+Connect to nuclear parts that generate electricity or to other reactor wires.
+Use reactor wires like this item to carry internal electricity to the
+bottom middle of the design for electricity to leave the nuclear reactor.
+For connecting to a Reaction Chamber, the Shielded Reactor Wiring is best.
 
 voltbuild:radioactive_shielding
 In game description is Radioactive Shielding
@@ -30,11 +35,6 @@ Radiation travels up, down, left, and right inside the design.
 Any radiation that reaches the edges will start being released from the machine
 The radiation that leaves the machine can hurt you within a certain distance.
 Radiation slowly fades away when the uranium is removed from the machine.
-
-voltbuild:reactor_steam_gen
-In game description is Reactor Steam Generator
-Summary:
-Takes a little heat from a square in the design and turns it into internal electricity.
 
 voltbuild:casing
 In game description is Reactor Heat Casing

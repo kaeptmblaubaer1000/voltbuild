@@ -691,6 +691,13 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "voltbuild:teleport_gloves_discharged",
+	recipe = {{"voltbuild:alunra_gem","voltbuild:mfs_unit","voltbuild:alunra_gem"},
+		{"voltbuild:alunra_gem","voltbuild:silicon_mese_block","voltbuild:alunra_gem"},
+		{"voltbuild:alunra_gem","voltbuild:mfs_unit","voltbuild:alunra_gem"}}
+})
+
+minetest.register_craft({
 	type = "fuel",
 	recipe = "voltbuild:ignis_dust",
 	burntime = 40
