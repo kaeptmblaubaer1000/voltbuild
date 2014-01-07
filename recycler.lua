@@ -50,14 +50,7 @@ local recycler_properties = {
 	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
 	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 }
-if pipeworks_path then
-	recycler_properties.after_place_node = function (pos)
-		tube_scanforobjects(pos)
-	end
-	recycler_properties.after_dig_node = function(pos)
-		tube_scanforobjects(pos)
-	end
-end
+
 minetest.register_node("voltbuild:recycler", recycler_properties)
 local active_recycler= {
 	drop = "voltbuild:recycler", 

@@ -477,14 +477,7 @@ local nuclear_reactor = {
 	end,
 	on_blast = nuclear_blast,
 }
-if pipeworks_path then
-	nuclear_reactor.after_place_node = function (pos)
-		tube_scanforobjects(pos)
-	end
-	nuclear_reactor.after_dig_node = function(pos)
-		tube_scanforobjects(pos)
-	end
-end
+
 minetest.register_node("voltbuild:nuclear_reactor",nuclear_reactor)
 
 local propagate_units = function (automata_name,pos,unit_max)

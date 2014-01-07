@@ -44,14 +44,7 @@ local extractor_properties = {
 	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
 	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 }
-if pipeworks_path then
-	extractor_properties.after_place_node = function (pos)
-		tube_scanforobjects(pos)
-	end
-	extractor_properties.after_dig_node = function(pos)
-		tube_scanforobjects(pos)
-	end
-end
+
 minetest.register_node("voltbuild:extractor", extractor_properties)
 local active_extractor= {
 	drop = "voltbuild:extractor", 

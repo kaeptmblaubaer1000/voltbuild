@@ -76,14 +76,7 @@ local generator_definition = {
 	allow_metadata_inventory_put = voltbuild.allow_metadata_inventory_put,
 	allow_metadata_inventory_move = voltbuild.allow_metadata_inventory_move,
 }
-if pipeworks_path then
-	generator_definition.after_place_node = function (pos)
-		tube_scanforobjects(pos)
-	end
-	generator_definition.after_dig_node = function(pos)
-		tube_scanforobjects(pos)
-	end
-end
+
 minetest.register_node("voltbuild:generator",generator_definition)
 
 local copy = {}
