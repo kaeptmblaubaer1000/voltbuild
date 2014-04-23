@@ -115,7 +115,6 @@ function voltbuild.deep_copy (table_from,table_to)
 end
 
 
-dofile(modpath.."/builtin.lua")
 dofile(modpath.."/mapgen.lua")
 dofile(modpath.."/voltbuild_objects.lua")
 dofile(modpath.."/components.lua")
