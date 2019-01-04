@@ -129,8 +129,8 @@ if not moreores_path then
 		clust_scarcity = 12*12*12,
 		clust_num_ores = 4,
 		clust_size     = 3,
-		height_min     = -63,
-		height_max     = -16,
+		y_min          = -63,
+		y_max          = -16,
 	})
 
 	minetest.register_ore({
@@ -140,8 +140,8 @@ if not moreores_path then
 		clust_scarcity = 9*9*9,
 		clust_num_ores = 5,
 		clust_size     = 3,
-		height_min     = -31000,
-		height_max     = -64,
+		y_min          = -31000,
+		y_max          = -64,
 		flags          = "absheight",
 	})
 	
@@ -152,8 +152,8 @@ if not moreores_path then
 		clust_scarcity = 8*8*8,
 		clust_num_ores = 5,
 		clust_size     = 3,
-		height_min     = -31000,
-		height_max     = -64,
+		y_min          = -31000,
+		y_max          = -64,
 		flags          = "absheight",
 	})
 end
@@ -165,8 +165,8 @@ minetest.register_ore({
 	clust_scarcity = 8*8*8,
 	clust_num_ores = 5,
 	clust_size     = 3,
-	height_min     = -31000,
-	height_max     = -64,
+	y_min          = -31000,
+	y_max          = -64,
 	flags          = "absheight",
 })
 
@@ -177,8 +177,8 @@ minetest.register_ore({
 	clust_scarcity = 9*9*9,
 	clust_num_ores = 1,
 	clust_size     = 1,
-	height_min     = -31000,
-	height_max     = -64,
+	y_min          = -31000,
+	y_max          = -64,
 	flags          = "absheight",
 })
 
@@ -189,8 +189,8 @@ minetest.register_ore({
 	clust_scarcity = 16*1*32,
 	clust_num_ores = 1,
 	clust_size     = 1,
-	height_min     = -12,
-	height_max     = -10,
+	y_min          = -12,
+	y_max          = -10,
 })
 
 minetest.register_ore({
@@ -200,8 +200,8 @@ minetest.register_ore({
 	clust_scarcity = 16*1*16,
 	clust_num_ores = 2,
 	clust_size     = 3,
-	height_min     = -14,
-	height_max     = -13,
+	y_min          = -14,
+	y_max          = -13,
 })
 
 
@@ -212,8 +212,8 @@ minetest.register_ore({
 	clust_scarcity = 49*1*7,
 	clust_num_ores = 3,
 	clust_size     = 5,
-	height_min     = -40,
-	height_max     = -15,
+	y_min          = -40,
+	y_max          = -15,
 })
 
 minetest.register_ore({
@@ -223,8 +223,8 @@ minetest.register_ore({
 	clust_scarcity = 20*10*20,
 	clust_num_ores = 1,
 	clust_size     = 1,
-	height_min     = -31000,
-	height_max     = -13,
+	y_min          = -31000,
+	y_max          = -13,
 })
 
 if moreores_path then
