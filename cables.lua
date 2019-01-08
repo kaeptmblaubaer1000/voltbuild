@@ -36,19 +36,19 @@ function cable_autoroute(pos)
 	if (is_cable(nctr.name) == nil)
 		and minetest.get_item_group(nctr.name, "energy") ~= 1 then return end
 
-	pxm=0
-	pxp=0
-	pym=0
-	pyp=0
-	pzm=0
-	pzp=0
+	local pxm=0
+	local pxp=0
+	local pym=0
+	local pyp=0
+	local pzm=0
+	local pzp=0
 
-	nxm = minetest.env:get_node({ x=pos.x-1, y=pos.y  , z=pos.z   })
-	nxp = minetest.env:get_node({ x=pos.x+1, y=pos.y  , z=pos.z   })
-	nym = minetest.env:get_node({ x=pos.x  , y=pos.y-1, z=pos.z   })
-	nyp = minetest.env:get_node({ x=pos.x  , y=pos.y+1, z=pos.z   })
-	nzm = minetest.env:get_node({ x=pos.x  , y=pos.y  , z=pos.z-1 })
-	nzp = minetest.env:get_node({ x=pos.x  , y=pos.y  , z=pos.z+1 })
+	local nxm = minetest.env:get_node({ x=pos.x-1, y=pos.y  , z=pos.z   })
+	local nxp = minetest.env:get_node({ x=pos.x+1, y=pos.y  , z=pos.z   })
+	local nym = minetest.env:get_node({ x=pos.x  , y=pos.y-1, z=pos.z   })
+	local nyp = minetest.env:get_node({ x=pos.x  , y=pos.y+1, z=pos.z   })
+	local nzm = minetest.env:get_node({ x=pos.x  , y=pos.y  , z=pos.z-1 })
+	local nzp = minetest.env:get_node({ x=pos.x  , y=pos.y  , z=pos.z+1 })
 
 	if is_cable(nxm.name) 
 		or minetest.get_item_group(nxm.name, "energy") == 1 then pxm=1 end
